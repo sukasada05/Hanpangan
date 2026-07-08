@@ -1,177 +1,805 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Laporan Hanpangan</title>
+<title>Laporan Hanpangan - Koramil 1609-05/Sukasada</title>
+
+<!-- ===== GOOGLE FONTS ===== -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Times+New+Roman&display=swap" rel="stylesheet">
+
+<!-- ===== FONT AWESOME ===== -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Times New Roman',serif;background:#f0f2f5;padding:1.5rem;display:flex;justify-content:center}
-.container{max-width:900px;width:100%;background:#fff;padding:2rem;border-radius:12px}
-h2{text-align:center;border-bottom:2px solid #1e2b4a;padding-bottom:.5rem;margin-bottom:1.5rem}
-.info-jadwal{background:#e8f5e9;border:1px solid #4caf50;border-radius:8px;padding:.8rem 1.2rem;margin-bottom:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center}
-.info-jadwal .label{font-weight:700;color:#1e2b4a}
-.info-jadwal .nama{font-weight:700;color:#2e7d32;font-size:1.1rem}
-.info-jadwal .status{font-size:.8rem;color:#555;background:#fff;padding:.2rem .8rem;border-radius:20px;border:1px solid #4caf50}
-.info-jadwal .status.error{border-color:#f44336;color:#f44336}
-.info-jadwal .status.loading{border-color:#ff9800;color:#ff9800}
-.epoch-info{font-size:.7rem;color:#888;margin-top:2px}
-.form-group{background:#f8f9fc;padding:1rem;border-radius:8px;border:1px solid #dce1ec;margin-bottom:1.5rem}
-.form-row{display:flex;flex-wrap:wrap;gap:.8rem}
-.field-group{flex:1;min-width:150px;display:flex;align-items:center;gap:.3rem}
-.field-group label{font-weight:700;font-size:.85rem;white-space:nowrap}
-.field-group select,.field-group input{flex:1;padding:.3rem .6rem;border:1px solid #bcc3d4;border-radius:6px;font-family:'Times New Roman',serif;font-size:.9rem;min-width:80px}
-.btn-group{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1.5rem}
-.btn{padding:.5rem 1.5rem;border:none;border-radius:6px;font-weight:600;cursor:pointer;font-family:'Times New Roman',serif;transition:.2s}
-.btn-copy{background:#1e2b4a;color:#fff}
-.btn-copy:hover{background:#0f1a33}
-.btn-share{background:#0a6b3c;color:#fff}
-.btn-share:hover{background:#08522e}
-.btn-reset{background:#8a9bb0;color:#fff}
-.btn-reset:hover{background:#6a7f96}
-.btn-refresh{background:#b8860b;color:#fff}
-.btn-refresh:hover{background:#9a7209}
-.laporan-box{background:#fafbfc;border:2px solid #dce1ec;border-radius:8px;padding:1.8rem 2rem;white-space:pre-wrap;font-size:1rem;line-height:1.7;min-height:380px;outline:none;cursor:text}
-.laporan-box.empty{display:flex;justify-content:center;align-items:center;color:#a0aec0;font-style:italic;min-height:380px;border-style:dashed}
-.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#1e2b4a;color:#fff;padding:.7rem 2rem;border-radius:8px;opacity:0;transition:opacity .4s;pointer-events:none;z-index:999}
-.toast.show{opacity:1}
-.info-hari{background:#e8ebf2;padding:.2rem .8rem;border-radius:20px;font-weight:600;font-size:.85rem}
-@media(max-width:600px){.container{padding:1rem}.form-row{flex-direction:column}.field-group{min-width:100%}.laporan-box{padding:1rem;min-height:250px}}
+/* ============================================================
+   ROOT VARIABLES
+   ============================================================ */
+:root {
+  --primary: #0a1a2e;
+  --primary-light: #1a3a5e;
+  --primary-dark: #050f1a;
+  --gold: #d4a843;
+  --gold-light: #f0d080;
+  --gold-dark: #b8922e;
+  --green: #2e7d32;
+  --green-light: #4caf50;
+  --green-bg: #e8f5e9;
+  --red: #c62828;
+  --red-light: #ef5350;
+  --gray: #6a7a8a;
+  --gray-light: #e8ecf1;
+  --gray-bg: #f5f7fa;
+  --white: #ffffff;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --radius: 16px;
+  --radius-sm: 8px;
+  --transition: all 0.3s ease;
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Times New Roman', Times, serif;
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-primary);
+  background: var(--gray-bg);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1.5rem;
+}
+
+/* ============================================================
+   CONTAINER
+   ============================================================ */
+.container {
+  max-width: 960px;
+  width: 100%;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem 2rem 2.5rem;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.app-header {
+  text-align: center;
+  padding-bottom: 1.2rem;
+  border-bottom: 3px solid var(--gold);
+  margin-bottom: 1.5rem;
+}
+
+.app-header .logo-icon {
+  font-size: 2.2rem;
+  color: var(--gold);
+  margin-bottom: 0.2rem;
+}
+
+.app-header h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+
+.app-header h1 span {
+  color: var(--gold);
+}
+
+.app-header .subtitle {
+  font-size: 0.9rem;
+  color: var(--gray);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.app-header .subtitle i {
+  color: var(--gold);
+  margin: 0 4px;
+}
+
+/* ============================================================
+   INFO JADWAL - HANPANGAN
+   ============================================================ */
+.info-jadwal {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  border-radius: var(--radius);
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  box-shadow: 0 4px 16px rgba(10, 26, 46, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.info-jadwal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+}
+
+.info-jadwal .left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.info-jadwal .label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.info-jadwal .nama {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--gold-light);
+}
+
+.info-jadwal .nama i {
+  margin-right: 8px;
+  color: var(--gold);
+}
+
+.info-jadwal .epoch-info {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.5);
+  font-family: 'Courier New', monospace;
+  margin-top: 2px;
+}
+
+.info-jadwal .status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--white);
+  background: rgba(76, 175, 80, 0.2);
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  white-space: nowrap;
+}
+
+.info-jadwal .status.error {
+  background: rgba(239, 83, 80, 0.2);
+  border-color: rgba(239, 83, 80, 0.3);
+  color: var(--red-light);
+}
+
+.info-jadwal .status.loading {
+  background: rgba(255, 193, 7, 0.15);
+  border-color: rgba(255, 193, 7, 0.3);
+  color: #ffd54f;
+}
+
+/* ============================================================
+   FORM
+   ============================================================ */
+.form-group {
+  background: var(--gray-bg);
+  border-radius: var(--radius);
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid var(--gray-light);
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.field-group {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.field-group label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--primary);
+  white-space: nowrap;
+  min-width: 70px;
+}
+
+.field-group label i {
+  color: var(--gold);
+  width: 18px;
+}
+
+.field-group select,
+.field-group input {
+  flex: 1;
+  padding: 0.5rem 0.8rem;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  background: var(--white);
+  color: var(--primary);
+  transition: var(--transition);
+  min-width: 100px;
+}
+
+.field-group select:focus,
+.field-group input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.15);
+}
+
+.field-group select:hover,
+.field-group input:hover {
+  border-color: var(--gold-dark);
+}
+
+.field-group .info-hari {
+  background: var(--primary);
+  color: var(--white);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.btn {
+  padding: 0.55rem 1.4rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn i {
+  font-size: 0.9rem;
+}
+
+.btn-refresh {
+  background: var(--gold);
+  color: var(--primary);
+}
+.btn-refresh:hover {
+  background: var(--gold-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 168, 67, 0.3);
+}
+
+.btn-copy {
+  background: var(--primary);
+  color: var(--white);
+}
+.btn-copy:hover {
+  background: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(10, 26, 46, 0.25);
+}
+
+.btn-share {
+  background: var(--green);
+  color: var(--white);
+}
+.btn-share:hover {
+  background: #1b5e20;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+.btn-reset {
+  background: var(--gray-light);
+  color: var(--gray);
+}
+.btn-reset:hover {
+  background: #d5dce6;
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+/* ============================================================
+   LAPORAN BOX
+   ============================================================ */
+.laporan-wrapper {
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.laporan-wrapper:hover {
+  border-color: var(--gold);
+}
+
+.laporan-wrapper .laporan-header {
+  background: var(--gray-bg);
+  padding: 0.6rem 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.laporan-wrapper .laporan-header .title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.laporan-wrapper .laporan-header .title i {
+  color: var(--gold);
+  margin-right: 6px;
+}
+
+.laporan-wrapper .laporan-header .badge {
+  font-size: 0.65rem;
+  color: var(--gray);
+  background: var(--white);
+  padding: 0.2rem 0.8rem;
+  border-radius: 12px;
+  border: 1px solid var(--gray-light);
+}
+
+.laporan-box {
+  background: var(--white);
+  padding: 1.8rem 2rem;
+  white-space: pre-wrap;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.8;
+  min-height: 380px;
+  outline: none;
+  cursor: text;
+  color: var(--primary);
+  transition: var(--transition);
+}
+
+.laporan-box:focus {
+  background: #fafbfc;
+}
+
+.laporan-box.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #aab;
+  font-style: italic;
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  min-height: 380px;
+}
+
+.laporan-box .placeholder-text {
+  color: #aab;
+  font-style: italic;
+}
+
+.laporan-box .placeholder-text i {
+  color: var(--gold);
+  margin-right: 8px;
+}
+
+.laporan-box:not(.empty):hover {
+  background: #fcfdff;
+}
+
+/* ============================================================
+   TOAST NOTIFICATION
+   ============================================================ */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--primary);
+  color: var(--white);
+  padding: 0.8rem 2rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s ease;
+  z-index: 9999;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast i {
+  margin-right: 8px;
+}
+
+.toast.success i { color: var(--green-light); }
+.toast.error i { color: var(--red-light); }
+.toast.info i { color: var(--gold-light); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.app-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gray-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  color: var(--gray);
+}
+
+.app-footer .left {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.app-footer .left .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green-light);
+  display: inline-block;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.app-footer .right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.app-footer .right .badge {
+  background: var(--gray-light);
+  padding: 0.2rem 0.8rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.65rem;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  body { padding: 0.8rem; }
+  .container { padding: 1.2rem; }
+  .app-header h1 { font-size: 1.3rem; }
+  .info-jadwal { flex-direction: column; align-items: stretch; text-align: center; }
+  .info-jadwal .nama { font-size: 1.1rem; }
+  .info-jadwal .status { align-self: center; }
+  .form-row { flex-direction: column; }
+  .field-group { min-width: 100%; }
+  .btn-group { justify-content: center; }
+  .btn { flex: 1; justify-content: center; min-width: 80px; }
+  .laporan-box { padding: 1rem; font-size: 0.9rem; min-height: 250px; }
+  .laporan-box.empty { min-height: 200px; font-size: 0.9rem; }
+  .app-footer { flex-direction: column; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 0.8rem; }
+  .app-header h1 { font-size: 1.1rem; }
+  .info-jadwal { padding: 1rem; }
+  .info-jadwal .nama { font-size: 1rem; }
+  .info-jadwal .epoch-info { font-size: 0.6rem; }
+  .form-group { padding: 0.8rem; }
+  .field-group label { font-size: 0.75rem; min-width: 55px; }
+  .field-group select, .field-group input { font-size: 0.8rem; padding: 0.4rem 0.6rem; }
+  .btn { font-size: 0.75rem; padding: 0.4rem 0.8rem; }
+  .laporan-box { padding: 0.8rem; font-size: 0.8rem; min-height: 200px; }
+  .laporan-box.empty { min-height: 150px; }
+}
 </style>
 </head>
 <body>
 
 <div class="container">
-<h2>📋 Laporan Ketahanan Pangan</h2>
 
-<div class="info-jadwal">
-<div>
-<span class="label">🌾 Hanpangan Hari Ini:</span>
-<span class="nama" id="hanpanganNama">⏳ Memuat...</span>
-<div class="epoch-info" id="epochInfo">⏳ Menghitung epoch...</div>
-</div>
-<span class="status loading" id="hanpanganStatus">⏳ Memuat data...</span>
+  <!-- ===== HEADER ===== -->
+  <div class="app-header">
+    <div class="logo-icon"><i class="fas fa-file-alt"></i></div>
+    <h1>Laporan <span>Hanpangan</span></h1>
+    <div class="subtitle">
+      <i class="fas fa-map-marker-alt"></i>
+      KORAMIL 1609-05/SUKASADA
+      <i class="fas fa-circle" style="font-size:4px; color:var(--gold);"></i>
+      KODIM 1609/BULELENG
+    </div>
+  </div>
+
+  <!-- ===== INFO JADWAL ===== -->
+  <div class="info-jadwal">
+    <div class="left">
+      <span class="label"><i class="fas fa-calendar-day"></i> HANPANGAN HARI INI</span>
+      <span class="nama" id="hanpanganNama">
+        <i class="fas fa-user-tie"></i> ⏳ Memuat...
+      </span>
+      <span class="epoch-info" id="epochInfo">⏳ Menghitung epoch...</span>
+    </div>
+    <span class="status loading" id="hanpanganStatus">
+      <i class="fas fa-spinner fa-spin"></i> Memuat data...
+    </span>
+  </div>
+
+  <!-- ===== FORM ===== -->
+  <div class="form-group">
+    <div class="form-row">
+      <div class="field-group">
+        <label><i class="fas fa-city"></i> Desa</label>
+        <select id="selectDesa">
+          <option value="">-- Pilih Desa --</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label><i class="fas fa-user"></i> Personel</label>
+        <select id="selectPersonel">
+          <option value="">-- Auto dari Jadwal --</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row" style="margin-top:0.8rem;">
+      <div class="field-group">
+        <label><i class="fas fa-calendar-alt"></i> Tanggal</label>
+        <input type="date" id="inputTanggal">
+      </div>
+      <div class="field-group">
+        <label><i class="fas fa-clock"></i> Jam</label>
+        <input type="time" id="inputJam">
+      </div>
+      <div class="field-group" style="flex:0 0 auto;">
+        <span class="info-hari" id="infoHari">-</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BUTTONS ===== -->
+  <div class="btn-group">
+    <button class="btn btn-refresh" onclick="refreshData()">
+      <i class="fas fa-sync-alt"></i> Refresh
+    </button>
+    <button class="btn btn-copy" onclick="salin()">
+      <i class="fas fa-copy"></i> Salin
+    </button>
+    <button class="btn btn-share" onclick="bagikan()">
+      <i class="fas fa-share-alt"></i> Share
+    </button>
+    <button class="btn btn-reset" onclick="resetLaporan()">
+      <i class="fas fa-undo"></i> Reset
+    </button>
+  </div>
+
+  <!-- ===== LAPORAN ===== -->
+  <div class="laporan-wrapper">
+    <div class="laporan-header">
+      <span class="title"><i class="fas fa-file-alt"></i> LAPORAN KEGIATAN</span>
+      <span class="badge"><i class="fas fa-edit"></i> Klik untuk edit</span>
+    </div>
+    <div class="laporan-box empty" id="laporanDisplay" contenteditable="false">
+      <span class="placeholder-text"><i class="fas fa-pen"></i> Silakan isi data di atas</span>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="app-footer">
+    <div class="left">
+      <span class="dot"></span>
+      <span>Online <span id="totalPersonel">0</span> personel</span>
+    </div>
+    <div class="right">
+      <span class="badge"><i class="fas fa-code-branch"></i> EPOCH</span>
+      <span>KORAMIL 1609-05/SUKASADA</span>
+    </div>
+  </div>
+
 </div>
 
-<div class="form-group">
-<div class="form-row">
-<div class="field-group"><label>📍 Desa :</label><select id="selectDesa"><option value="">-- Pilih Desa --</option></select></div>
-<div class="field-group"><label>👤 Personel :</label><select id="selectPersonel"><option value="">-- Auto dari Jadwal --</option></select></div>
-</div>
-<div class="form-row">
-<div class="field-group"><label>📅 Tanggal :</label><input type="date" id="inputTanggal"></div>
-<div class="field-group"><label>🕐 Jam :</label><input type="time" id="inputJam"></div>
-<div class="field-group" style="flex:0 0 auto;"><span class="info-hari" id="infoHari">-</span></div>
-</div>
-</div>
-
-<div class="btn-group">
-<button class="btn btn-refresh" onclick="refreshData()">🔄 Refresh</button>
-<button class="btn btn-copy" onclick="salin()">📄 Salin</button>
-<button class="btn btn-share" onclick="bagikan()">📤 Share</button>
-<button class="btn btn-reset" onclick="resetLaporan()">↺ Reset</button>
-</div>
-
-<div class="laporan-box empty" id="laporanDisplay" contenteditable="false">
-<span class="placeholder-text">📄 Silakan isi data di atas</span>
-</div>
-</div>
-
+<!-- ===== TOAST ===== -->
 <div class="toast" id="toast"></div>
 
 <script>
 // ============================================================
-//  TANPA DATA DI HTML! SEMUA DARI CSV
+//  KONFIGURASI
 // ============================================================
-
 const CSV_URL = 'data/personel.csv?t=' + Date.now();
 
-const $=id=>document.getElementById(id);
-const ds=$('selectDesa'), ps=$('selectPersonel'), tg=$('inputTanggal'), jm=$('inputJam'), ih=$('infoHari'), lp=$('laporanDisplay');
+// ============================================================
+//  DOM
+// ============================================================
+const $ = id => document.getElementById(id);
+const ds = $('selectDesa');
+const ps = $('selectPersonel');
+const tg = $('inputTanggal');
+const jm = $('inputJam');
+const ih = $('infoHari');
+const lp = $('laporanDisplay');
 
-let map={}, desaList=[], hanpangan='', daftarNama=[];
-const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-const BLN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+let map = {};
+let desaList = [];
+let hanpangan = '';
+let daftarNama = [];
 
-function now(){const n=new Date();return {d:n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0'),j:String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')};}
-
-function tgl(s){if(!s)s=now().d;const p=s.split('-');const t=+p[0],b=+p[1]-1,h=+p[2];return {tgl:h+' '+BLN[b]+' '+t,hr:HARI[new Date(t,b,h).getDay()]};}
+const HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const BLN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 
 // ============================================================
-//  EPOCH HANPANGAN (SAMA DENGAN DUKOPS) - HANYA FUNGSI, TANPA DATA
+//  FUNGSI BANTU
 // ============================================================
-function getHanpanganIndex(arr){
-  if(!arr||arr.length===0)return 0;
-  const today=new Date();
-  const epochDays=Math.floor(today.getTime()/(24*60*60*1000));
-  const referenceDate=new Date(2024,0,1);
-  const epochDaysRef=Math.floor(referenceDate.getTime()/(24*60*60*1000));
-  let offset=(0-epochDaysRef)%arr.length;
-  if(offset<0)offset+=arr.length;
-  let index=(epochDays+offset)%arr.length;
-  if(index<0)index+=arr.length;
+function now() {
+  const n = new Date();
+  return {
+    d: n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0'),
+    j: String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')
+  };
+}
 
-  $('epochInfo').innerHTML = `📆 Epoch: ${epochDays} | Ref: ${epochDaysRef} | Offset: ${offset} | Index: ${index} | 👤 Hasil: ${arr[index]}`;
+function tgl(s) {
+  if (!s) s = now().d;
+  const p = s.split('-');
+  const t = +p[0], b = +p[1]-1, h = +p[2];
+  return {
+    tgl: h+' '+BLN[b]+' '+t,
+    hr: HARI[new Date(t,b,h).getDay()]
+  };
+}
+
+// ============================================================
+//  EPOCH HANPANGAN (SAMA DENGAN DUKOPS)
+// ============================================================
+function getHanpanganIndex(arr) {
+  if (!arr || arr.length === 0) return 0;
+  const today = new Date();
+  const epochDays = Math.floor(today.getTime() / (24 * 60 * 60 * 1000));
+  const referenceDate = new Date(2024, 0, 1);
+  const epochDaysRef = Math.floor(referenceDate.getTime() / (24 * 60 * 60 * 1000));
+  let offset = (0 - epochDaysRef) % arr.length;
+  if (offset < 0) offset += arr.length;
+  let index = (epochDays + offset) % arr.length;
+  if (index < 0) index += arr.length;
+
+  $('epochInfo').innerHTML =
+    `<i class="fas fa-calculator"></i> Epoch: ${epochDays} | Ref: ${epochDaysRef} | Offset: ${offset} | Index: ${index} | <i class="fas fa-user-check"></i> ${arr[index]}`;
+
   return index;
 }
 
 // ============================================================
-//  LOAD CSV - SATU-SATUNYA SUMBER DATA
+//  LOAD CSV
 // ============================================================
-async function loadCSV(){
-  try{
-    const res=await fetch(CSV_URL);
-    if(!res.ok)throw new Error('CSV tidak ditemukan');
-    const text=await res.text();
-    const lines=text.trim().split('\n').filter(l=>l.trim());
-    if(lines.length<2)throw new Error('CSV kosong');
+async function loadCSV() {
+  try {
+    const res = await fetch(CSV_URL);
+    if (!res.ok) throw new Error('CSV tidak ditemukan');
+    const text = await res.text();
+    const lines = text.trim().split('\n').filter(l => l.trim());
+    if (lines.length < 2) throw new Error('CSV kosong');
 
-    const header=lines[0].split(',').map(h=>h.trim());
-    const idxNama=header.indexOf('nama');
-    const idxDesa=header.indexOf('desa');
-    const idxStatus=header.indexOf('status');
-    if(idxNama===-1||idxDesa===-1)throw new Error('Format CSV salah (butuh: nama,desa,status)');
+    const header = lines[0].split(',').map(h => h.trim());
+    const idxNama = header.indexOf('nama');
+    const idxDesa = header.indexOf('desa');
+    const idxStatus = header.indexOf('status');
+    if (idxNama === -1 || idxDesa === -1) throw new Error('Format CSV salah');
 
-    map={};desaList=[];daftarNama=[];
-    for(let i=1;i<lines.length;i++){
-      const row=lines[i].split(',').map(c=>c.trim());
-      const nama=row[idxNama]||'';
-      const desa=row[idxDesa]||'';
-      const status=row[idxStatus]||'Desa';
-      if(nama&&desa){
-        map[nama]={desa,status};
+    map = {};
+    desaList = [];
+    daftarNama = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const row = lines[i].split(',').map(c => c.trim());
+      const nama = row[idxNama] || '';
+      const desa = row[idxDesa] || '';
+      const status = row[idxStatus] || 'Desa';
+      if (nama && desa) {
+        map[nama] = { desa, status };
         daftarNama.push(nama);
-        if(!desaList.includes(desa))desaList.push(desa);
+        if (!desaList.includes(desa)) desaList.push(desa);
       }
     }
-    if(Object.keys(map).length===0)throw new Error('Tidak ada data');
+    if (Object.keys(map).length === 0) throw new Error('Tidak ada data');
 
-    // HITUNG HANPANGAN DARI DATA CSV (EPOCH)
-    const idx=getHanpanganIndex(daftarNama);
-    hanpangan=daftarNama[idx]||'';
+    // HITUNG HANPANGAN
+    const idx = getHanpanganIndex(daftarNama);
+    hanpangan = daftarNama[idx] || '';
 
     // POPULATE DESA
-    ds.innerHTML='<option value="">-- Pilih Desa --</option>';
-    desaList.sort().forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;ds.appendChild(o);});
+    ds.innerHTML = '<option value="">-- Pilih Desa --</option>';
+    desaList.sort().forEach(d => {
+      const o = document.createElement('option');
+      o.value = d;
+      o.textContent = d;
+      ds.appendChild(o);
+    });
 
     // POPULATE PERSONEL
-    ps.innerHTML='<option value="">-- Auto dari Jadwal --</option>';
-    daftarNama.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;ps.appendChild(o);});
+    ps.innerHTML = '<option value="">-- Auto dari Jadwal --</option>';
+    daftarNama.forEach(n => {
+      const o = document.createElement('option');
+      o.value = n;
+      o.textContent = n;
+      ps.appendChild(o);
+    });
 
     // AUTO SET
-    $('hanpanganNama').textContent=hanpangan||'-';
-    $('hanpanganStatus').textContent='✅ '+Object.keys(map).length+' personel';
-    $('hanpanganStatus').className='status';
-    if(hanpangan){const ex=[...ps.options].some(o=>o.value===hanpangan);if(ex)ps.value=hanpangan;}
-    if(hanpangan&&map[hanpangan]){const d=map[hanpangan].desa;const ex2=[...ds.options].some(o=>o.value===d);if(ex2)ds.value=d;}
+    $('hanpanganNama').innerHTML = `<i class="fas fa-user-tie"></i> ${hanpangan || '-'}`;
+    $('hanpanganStatus').innerHTML = `<i class="fas fa-check-circle"></i> ${Object.keys(map).length} personel`;
+    $('hanpanganStatus').className = 'status';
+    $('totalPersonel').textContent = Object.keys(map).length;
 
-    const {d:dd,j:jj}=now();tg.value=dd;jm.value=jj;const {hr}=tgl(dd);ih.textContent=hr;
+    if (hanpangan) {
+      const ex = [...ps.options].some(o => o.value === hanpangan);
+      if (ex) ps.value = hanpangan;
+    }
+    if (hanpangan && map[hanpangan]) {
+      const d = map[hanpangan].desa;
+      const ex2 = [...ds.options].some(o => o.value === d);
+      if (ex2) ds.value = d;
+    }
+
+    const { d, j } = now();
+    tg.value = d;
+    jm.value = j;
+    const { hr } = tgl(d);
+    ih.textContent = hr;
+
     generate();
 
-  }catch(e){
-    $('hanpanganStatus').textContent='❌ '+e.message;
-    $('hanpanganStatus').className='status error';
-    $('epochInfo').textContent='❌ Error: '+e.message;
+  } catch (e) {
+    $('hanpanganStatus').innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${e.message}`;
+    $('hanpanganStatus').className = 'status error';
+    $('epochInfo').innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${e.message}`;
     console.error(e);
   }
 }
@@ -179,66 +807,142 @@ async function loadCSV(){
 // ============================================================
 //  GENERATE LAPORAN
 // ============================================================
-function generate(){
-  const desa=ds.value;
-  if(!desa||!tg.value||!jm.value){lp.innerHTML='<span class="placeholder-text">📄 Silakan isi data di atas</span>';lp.className='laporan-box empty';lp.contentEditable='false';return;}
-  const {tgl:t,hr:h}=tgl(tg.value);const jam=jm.value.replace(':','.');
-  ih.textContent=h;let p=ps.value||hanpangan;const st=map[p]?.status||'Desa';
-  const txt=`*KORAMIL 1609-05/SUKASADA*
+function generate() {
+  const desa = ds.value;
+  if (!desa || !tg.value || !jm.value) {
+    lp.innerHTML = '<span class="placeholder-text"><i class="fas fa-pen"></i> Silakan isi data di atas</span>';
+    lp.className = 'laporan-box empty';
+    lp.contentEditable = 'false';
+    return;
+  }
+
+  const { tgl: t, hr: h } = tgl(tg.value);
+  const jam = jm.value.replace(':', '.');
+  ih.textContent = h;
+
+  let p = ps.value || hanpangan;
+  const st = map[p]?.status || 'Desa';
+
+  const txt = `*KORAMIL 1609-05/SUKASADA*
 
 *Perihal : GERAKAN ANTISIPASI DARURAT PANGAN NASIONAL OLEH KORAMIL 1609-05/SUKASADA.*
 
 *Yth. Dandim 1609/Buleleng*
-Cc. Kasdim 
+Cc. Kasdim
 
 Ijin melaporkan, Menindak lanjuti Perintah Danrem 163/WSA tentang Hanpangan pada hari ${h}, tanggal  ${t}. Satuan Koramil 1609-05/Sukasada telah melaksanakan kegiatan *GERAKAN ANTISIPASI DARURAT PANGAN NASIONAL* dalam rangka Ketahanan Pangan Nasional di wilayah Koramil 1609-05/Sukasada, dengan rincian kegiatan sbb :
 
-A. PIPANISASI       : NIHIL 
+A. PIPANISASI       : NIHIL
 
-B. SUMUR BOR     : NIHIL 
+B. SUMUR BOR     : NIHIL
 
-C. POMPANISASI : 2 Unit 
+C. POMPANISASI : 2 Unit
 
 D. GERAKAN ANTISIPASI DARURAT PANGAN  NASIONAL sbb :
 
--*Babinsa ${st} ${desa}* 
- 
+-*Babinsa ${st} ${desa}*
+
 Pada hari ${h}, ${t}  pukul ${jam}Wita. Babinsa ${st} ${desa}, ${p} melaksanakan  monitoring ketahanan pangan di wilayah ${st} ${desa}. Kegiatan ini dilakukan sebagai bentuk pendampingan kepada para petani setelah tanam padi dengan ketersediaan air sangat mencukupi. Monitoring ini adalah upaya mendukung program Ketahanan Pangan Nasional.
 
 Kegiatan berjalan tertib lancar dan aman.
 
 Demikian yang dapat kami laporkan, selanjutnya mohon petunjuk, UMP.`;
-  lp.textContent=txt;lp.className='laporan-box';lp.contentEditable='true';
+
+  lp.textContent = txt;
+  lp.className = 'laporan-box';
+  lp.contentEditable = 'true';
 }
 
 // ============================================================
 //  EVENT
 // ============================================================
-ds.onchange=()=>{const d=ds.value;const p=Object.keys(map).find(k=>map[k].desa===d);if(p)ps.value=p;generate();};
-ps.onchange=()=>{const n=ps.value;if(n&&map[n]){const d=map[n].desa;const ex=[...ds.options].some(o=>o.value===d);if(ex)ds.value=d;}generate();};
-tg.oninput=()=>{if(tg.value){const{hr}=tgl(tg.value);ih.textContent=hr;}else ih.textContent='-';generate();};
-jm.oninput=generate;
+ds.onchange = () => {
+  const d = ds.value;
+  const p = Object.keys(map).find(k => map[k].desa === d);
+  if (p) ps.value = p;
+  generate();
+};
 
-function resetLaporan(){ds.value='';ps.value='';tg.value='';jm.value='';ih.textContent='-';lp.innerHTML='<span class="placeholder-text">📄 Silakan isi data di atas</span>';lp.className='laporan-box empty';lp.contentEditable='false';toast('↺ Reset');}
+ps.onchange = () => {
+  const n = ps.value;
+  if (n && map[n]) {
+    const d = map[n].desa;
+    const ex = [...ds.options].some(o => o.value === d);
+    if (ex) ds.value = d;
+  }
+  generate();
+};
 
-function toast(m){const t=$('toast');t.textContent=m;t.className='toast show';clearTimeout(t._timer);t._timer=setTimeout(()=>t.className='toast',2500);}
+tg.oninput = () => {
+  if (tg.value) {
+    const { hr } = tgl(tg.value);
+    ih.textContent = hr;
+  } else {
+    ih.textContent = '-';
+  }
+  generate();
+};
 
-function salin(){if(lp.classList.contains('empty'))return toast('⚠️ Belum ada laporan');navigator.clipboard.writeText(lp.textContent).then(()=>toast('✅ Disalin!'));}
+jm.oninput = generate;
 
-function bagikan(){if(lp.classList.contains('empty'))return toast('⚠️ Belum ada laporan');const t=lp.textContent;navigator.share?navigator.share({title:'Laporan Hanpangan',text:t}):navigator.clipboard.writeText(t).then(()=>toast('📤 Disalin'));}
+// ============================================================
+//  UTILITY
+// ============================================================
+function resetLaporan() {
+  ds.value = '';
+  ps.value = '';
+  tg.value = '';
+  jm.value = '';
+  ih.textContent = '-';
+  lp.innerHTML = '<span class="placeholder-text"><i class="fas fa-pen"></i> Silakan isi data di atas</span>';
+  lp.className = 'laporan-box empty';
+  lp.contentEditable = 'false';
+  toast('↺ Laporan direset', 'info');
+}
 
-async function refreshData(){
-  $('hanpanganStatus').textContent='⏳ Memuat...';
-  $('hanpanganStatus').className='status loading';
-  $('epochInfo').textContent='⏳ Menghitung ulang epoch...';
+function toast(msg, type = 'info') {
+  const t = $('toast');
+  const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+  t.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> ${msg}`;
+  t.className = `toast ${type}`;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function salin() {
+  if (lp.classList.contains('empty')) return toast('⚠️ Belum ada laporan', 'error');
+  navigator.clipboard.writeText(lp.textContent)
+    .then(() => toast('✅ Laporan disalin!', 'success'))
+    .catch(() => toast('❌ Gagal menyalin', 'error'));
+}
+
+function bagikan() {
+  if (lp.classList.contains('empty')) return toast('⚠️ Belum ada laporan', 'error');
+  const t = lp.textContent;
+  if (navigator.share) {
+    navigator.share({ title: 'Laporan Hanpangan', text: t })
+      .catch(() => {});
+  } else {
+    navigator.clipboard.writeText(t)
+      .then(() => toast('📤 Laporan disalin untuk dibagikan', 'success'))
+      .catch(() => toast('❌ Gagal membagikan', 'error'));
+  }
+}
+
+async function refreshData() {
+  $('hanpanganStatus').innerHTML = `<i class="fas fa-spinner fa-spin"></i> Memuat...`;
+  $('hanpanganStatus').className = 'status loading';
+  $('epochInfo').innerHTML = `<i class="fas fa-spinner fa-spin"></i> Menghitung epoch...`;
   await loadCSV();
-  toast('✅ Data refreshed');
+  toast('✅ Data refreshed', 'success');
 }
 
 // ============================================================
-//  START - TANPA DATA DI HTML
+//  START
 // ============================================================
 loadCSV();
 </script>
+
 </body>
 </html>
