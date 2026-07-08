@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Hanpangan</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Times New Roman',serif;background:#f0f2f5;padding:1.5rem;display:flex;justify-content:center}
+.container{max-width:900px;width:100%;background:#fff;padding:2rem;border-radius:12px}
+h2{text-align:center;border-bottom:2px solid #1e2b4a;padding-bottom:.5rem;margin-bottom:1.5rem}
+.info-jadwal{background:#e8f5e9;border:1px solid #4caf50;border-radius:8px;padding:.8rem 1.2rem;margin-bottom:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center}
+.info-jadwal .label{font-weight:700;color:#1e2b4a}
+.info-jadwal .nama{font-weight:700;color:#2e7d32;font-size:1.1rem}
+.info-jadwal .status{font-size:.8rem;color:#555;background:#fff;padding:.2rem .8rem;border-radius:20px;border:1px solid #4caf50}
+.info-jadwal .status.error{border-color:#f44336;color:#f44336}
+.info-jadwal .status.loading{border-color:#ff9800;color:#ff9800}
+.epoch-info{font-size:.7rem;color:#888;margin-top:2px}
+.form-group{background:#f8f9fc;padding:1rem;border-radius:8px;border:1px solid #dce1ec;margin-bottom:1.5rem}
+.form-row{display:flex;flex-wrap:wrap;gap:.8rem}
+.field-group{flex:1;min-width:150px;display:flex;align-items:center;gap:.3rem}
+.field-group label{font-weight:700;font-size:.85rem;white-space:nowrap}
+.field-group select,.field-group input{flex:1;padding:.3rem .6rem;border:1px solid #bcc3d4;border-radius:6px;font-family:'Times New Roman',serif;font-size:.9rem;min-width:80px}
+.btn-group{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.btn{padding:.5rem 1.5rem;border:none;border-radius:6px;font-weight:600;cursor:pointer;font-family:'Times New Roman',serif;transition:.2s}
+.btn-copy{background:#1e2b4a;color:#fff}
+.btn-copy:hover{background:#0f1a33}
+.btn-share{background:#0a6b3c;color:#fff}
+.btn-share:hover{background:#08522e}
+.btn-reset{background:#8a9bb0;color:#fff}
+.btn-reset:hover{background:#6a7f96}
+.btn-refresh{background:#b8860b;color:#fff}
+.btn-refresh:hover{background:#9a7209}
+.laporan-box{background:#fafbfc;border:2px solid #dce1ec;border-radius:8px;padding:1.8rem 2rem;white-space:pre-wrap;font-size:1rem;line-height:1.7;min-height:380px;outline:none;cursor:text}
+.laporan-box.empty{display:flex;justify-content:center;align-items:center;color:#a0aec0;font-style:italic;min-height:380px;border-style:dashed}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#1e2b4a;color:#fff;padding:.7rem 2rem;border-radius:8px;opacity:0;transition:opacity .4s;pointer-events:none;z-index:999}
+.toast.show{opacity:1}
+.info-hari{background:#e8ebf2;padding:.2rem .8rem;border-radius:20px;font-weight:600;font-size:.85rem}
+@media(max-width:600px){.container{padding:1rem}.form-row{flex-direction:column}.field-group{min-width:100%}.laporan-box{padding:1rem;min-height:250px}}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>📋 Laporan Ketahanan Pangan</h2>
+
+<div class="info-jadwal">
+<div>
+<span class="label">🌾 Hanpangan Hari Ini:</span>
+<span class="nama" id="hanpanganNama">⏳ Memuat...</span>
+<div class="epoch-info" id="epochInfo">⏳ Menghitung epoch...</div>
+</div>
+<span class="status loading" id="hanpanganStatus">⏳ Memuat data...</span>
+</div>
+
+<div class="form-group">
+<div class="form-row">
+<div class="field-group"><label>📍 Desa :</label><select id="selectDesa"><option value="">-- Pilih Desa --</option></select></div>
+<div class="field-group"><label>👤 Personel :</label><select id="selectPersonel"><option value="">-- Auto dari Jadwal --</option></select></div>
+</div>
+<div class="form-row">
+<div class="field-group"><label>📅 Tanggal :</label><input type="date" id="inputTanggal"></div>
+<div class="field-group"><label>🕐 Jam :</label><input type="time" id="inputJam"></div>
+<div class="field-group" style="flex:0 0 auto;"><span class="info-hari" id="infoHari">-</span></div>
+</div>
+</div>
+
+<div class="btn-group">
+<button class="btn btn-refresh" onclick="refreshData()">🔄 Refresh</button>
+<button class="btn btn-copy" onclick="salin()">📄 Salin</button>
+<button class="btn btn-share" onclick="bagikan()">📤 Share</button>
+<button class="btn btn-reset" onclick="resetLaporan()">↺ Reset</button>
+</div>
+
+<div class="laporan-box empty" id="laporanDisplay" contenteditable="false">
+<span class="placeholder-text">📄 Silakan isi data di atas</span>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  TANPA DATA DI HTML! SEMUA DARI CSV
+// ============================================================
+
+const CSV_URL = 'data/personel.csv?t=' + Date.now();
+
+const $=id=>document.getElementById(id);
+const ds=$('selectDesa'), ps=$('selectPersonel'), tg=$('inputTanggal'), jm=$('inputJam'), ih=$('infoHari'), lp=$('laporanDisplay');
+
+let map={}, desaList=[], hanpangan='', daftarNama=[];
+const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const BLN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+function now(){const n=new Date();return {d:n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0'),j:String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')};}
+
+function tgl(s){if(!s)s=now().d;const p=s.split('-');const t=+p[0],b=+p[1]-1,h=+p[2];return {tgl:h+' '+BLN[b]+' '+t,hr:HARI[new Date(t,b,h).getDay()]};}
+
+// ============================================================
+//  EPOCH HANPANGAN (SAMA DENGAN DUKOPS) - HANYA FUNGSI, TANPA DATA
+// ============================================================
+function getHanpanganIndex(arr){
+  if(!arr||arr.length===0)return 0;
+  const today=new Date();
+  const epochDays=Math.floor(today.getTime()/(24*60*60*1000));
+  const referenceDate=new Date(2024,0,1);
+  const epochDaysRef=Math.floor(referenceDate.getTime()/(24*60*60*1000));
+  let offset=(0-epochDaysRef)%arr.length;
+  if(offset<0)offset+=arr.length;
+  let index=(epochDays+offset)%arr.length;
+  if(index<0)index+=arr.length;
+
+  $('epochInfo').innerHTML = `📆 Epoch: ${epochDays} | Ref: ${epochDaysRef} | Offset: ${offset} | Index: ${index} | 👤 Hasil: ${arr[index]}`;
+  return index;
+}
+
+// ============================================================
+//  LOAD CSV - SATU-SATUNYA SUMBER DATA
+// ============================================================
+async function loadCSV(){
+  try{
+    const res=await fetch(CSV_URL);
+    if(!res.ok)throw new Error('CSV tidak ditemukan');
+    const text=await res.text();
+    const lines=text.trim().split('\n').filter(l=>l.trim());
+    if(lines.length<2)throw new Error('CSV kosong');
+
+    const header=lines[0].split(',').map(h=>h.trim());
+    const idxNama=header.indexOf('nama');
+    const idxDesa=header.indexOf('desa');
+    const idxStatus=header.indexOf('status');
+    if(idxNama===-1||idxDesa===-1)throw new Error('Format CSV salah (butuh: nama,desa,status)');
+
+    map={};desaList=[];daftarNama=[];
+    for(let i=1;i<lines.length;i++){
+      const row=lines[i].split(',').map(c=>c.trim());
+      const nama=row[idxNama]||'';
+      const desa=row[idxDesa]||'';
+      const status=row[idxStatus]||'Desa';
+      if(nama&&desa){
+        map[nama]={desa,status};
+        daftarNama.push(nama);
+        if(!desaList.includes(desa))desaList.push(desa);
+      }
+    }
+    if(Object.keys(map).length===0)throw new Error('Tidak ada data');
+
+    // HITUNG HANPANGAN DARI DATA CSV (EPOCH)
+    const idx=getHanpanganIndex(daftarNama);
+    hanpangan=daftarNama[idx]||'';
+
+    // POPULATE DESA
+    ds.innerHTML='<option value="">-- Pilih Desa --</option>';
+    desaList.sort().forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;ds.appendChild(o);});
+
+    // POPULATE PERSONEL
+    ps.innerHTML='<option value="">-- Auto dari Jadwal --</option>';
+    daftarNama.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;ps.appendChild(o);});
+
+    // AUTO SET
+    $('hanpanganNama').textContent=hanpangan||'-';
+    $('hanpanganStatus').textContent='✅ '+Object.keys(map).length+' personel';
+    $('hanpanganStatus').className='status';
+    if(hanpangan){const ex=[...ps.options].some(o=>o.value===hanpangan);if(ex)ps.value=hanpangan;}
+    if(hanpangan&&map[hanpangan]){const d=map[hanpangan].desa;const ex2=[...ds.options].some(o=>o.value===d);if(ex2)ds.value=d;}
+
+    const {d:dd,j:jj}=now();tg.value=dd;jm.value=jj;const {hr}=tgl(dd);ih.textContent=hr;
+    generate();
+
+  }catch(e){
+    $('hanpanganStatus').textContent='❌ '+e.message;
+    $('hanpanganStatus').className='status error';
+    $('epochInfo').textContent='❌ Error: '+e.message;
+    console.error(e);
+  }
+}
+
+// ============================================================
+//  GENERATE LAPORAN
+// ============================================================
+function generate(){
+  const desa=ds.value;
+  if(!desa||!tg.value||!jm.value){lp.innerHTML='<span class="placeholder-text">📄 Silakan isi data di atas</span>';lp.className='laporan-box empty';lp.contentEditable='false';return;}
+  const {tgl:t,hr:h}=tgl(tg.value);const jam=jm.value.replace(':','.');
+  ih.textContent=h;let p=ps.value||hanpangan;const st=map[p]?.status||'Desa';
+  const txt=`*KORAMIL 1609-05/SUKASADA*
+
+*Perihal : GERAKAN ANTISIPASI DARURAT PANGAN NASIONAL OLEH KORAMIL 1609-05/SUKASADA.*
+
+*Yth. Dandim 1609/Buleleng*
+Cc. Kasdim 
+
+Ijin melaporkan, Menindak lanjuti Perintah Danrem 163/WSA tentang Hanpangan pada hari ${h}, tanggal  ${t}. Satuan Koramil 1609-05/Sukasada telah melaksanakan kegiatan *GERAKAN ANTISIPASI DARURAT PANGAN NASIONAL* dalam rangka Ketahanan Pangan Nasional di wilayah Koramil 1609-05/Sukasada, dengan rincian kegiatan sbb :
+
+A. PIPANISASI       : NIHIL 
+
+B. SUMUR BOR     : NIHIL 
+
+C. POMPANISASI : 2 Unit 
+
+D. GERAKAN ANTISIPASI DARURAT PANGAN  NASIONAL sbb :
+
+-*Babinsa ${st} ${desa}* 
+ 
+Pada hari ${h}, ${t}  pukul ${jam}Wita. Babinsa ${st} ${desa}, ${p} melaksanakan  monitoring ketahanan pangan di wilayah ${st} ${desa}. Kegiatan ini dilakukan sebagai bentuk pendampingan kepada para petani setelah tanam padi dengan ketersediaan air sangat mencukupi. Monitoring ini adalah upaya mendukung program Ketahanan Pangan Nasional.
+
+Kegiatan berjalan tertib lancar dan aman.
+
+Demikian yang dapat kami laporkan, selanjutnya mohon petunjuk, UMP.`;
+  lp.textContent=txt;lp.className='laporan-box';lp.contentEditable='true';
+}
+
+// ============================================================
+//  EVENT
+// ============================================================
+ds.onchange=()=>{const d=ds.value;const p=Object.keys(map).find(k=>map[k].desa===d);if(p)ps.value=p;generate();};
+ps.onchange=()=>{const n=ps.value;if(n&&map[n]){const d=map[n].desa;const ex=[...ds.options].some(o=>o.value===d);if(ex)ds.value=d;}generate();};
+tg.oninput=()=>{if(tg.value){const{hr}=tgl(tg.value);ih.textContent=hr;}else ih.textContent='-';generate();};
+jm.oninput=generate;
+
+function resetLaporan(){ds.value='';ps.value='';tg.value='';jm.value='';ih.textContent='-';lp.innerHTML='<span class="placeholder-text">📄 Silakan isi data di atas</span>';lp.className='laporan-box empty';lp.contentEditable='false';toast('↺ Reset');}
+
+function toast(m){const t=$('toast');t.textContent=m;t.className='toast show';clearTimeout(t._timer);t._timer=setTimeout(()=>t.className='toast',2500);}
+
+function salin(){if(lp.classList.contains('empty'))return toast('⚠️ Belum ada laporan');navigator.clipboard.writeText(lp.textContent).then(()=>toast('✅ Disalin!'));}
+
+function bagikan(){if(lp.classList.contains('empty'))return toast('⚠️ Belum ada laporan');const t=lp.textContent;navigator.share?navigator.share({title:'Laporan Hanpangan',text:t}):navigator.clipboard.writeText(t).then(()=>toast('📤 Disalin'));}
+
+async function refreshData(){
+  $('hanpanganStatus').textContent='⏳ Memuat...';
+  $('hanpanganStatus').className='status loading';
+  $('epochInfo').textContent='⏳ Menghitung ulang epoch...';
+  await loadCSV();
+  toast('✅ Data refreshed');
+}
+
+// ============================================================
+//  START - TANPA DATA DI HTML
+// ============================================================
+loadCSV();
+</script>
+</body>
+</html>
