@@ -12,11 +12,11 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <!-- ===== ICONS ===== -->
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/Hanpangan/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/Hanpangan/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/Hanpangan/favicon-16x16.png">
+<link rel="manifest" href="/Hanpangan/manifest.json">
+<link rel="shortcut icon" href="/Hanpangan/favicon.ico">
 
 <!-- ===== FONT AWESOME ===== -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -1006,6 +1006,12 @@ window.addEventListener('appinstalled', () => {
   deferredPrompt = null;
 });
 
+// CEK JIKA SUDAH DALAM MODE STANDALONE (PWA)
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  const installBtn = document.getElementById('installBtn');
+  if (installBtn) installBtn.style.display = 'none';
+}
+
 // ============================================================
 //  START
 // ============================================================
@@ -1016,7 +1022,7 @@ loadCSV();
 // ============================================================
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/sw.js')
+    navigator.serviceWorker.register('/Hanpangan/sw.js')
       .then(function(reg) {
         console.log('✅ Service Worker registered');
       })
