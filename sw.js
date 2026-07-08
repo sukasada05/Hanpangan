@@ -1,19 +1,17 @@
-// ============================================================
-//  SERVICE WORKER - CACHE & OFFLINE SUPPORT
-// ============================================================
-
 const CACHE_NAME = 'hanpangan-v1';
 const urlsToCache = [
-  'index.html',
-  'manifest.json',
-  'favicon.ico',
-  'icon-192.png',
-  'icon-512.png',
-  'apple-touch-icon.png',
-  'data/personel.csv'
+  '/Hanpangan/',
+  '/Hanpangan/index.html',
+  '/Hanpangan/manifest.json',
+  '/Hanpangan/favicon.ico',
+  '/Hanpangan/favicon-32x32.png',
+  '/Hanpangan/favicon-16x16.png',
+  '/Hanpangan/apple-touch-icon.png',
+  '/Hanpangan/android-chrome-192x192.png',
+  '/Hanpangan/android-chrome-512x512.png',
+  '/Hanpangan/data/personel.csv'
 ];
 
-// INSTALL
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -27,7 +25,6 @@ self.addEventListener('install', function(event) {
   );
 });
 
-// ACTIVATE
 self.addEventListener('activate', function(event) {
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
@@ -45,33 +42,23 @@ self.addEventListener('activate', function(event) {
   );
 });
 
-// FETCH
 self.addEventListener('fetch', function(event) {
   event.respondWith(
     caches.match(event.request)
       .then(function(response) {
-        // Cache hit - return response
         if (response) {
           return response;
         }
-
-        // Clone request
         var fetchRequest = event.request.clone();
-
         return fetch(fetchRequest).then(function(response) {
-          // Check if valid response
           if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
           }
-
-          // Clone response
           var responseToCache = response.clone();
-
           caches.open(CACHE_NAME)
             .then(function(cache) {
               cache.put(event.request, responseToCache);
             });
-
           return response;
         });
       })
