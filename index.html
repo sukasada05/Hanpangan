@@ -2,55 +2,71 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Laporan Hanpangan - Koramil 1609-05/Sukasada</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a1a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Laporan Hanpangan">
+<meta name="mobile-web-app-capable" content="yes">
 
-<!-- ===== GOOGLE FONTS ===== -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Times+New+Roman&display=swap" rel="stylesheet">
+<!-- ===== PWA MANIFEST ===== -->
+<link rel="manifest" href="manifest.json">
+
+<!-- ===== ICONS ===== -->
+<link rel="icon" type="image/png" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 
 <!-- ===== FONT AWESOME ===== -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+<title>Laporan Hanpangan - Koramil 1609-05/Sukasada</title>
+
 <style>
 /* ============================================================
-   ROOT VARIABLES
+   ROOT VARIABLES (ISOLATED - TIDAK PENGARUH CSS LAIN)
    ============================================================ */
-:root {
-  --primary: #0a1a2e;
-  --primary-light: #1a3a5e;
-  --primary-dark: #050f1a;
-  --gold: #d4a843;
-  --gold-light: #f0d080;
-  --gold-dark: #b8922e;
-  --green: #2e7d32;
-  --green-light: #4caf50;
-  --green-bg: #e8f5e9;
-  --red: #c62828;
-  --red-light: #ef5350;
-  --gray: #6a7a8a;
-  --gray-light: #e8ecf1;
-  --gray-bg: #f5f7fa;
-  --white: #ffffff;
-  --shadow: 0 4px 24px rgba(0,0,0,0.08);
-  --radius: 16px;
-  --radius-sm: 8px;
-  --transition: all 0.3s ease;
-  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: 'Times New Roman', Times, serif;
+.hanpangan-app {
+  --hp-primary: #0a1a2e;
+  --hp-primary-light: #1a3a5e;
+  --hp-primary-dark: #050f1a;
+  --hp-gold: #d4a843;
+  --hp-gold-light: #f0d080;
+  --hp-gold-dark: #b8922e;
+  --hp-green: #2e7d32;
+  --hp-green-light: #4caf50;
+  --hp-green-bg: #e8f5e9;
+  --hp-red: #c62828;
+  --hp-red-light: #ef5350;
+  --hp-gray: #6a7a8a;
+  --hp-gray-light: #e8ecf1;
+  --hp-gray-bg: #f5f7fa;
+  --hp-white: #ffffff;
+  --hp-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --hp-radius: 16px;
+  --hp-radius-sm: 8px;
+  --hp-transition: all 0.3s ease;
+  --hp-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --hp-serif: 'Times New Roman', Times, serif;
+
+  /* RESET DALAM SCOPE */
+  all: initial;
+  display: block;
+  font-family: var(--hp-font);
+  color: var(--hp-primary);
 }
 
 /* ============================================================
-   RESET
+   SEMUA CSS DALAM SCOPE .hanpangan-app
    ============================================================ */
-* {
+.hanpangan-app * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: var(--font-primary);
-  background: var(--gray-bg);
+.hanpangan-app body {
+  font-family: var(--hp-font);
+  background: var(--hp-gray-bg);
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -61,12 +77,12 @@ body {
 /* ============================================================
    CONTAINER
    ============================================================ */
-.container {
+.hanpangan-app .container {
   max-width: 960px;
   width: 100%;
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  background: var(--hp-white);
+  border-radius: var(--hp-radius);
+  box-shadow: var(--hp-shadow);
   padding: 2rem 2rem 2.5rem;
   margin: 0 auto;
 }
@@ -74,48 +90,48 @@ body {
 /* ============================================================
    HEADER
    ============================================================ */
-.app-header {
+.hanpangan-app .app-header {
   text-align: center;
   padding-bottom: 1.2rem;
-  border-bottom: 3px solid var(--gold);
+  border-bottom: 3px solid var(--hp-gold);
   margin-bottom: 1.5rem;
 }
 
-.app-header .logo-icon {
+.hanpangan-app .app-header .logo-icon {
   font-size: 2.2rem;
-  color: var(--gold);
+  color: var(--hp-gold);
   margin-bottom: 0.2rem;
 }
 
-.app-header h1 {
+.hanpangan-app .app-header h1 {
   font-size: 1.8rem;
   font-weight: 800;
-  color: var(--primary);
+  color: var(--hp-primary);
   letter-spacing: 1px;
 }
 
-.app-header h1 span {
-  color: var(--gold);
+.hanpangan-app .app-header h1 span {
+  color: var(--hp-gold);
 }
 
-.app-header .subtitle {
+.hanpangan-app .app-header .subtitle {
   font-size: 0.9rem;
-  color: var(--gray);
+  color: var(--hp-gray);
   font-weight: 500;
   letter-spacing: 0.5px;
 }
 
-.app-header .subtitle i {
-  color: var(--gold);
+.hanpangan-app .app-header .subtitle i {
+  color: var(--hp-gold);
   margin: 0 4px;
 }
 
 /* ============================================================
-   INFO JADWAL - HANPANGAN
+   INFO JADWAL
    ============================================================ */
-.info-jadwal {
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  border-radius: var(--radius);
+.hanpangan-app .info-jadwal {
+  background: linear-gradient(135deg, var(--hp-primary), var(--hp-primary-light));
+  border-radius: var(--hp-radius);
   padding: 1.2rem 1.5rem;
   margin-bottom: 1.5rem;
   display: flex;
@@ -128,23 +144,23 @@ body {
   overflow: hidden;
 }
 
-.info-jadwal::before {
+.hanpangan-app .info-jadwal::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+  background: linear-gradient(90deg, var(--hp-gold), var(--hp-gold-light), var(--hp-gold));
 }
 
-.info-jadwal .left {
+.hanpangan-app .info-jadwal .left {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
 }
 
-.info-jadwal .label {
+.hanpangan-app .info-jadwal .label {
   font-size: 0.75rem;
   font-weight: 600;
   color: rgba(255,255,255,0.6);
@@ -152,28 +168,28 @@ body {
   letter-spacing: 1.5px;
 }
 
-.info-jadwal .nama {
+.hanpangan-app .info-jadwal .nama {
   font-size: 1.4rem;
   font-weight: 800;
-  color: var(--gold-light);
+  color: var(--hp-gold-light);
 }
 
-.info-jadwal .nama i {
+.hanpangan-app .info-jadwal .nama i {
   margin-right: 8px;
-  color: var(--gold);
+  color: var(--hp-gold);
 }
 
-.info-jadwal .epoch-info {
+.hanpangan-app .info-jadwal .epoch-info {
   font-size: 0.7rem;
   color: rgba(255,255,255,0.5);
   font-family: 'Courier New', monospace;
   margin-top: 2px;
 }
 
-.info-jadwal .status {
+.hanpangan-app .info-jadwal .status {
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--white);
+  color: var(--hp-white);
   background: rgba(76, 175, 80, 0.2);
   padding: 0.4rem 1rem;
   border-radius: 20px;
@@ -181,13 +197,13 @@ body {
   white-space: nowrap;
 }
 
-.info-jadwal .status.error {
+.hanpangan-app .info-jadwal .status.error {
   background: rgba(239, 83, 80, 0.2);
   border-color: rgba(239, 83, 80, 0.3);
-  color: var(--red-light);
+  color: var(--hp-red-light);
 }
 
-.info-jadwal .status.loading {
+.hanpangan-app .info-jadwal .status.loading {
   background: rgba(255, 193, 7, 0.15);
   border-color: rgba(255, 193, 7, 0.3);
   color: #ffd54f;
@@ -196,21 +212,21 @@ body {
 /* ============================================================
    FORM
    ============================================================ */
-.form-group {
-  background: var(--gray-bg);
-  border-radius: var(--radius);
+.hanpangan-app .form-group {
+  background: var(--hp-gray-bg);
+  border-radius: var(--hp-radius);
   padding: 1.2rem 1.5rem;
   margin-bottom: 1.2rem;
-  border: 1px solid var(--gray-light);
+  border: 1px solid var(--hp-gray-light);
 }
 
-.form-row {
+.hanpangan-app .form-row {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
-.field-group {
+.hanpangan-app .field-group {
   flex: 1;
   min-width: 180px;
   display: flex;
@@ -218,48 +234,43 @@ body {
   gap: 0.6rem;
 }
 
-.field-group label {
+.hanpangan-app .field-group label {
   font-weight: 600;
   font-size: 0.85rem;
-  color: var(--primary);
+  color: var(--hp-primary);
   white-space: nowrap;
   min-width: 70px;
 }
 
-.field-group label i {
-  color: var(--gold);
+.hanpangan-app .field-group label i {
+  color: var(--hp-gold);
   width: 18px;
 }
 
-.field-group select,
-.field-group input {
+.hanpangan-app .field-group select,
+.hanpangan-app .field-group input {
   flex: 1;
   padding: 0.5rem 0.8rem;
-  border: 2px solid var(--gray-light);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-primary);
+  border: 2px solid var(--hp-gray-light);
+  border-radius: var(--hp-radius-sm);
+  font-family: var(--hp-font);
   font-size: 0.9rem;
-  background: var(--white);
-  color: var(--primary);
-  transition: var(--transition);
+  background: var(--hp-white);
+  color: var(--hp-primary);
+  transition: var(--hp-transition);
   min-width: 100px;
 }
 
-.field-group select:focus,
-.field-group input:focus {
+.hanpangan-app .field-group select:focus,
+.hanpangan-app .field-group input:focus {
   outline: none;
-  border-color: var(--gold);
+  border-color: var(--hp-gold);
   box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.15);
 }
 
-.field-group select:hover,
-.field-group input:hover {
-  border-color: var(--gold-dark);
-}
-
-.field-group .info-hari {
-  background: var(--primary);
-  color: var(--white);
+.hanpangan-app .field-group .info-hari {
+  background: var(--hp-primary);
+  color: var(--hp-white);
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -270,175 +281,175 @@ body {
 /* ============================================================
    BUTTONS
    ============================================================ */
-.btn-group {
+.hanpangan-app .btn-group {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
   margin-bottom: 1.2rem;
 }
 
-.btn {
+.hanpangan-app .btn {
   padding: 0.55rem 1.4rem;
   border: none;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-primary);
+  border-radius: var(--hp-radius-sm);
+  font-family: var(--hp-font);
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--hp-transition);
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.btn i {
+.hanpangan-app .btn i {
   font-size: 0.9rem;
 }
 
-.btn-refresh {
-  background: var(--gold);
-  color: var(--primary);
+.hanpangan-app .btn-refresh {
+  background: var(--hp-gold);
+  color: var(--hp-primary);
 }
-.btn-refresh:hover {
-  background: var(--gold-dark);
+.hanpangan-app .btn-refresh:hover {
+  background: var(--hp-gold-dark);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(212, 168, 67, 0.3);
 }
 
-.btn-copy {
-  background: var(--primary);
-  color: var(--white);
+.hanpangan-app .btn-copy {
+  background: var(--hp-primary);
+  color: var(--hp-white);
 }
-.btn-copy:hover {
-  background: var(--primary-light);
+.hanpangan-app .btn-copy:hover {
+  background: var(--hp-primary-light);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(10, 26, 46, 0.25);
 }
 
-.btn-share {
-  background: var(--green);
-  color: var(--white);
+.hanpangan-app .btn-share {
+  background: var(--hp-green);
+  color: var(--hp-white);
 }
-.btn-share:hover {
+.hanpangan-app .btn-share:hover {
   background: #1b5e20;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
 }
 
-.btn-reset {
-  background: var(--gray-light);
-  color: var(--gray);
+.hanpangan-app .btn-reset {
+  background: var(--hp-gray-light);
+  color: var(--hp-gray);
 }
-.btn-reset:hover {
+.hanpangan-app .btn-reset:hover {
   background: #d5dce6;
   transform: translateY(-2px);
 }
 
-.btn:active {
+.hanpangan-app .btn:active {
   transform: scale(0.96);
 }
 
 /* ============================================================
    LAPORAN BOX
    ============================================================ */
-.laporan-wrapper {
-  border: 2px solid var(--gray-light);
-  border-radius: var(--radius);
+.hanpangan-app .laporan-wrapper {
+  border: 2px solid var(--hp-gray-light);
+  border-radius: var(--hp-radius);
   overflow: hidden;
-  transition: var(--transition);
+  transition: var(--hp-transition);
 }
 
-.laporan-wrapper:hover {
-  border-color: var(--gold);
+.hanpangan-app .laporan-wrapper:hover {
+  border-color: var(--hp-gold);
 }
 
-.laporan-wrapper .laporan-header {
-  background: var(--gray-bg);
+.hanpangan-app .laporan-header {
+  background: var(--hp-gray-bg);
   padding: 0.6rem 1.2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--gray-light);
+  border-bottom: 1px solid var(--hp-gray-light);
 }
 
-.laporan-wrapper .laporan-header .title {
+.hanpangan-app .laporan-header .title {
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--gray);
+  color: var(--hp-gray);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.laporan-wrapper .laporan-header .title i {
-  color: var(--gold);
+.hanpangan-app .laporan-header .title i {
+  color: var(--hp-gold);
   margin-right: 6px;
 }
 
-.laporan-wrapper .laporan-header .badge {
+.hanpangan-app .laporan-header .badge {
   font-size: 0.65rem;
-  color: var(--gray);
-  background: var(--white);
+  color: var(--hp-gray);
+  background: var(--hp-white);
   padding: 0.2rem 0.8rem;
   border-radius: 12px;
-  border: 1px solid var(--gray-light);
+  border: 1px solid var(--hp-gray-light);
 }
 
-.laporan-box {
-  background: var(--white);
+.hanpangan-app .laporan-box {
+  background: var(--hp-white);
   padding: 1.8rem 2rem;
   white-space: pre-wrap;
-  font-family: var(--font-serif);
+  font-family: var(--hp-serif);
   font-size: 1rem;
   line-height: 1.8;
   min-height: 380px;
   outline: none;
   cursor: text;
-  color: var(--primary);
-  transition: var(--transition);
+  color: var(--hp-primary);
+  transition: var(--hp-transition);
 }
 
-.laporan-box:focus {
+.hanpangan-app .laporan-box:focus {
   background: #fafbfc;
 }
 
-.laporan-box.empty {
+.hanpangan-app .laporan-box.empty {
   display: flex;
   justify-content: center;
   align-items: center;
   color: #aab;
   font-style: italic;
-  font-family: var(--font-primary);
+  font-family: var(--hp-font);
   font-size: 1rem;
   min-height: 380px;
 }
 
-.laporan-box .placeholder-text {
+.hanpangan-app .laporan-box .placeholder-text {
   color: #aab;
   font-style: italic;
 }
 
-.laporan-box .placeholder-text i {
-  color: var(--gold);
+.hanpangan-app .laporan-box .placeholder-text i {
+  color: var(--hp-gold);
   margin-right: 8px;
 }
 
-.laporan-box:not(.empty):hover {
+.hanpangan-app .laporan-box:not(.empty):hover {
   background: #fcfdff;
 }
 
 /* ============================================================
-   TOAST NOTIFICATION
+   TOAST
    ============================================================ */
-.toast {
+.hanpangan-app .toast {
   position: fixed;
   bottom: 2rem;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
-  background: var(--primary);
-  color: var(--white);
+  background: var(--hp-primary);
+  color: var(--hp-white);
   padding: 0.8rem 2rem;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-primary);
+  border-radius: var(--hp-radius-sm);
+  font-family: var(--hp-font);
   font-size: 0.9rem;
   font-weight: 500;
   opacity: 0;
@@ -448,63 +459,59 @@ body {
   box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
 
-.toast.show {
+.hanpangan-app .toast.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
 
-.toast i {
+.hanpangan-app .toast i {
   margin-right: 8px;
 }
-
-.toast.success i { color: var(--green-light); }
-.toast.error i { color: var(--red-light); }
-.toast.info i { color: var(--gold-light); }
 
 /* ============================================================
    FOOTER
    ============================================================ */
-.app-footer {
+.hanpangan-app .app-footer {
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--gray-light);
+  border-top: 1px solid var(--hp-gray-light);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
   font-size: 0.7rem;
-  color: var(--gray);
+  color: var(--hp-gray);
 }
 
-.app-footer .left {
+.hanpangan-app .app-footer .left {
   display: flex;
   align-items: center;
   gap: 0.8rem;
 }
 
-.app-footer .left .dot {
+.hanpangan-app .app-footer .left .dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--green-light);
+  background: var(--hp-green-light);
   display: inline-block;
-  animation: pulse-dot 2s infinite;
+  animation: hp-pulse-dot 2s infinite;
 }
 
-@keyframes pulse-dot {
+@keyframes hp-pulse-dot {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
 }
 
-.app-footer .right {
+.hanpangan-app .app-footer .right {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.app-footer .right .badge {
-  background: var(--gray-light);
+.hanpangan-app .app-footer .right .badge {
+  background: var(--hp-gray-light);
   padding: 0.2rem 0.8rem;
   border-radius: 12px;
   font-weight: 600;
@@ -515,53 +522,57 @@ body {
    RESPONSIVE
    ============================================================ */
 @media (max-width: 768px) {
-  body { padding: 0.8rem; }
-  .container { padding: 1.2rem; }
-  .app-header h1 { font-size: 1.3rem; }
-  .info-jadwal { flex-direction: column; align-items: stretch; text-align: center; }
-  .info-jadwal .nama { font-size: 1.1rem; }
-  .info-jadwal .status { align-self: center; }
-  .form-row { flex-direction: column; }
-  .field-group { min-width: 100%; }
-  .btn-group { justify-content: center; }
-  .btn { flex: 1; justify-content: center; min-width: 80px; }
-  .laporan-box { padding: 1rem; font-size: 0.9rem; min-height: 250px; }
-  .laporan-box.empty { min-height: 200px; font-size: 0.9rem; }
-  .app-footer { flex-direction: column; text-align: center; }
+  .hanpangan-app body { padding: 0.8rem; }
+  .hanpangan-app .container { padding: 1.2rem; }
+  .hanpangan-app .app-header h1 { font-size: 1.3rem; }
+  .hanpangan-app .info-jadwal { flex-direction: column; align-items: stretch; text-align: center; }
+  .hanpangan-app .info-jadwal .nama { font-size: 1.1rem; }
+  .hanpangan-app .info-jadwal .status { align-self: center; }
+  .hanpangan-app .form-row { flex-direction: column; }
+  .hanpangan-app .field-group { min-width: 100%; }
+  .hanpangan-app .btn-group { justify-content: center; }
+  .hanpangan-app .btn { flex: 1; justify-content: center; min-width: 80px; }
+  .hanpangan-app .laporan-box { padding: 1rem; font-size: 0.9rem; min-height: 250px; }
+  .hanpangan-app .laporan-box.empty { min-height: 200px; font-size: 0.9rem; }
+  .hanpangan-app .app-footer { flex-direction: column; text-align: center; }
 }
 
 @media (max-width: 480px) {
-  .container { padding: 0.8rem; }
-  .app-header h1 { font-size: 1.1rem; }
-  .info-jadwal { padding: 1rem; }
-  .info-jadwal .nama { font-size: 1rem; }
-  .info-jadwal .epoch-info { font-size: 0.6rem; }
-  .form-group { padding: 0.8rem; }
-  .field-group label { font-size: 0.75rem; min-width: 55px; }
-  .field-group select, .field-group input { font-size: 0.8rem; padding: 0.4rem 0.6rem; }
-  .btn { font-size: 0.75rem; padding: 0.4rem 0.8rem; }
-  .laporan-box { padding: 0.8rem; font-size: 0.8rem; min-height: 200px; }
-  .laporan-box.empty { min-height: 150px; }
+  .hanpangan-app .container { padding: 0.8rem; }
+  .hanpangan-app .app-header h1 { font-size: 1.1rem; }
+  .hanpangan-app .info-jadwal { padding: 1rem; }
+  .hanpangan-app .info-jadwal .nama { font-size: 1rem; }
+  .hanpangan-app .info-jadwal .epoch-info { font-size: 0.6rem; }
+  .hanpangan-app .form-group { padding: 0.8rem; }
+  .hanpangan-app .field-group label { font-size: 0.75rem; min-width: 55px; }
+  .hanpangan-app .field-group select,
+  .hanpangan-app .field-group input { font-size: 0.8rem; padding: 0.4rem 0.6rem; }
+  .hanpangan-app .btn { font-size: 0.75rem; padding: 0.4rem 0.8rem; }
+  .hanpangan-app .laporan-box { padding: 0.8rem; font-size: 0.8rem; min-height: 200px; }
+  .hanpangan-app .laporan-box.empty { min-height: 150px; }
 }
 </style>
 </head>
 <body>
 
+<!-- ===== SEMUA DALAM 1 SCOPE ===== -->
+<div class="hanpangan-app">
+
 <div class="container">
 
-  <!-- ===== HEADER ===== -->
+  <!-- HEADER -->
   <div class="app-header">
     <div class="logo-icon"><i class="fas fa-file-alt"></i></div>
     <h1>Laporan <span>Hanpangan</span></h1>
     <div class="subtitle">
       <i class="fas fa-map-marker-alt"></i>
       KORAMIL 1609-05/SUKASADA
-      <i class="fas fa-circle" style="font-size:4px; color:var(--gold);"></i>
+      <i class="fas fa-circle" style="font-size:4px; color:var(--hp-gold);"></i>
       KODIM 1609/BULELENG
     </div>
   </div>
 
-  <!-- ===== INFO JADWAL ===== -->
+  <!-- INFO JADWAL -->
   <div class="info-jadwal">
     <div class="left">
       <span class="label"><i class="fas fa-calendar-day"></i> HANPANGAN HARI INI</span>
@@ -575,7 +586,7 @@ body {
     </span>
   </div>
 
-  <!-- ===== FORM ===== -->
+  <!-- FORM -->
   <div class="form-group">
     <div class="form-row">
       <div class="field-group">
@@ -606,23 +617,23 @@ body {
     </div>
   </div>
 
-  <!-- ===== BUTTONS ===== -->
+  <!-- BUTTONS -->
   <div class="btn-group">
-    <button class="btn btn-refresh" onclick="refreshData()">
+    <button class="btn btn-refresh" onclick="window.refreshData()">
       <i class="fas fa-sync-alt"></i> Refresh
     </button>
-    <button class="btn btn-copy" onclick="salin()">
+    <button class="btn btn-copy" onclick="window.salin()">
       <i class="fas fa-copy"></i> Salin
     </button>
-    <button class="btn btn-share" onclick="bagikan()">
+    <button class="btn btn-share" onclick="window.bagikan()">
       <i class="fas fa-share-alt"></i> Share
     </button>
-    <button class="btn btn-reset" onclick="resetLaporan()">
+    <button class="btn btn-reset" onclick="window.resetLaporan()">
       <i class="fas fa-undo"></i> Reset
     </button>
   </div>
 
-  <!-- ===== LAPORAN ===== -->
+  <!-- LAPORAN -->
   <div class="laporan-wrapper">
     <div class="laporan-header">
       <span class="title"><i class="fas fa-file-alt"></i> LAPORAN KEGIATAN</span>
@@ -633,7 +644,7 @@ body {
     </div>
   </div>
 
-  <!-- ===== FOOTER ===== -->
+  <!-- FOOTER -->
   <div class="app-footer">
     <div class="left">
       <span class="dot"></span>
@@ -647,8 +658,10 @@ body {
 
 </div>
 
-<!-- ===== TOAST ===== -->
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
+
+</div>
 
 <script>
 // ============================================================
@@ -750,7 +763,6 @@ async function loadCSV() {
     }
     if (Object.keys(map).length === 0) throw new Error('Tidak ada data');
 
-    // HITUNG HANPANGAN
     const idx = getHanpanganIndex(daftarNama);
     hanpangan = daftarNama[idx] || '';
 
@@ -886,9 +898,9 @@ tg.oninput = () => {
 jm.oninput = generate;
 
 // ============================================================
-//  UTILITY
+//  UTILITY (WINDOW SCOPE UNTUK TOMBOL)
 // ============================================================
-function resetLaporan() {
+window.resetLaporan = function() {
   ds.value = '';
   ps.value = '';
   tg.value = '';
@@ -898,7 +910,7 @@ function resetLaporan() {
   lp.className = 'laporan-box empty';
   lp.contentEditable = 'false';
   toast('↺ Laporan direset', 'info');
-}
+};
 
 function toast(msg, type = 'info') {
   const t = $('toast');
@@ -910,14 +922,14 @@ function toast(msg, type = 'info') {
   t._timer = setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-function salin() {
+window.salin = function() {
   if (lp.classList.contains('empty')) return toast('⚠️ Belum ada laporan', 'error');
   navigator.clipboard.writeText(lp.textContent)
     .then(() => toast('✅ Laporan disalin!', 'success'))
     .catch(() => toast('❌ Gagal menyalin', 'error'));
-}
+};
 
-function bagikan() {
+window.bagikan = function() {
   if (lp.classList.contains('empty')) return toast('⚠️ Belum ada laporan', 'error');
   const t = lp.textContent;
   if (navigator.share) {
@@ -928,20 +940,35 @@ function bagikan() {
       .then(() => toast('📤 Laporan disalin untuk dibagikan', 'success'))
       .catch(() => toast('❌ Gagal membagikan', 'error'));
   }
-}
+};
 
-async function refreshData() {
+window.refreshData = async function() {
   $('hanpanganStatus').innerHTML = `<i class="fas fa-spinner fa-spin"></i> Memuat...`;
   $('hanpanganStatus').className = 'status loading';
   $('epochInfo').innerHTML = `<i class="fas fa-spinner fa-spin"></i> Menghitung epoch...`;
   await loadCSV();
   toast('✅ Data refreshed', 'success');
-}
+};
 
 // ============================================================
 //  START
 // ============================================================
 loadCSV();
+
+// ============================================================
+//  PWA SERVICE WORKER REGISTRATION
+// ============================================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js')
+      .then(function(reg) {
+        console.log('✅ Service Worker registered');
+      })
+      .catch(function(err) {
+        console.log('❌ Service Worker registration failed:', err);
+      });
+  });
+}
 </script>
 
 </body>
