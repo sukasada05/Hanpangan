@@ -2,24 +2,23 @@
   "name": "Laporan Hanpangan - Koramil 1609-05/Sukasada",
   "short_name": "Lap. Hanpangan",
   "description": "Aplikasi laporan kegiatan GERAKAN ANTISIPASI DARURAT PANGAN NASIONAL",
-  "start_url": "index.html",
+  "start_url": "/Hanpangan/index.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0a1a2e",
   "theme_color": "#0a1a2e",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "/Hanpangan/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
+      "src": "/Hanpangan/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "screenshots": []
+  ]
 }
