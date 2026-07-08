@@ -115,6 +115,35 @@
 }
 
 /* ============================================================
+   INSTALL BUTTON
+   ============================================================ */
+.hanpangan-app #installBtn {
+  display: none;
+  width: 100%;
+  background: var(--hp-gold);
+  color: var(--hp-primary);
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: var(--hp-radius-sm);
+  font-family: var(--hp-font);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--hp-transition);
+  margin-bottom: 1rem;
+}
+
+.hanpangan-app #installBtn:hover {
+  background: var(--hp-gold-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 168, 67, 0.3);
+}
+
+.hanpangan-app #installBtn i {
+  margin-right: 8px;
+}
+
+/* ============================================================
    INFO JADWAL
    ============================================================ */
 .hanpangan-app .info-jadwal {
@@ -563,6 +592,11 @@
     </div>
   </div>
 
+  <!-- INSTALL BUTTON (hidden by default, muncul jika PWA siap) -->
+  <button id="installBtn">
+    <i class="fas fa-download"></i> Install App
+  </button>
+
   <!-- INFO JADWAL -->
   <div class="info-jadwal">
     <div class="left">
@@ -940,6 +974,37 @@ window.refreshData = async function() {
   await loadCSV();
   toast('✅ Data refreshed', 'success');
 };
+
+// ============================================================
+//  INSTALL BUTTON PWA
+// ============================================================
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const installBtn = document.getElementById('installBtn');
+  if (installBtn) {
+    installBtn.style.display = 'block';
+    installBtn.onclick = async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          installBtn.style.display = 'none';
+          toast('✅ Aplikasi berhasil diinstall!', 'success');
+        }
+        deferredPrompt = null;
+      }
+    };
+  }
+});
+
+window.addEventListener('appinstalled', () => {
+  const installBtn = document.getElementById('installBtn');
+  if (installBtn) installBtn.style.display = 'none';
+  deferredPrompt = null;
+});
 
 // ============================================================
 //  START
