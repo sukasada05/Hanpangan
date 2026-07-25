@@ -1,1037 +1,2200 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<!-- ===== PWA THEME ===== -->
-<meta name="theme-color" content="#0a1a2e">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Lap. Hanpangan">
-<meta name="mobile-web-app-capable" content="yes">
-
-<!-- ===== ICONS ===== -->
-<link rel="apple-touch-icon" sizes="180x180" href="/Hanpangan/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/Hanpangan/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/Hanpangan/favicon-16x16.png">
-<link rel="manifest" href="/Hanpangan/manifest.json">
-<link rel="shortcut icon" href="/Hanpangan/favicon.ico">
-
-<!-- ===== FONT AWESOME ===== -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<title>Laporan Hanpangan - Koramil 1609-05/Sukasada</title>
-
-<style>
-/* ============================================================
-   ROOT VARIABLES (ISOLATED - TIDAK PENGARUH CSS LAIN)
-   ============================================================ */
-.hanpangan-app {
-  --hp-primary: #0a1a2e;
-  --hp-primary-light: #1a3a5e;
-  --hp-primary-dark: #050f1a;
-  --hp-gold: #d4a843;
-  --hp-gold-light: #f0d080;
-  --hp-gold-dark: #b8922e;
-  --hp-green: #2e7d32;
-  --hp-green-light: #4caf50;
-  --hp-green-bg: #e8f5e9;
-  --hp-red: #c62828;
-  --hp-red-light: #ef5350;
-  --hp-gray: #6a7a8a;
-  --hp-gray-light: #e8ecf1;
-  --hp-gray-bg: #f5f7fa;
-  --hp-white: #ffffff;
-  --hp-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  --hp-radius: 16px;
-  --hp-radius-sm: 8px;
-  --hp-transition: all 0.3s ease;
-  --hp-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --hp-serif: 'Times New Roman', Times, serif;
-
-  all: initial;
-  display: block;
-  font-family: var(--hp-font);
-  color: var(--hp-primary);
-}
-
-.hanpangan-app * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* ============================================================
-   CONTAINER
-   ============================================================ */
-.hanpangan-app .container {
-  max-width: 960px;
-  width: 100%;
-  background: var(--hp-white);
-  border-radius: var(--hp-radius);
-  box-shadow: var(--hp-shadow);
-  padding: 2rem 2rem 2.5rem;
-  margin: 2rem auto;
-}
-
-/* ============================================================
-   HEADER
-   ============================================================ */
-.hanpangan-app .app-header {
-  text-align: center;
-  padding-bottom: 1.2rem;
-  border-bottom: 3px solid var(--hp-gold);
-  margin-bottom: 1.5rem;
-}
-
-.hanpangan-app .app-header .logo-icon {
-  font-size: 2.2rem;
-  color: var(--hp-gold);
-  margin-bottom: 0.2rem;
-}
-
-.hanpangan-app .app-header h1 {
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: var(--hp-primary);
-  letter-spacing: 1px;
-}
-
-.hanpangan-app .app-header h1 span {
-  color: var(--hp-gold);
-}
-
-.hanpangan-app .app-header .subtitle {
-  font-size: 0.9rem;
-  color: var(--hp-gray);
-  font-weight: 500;
-  letter-spacing: 0.5px;
-}
-
-.hanpangan-app .app-header .subtitle i {
-  color: var(--hp-gold);
-  margin: 0 4px;
-}
-
-/* ============================================================
-   INSTALL BUTTON
-   ============================================================ */
-.hanpangan-app #installBtn {
-  display: none;
-  width: 100%;
-  background: var(--hp-gold);
-  color: var(--hp-primary);
-  border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: var(--hp-radius-sm);
-  font-family: var(--hp-font);
-  font-weight: 700;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: var(--hp-transition);
-  margin-bottom: 1rem;
-}
-
-.hanpangan-app #installBtn:hover {
-  background: var(--hp-gold-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(212, 168, 67, 0.3);
-}
-
-.hanpangan-app #installBtn i {
-  margin-right: 8px;
-}
-
-/* ============================================================
-   INFO JADWAL
-   ============================================================ */
-.hanpangan-app .info-jadwal {
-  background: linear-gradient(135deg, var(--hp-primary), var(--hp-primary-light));
-  border-radius: var(--hp-radius);
-  padding: 1.2rem 1.5rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  box-shadow: 0 4px 16px rgba(10, 26, 46, 0.25);
-  position: relative;
-  overflow: hidden;
-}
-
-.hanpangan-app .info-jadwal::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--hp-gold), var(--hp-gold-light), var(--hp-gold));
-}
-
-.hanpangan-app .info-jadwal .left {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.hanpangan-app .info-jadwal .label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: rgba(255,255,255,0.6);
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-}
-
-.hanpangan-app .info-jadwal .nama {
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: var(--hp-gold-light);
-}
-
-.hanpangan-app .info-jadwal .nama i {
-  margin-right: 8px;
-  color: var(--hp-gold);
-}
-
-.hanpangan-app .info-jadwal .epoch-info {
-  font-size: 0.7rem;
-  color: rgba(255,255,255,0.5);
-  font-family: 'Courier New', monospace;
-  margin-top: 2px;
-}
-
-.hanpangan-app .info-jadwal .status {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--hp-white);
-  background: rgba(76, 175, 80, 0.2);
-  padding: 0.4rem 1rem;
-  border-radius: 20px;
-  border: 1px solid rgba(76, 175, 80, 0.3);
-  white-space: nowrap;
-}
-
-.hanpangan-app .info-jadwal .status.error {
-  background: rgba(239, 83, 80, 0.2);
-  border-color: rgba(239, 83, 80, 0.3);
-  color: var(--hp-red-light);
-}
-
-.hanpangan-app .info-jadwal .status.loading {
-  background: rgba(255, 193, 7, 0.15);
-  border-color: rgba(255, 193, 7, 0.3);
-  color: #ffd54f;
-}
-
-/* ============================================================
-   FORM
-   ============================================================ */
-.hanpangan-app .form-group {
-  background: var(--hp-gray-bg);
-  border-radius: var(--hp-radius);
-  padding: 1.2rem 1.5rem;
-  margin-bottom: 1.2rem;
-  border: 1px solid var(--hp-gray-light);
-}
-
-.hanpangan-app .form-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.hanpangan-app .form-row + .form-row {
-  margin-top: 0.8rem;
-}
-
-.hanpangan-app .field-group {
-  flex: 1;
-  min-width: 180px;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.hanpangan-app .field-group label {
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: var(--hp-primary);
-  white-space: nowrap;
-  min-width: 70px;
-}
-
-.hanpangan-app .field-group label i {
-  color: var(--hp-gold);
-  width: 18px;
-}
-
-.hanpangan-app .field-group select,
-.hanpangan-app .field-group input {
-  flex: 1;
-  padding: 0.5rem 0.8rem;
-  border: 2px solid var(--hp-gray-light);
-  border-radius: var(--hp-radius-sm);
-  font-family: var(--hp-font);
-  font-size: 0.9rem;
-  background: var(--hp-white);
-  color: var(--hp-primary);
-  transition: var(--hp-transition);
-  min-width: 100px;
-}
-
-.hanpangan-app .field-group select:focus,
-.hanpangan-app .field-group input:focus {
-  outline: none;
-  border-color: var(--hp-gold);
-  box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.15);
-}
-
-.hanpangan-app .field-group .info-hari {
-  background: var(--hp-primary);
-  color: var(--hp-white);
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-/* ============================================================
-   BUTTONS
-   ============================================================ */
-.hanpangan-app .btn-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-bottom: 1.2rem;
-}
-
-.hanpangan-app .btn {
-  padding: 0.55rem 1.4rem;
-  border: none;
-  border-radius: var(--hp-radius-sm);
-  font-family: var(--hp-font);
-  font-weight: 600;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: var(--hp-transition);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.hanpangan-app .btn i {
-  font-size: 0.9rem;
-}
-
-.hanpangan-app .btn-refresh {
-  background: var(--hp-gold);
-  color: var(--hp-primary);
-}
-.hanpangan-app .btn-refresh:hover {
-  background: var(--hp-gold-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(212, 168, 67, 0.3);
-}
-
-.hanpangan-app .btn-copy {
-  background: var(--hp-primary);
-  color: var(--hp-white);
-}
-.hanpangan-app .btn-copy:hover {
-  background: var(--hp-primary-light);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(10, 26, 46, 0.25);
-}
-
-.hanpangan-app .btn-share {
-  background: var(--hp-green);
-  color: var(--hp-white);
-}
-.hanpangan-app .btn-share:hover {
-  background: #1b5e20;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
-}
-
-.hanpangan-app .btn-reset {
-  background: var(--hp-gray-light);
-  color: var(--hp-gray);
-}
-.hanpangan-app .btn-reset:hover {
-  background: #d5dce6;
-  transform: translateY(-2px);
-}
-
-.hanpangan-app .btn:active {
-  transform: scale(0.96);
-}
-
-/* ============================================================
-   LAPORAN BOX
-   ============================================================ */
-.hanpangan-app .laporan-wrapper {
-  border: 2px solid var(--hp-gray-light);
-  border-radius: var(--hp-radius);
-  overflow: hidden;
-  transition: var(--hp-transition);
-}
-
-.hanpangan-app .laporan-wrapper:hover {
-  border-color: var(--hp-gold);
-}
-
-.hanpangan-app .laporan-header {
-  background: var(--hp-gray-bg);
-  padding: 0.6rem 1.2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--hp-gray-light);
-}
-
-.hanpangan-app .laporan-header .title {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--hp-gray);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.hanpangan-app .laporan-header .title i {
-  color: var(--hp-gold);
-  margin-right: 6px;
-}
-
-.hanpangan-app .laporan-header .badge {
-  font-size: 0.65rem;
-  color: var(--hp-gray);
-  background: var(--hp-white);
-  padding: 0.2rem 0.8rem;
-  border-radius: 12px;
-  border: 1px solid var(--hp-gray-light);
-}
-
-.hanpangan-app .laporan-box {
-  background: var(--hp-white);
-  padding: 1.8rem 2rem;
-  white-space: pre-wrap;
-  font-family: var(--hp-serif);
-  font-size: 1rem;
-  line-height: 1.8;
-  min-height: 380px;
-  outline: none;
-  cursor: text;
-  color: var(--hp-primary);
-  transition: var(--hp-transition);
-}
-
-.hanpangan-app .laporan-box:focus {
-  background: #fafbfc;
-}
-
-.hanpangan-app .laporan-box.empty {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #aab;
-  font-style: italic;
-  font-family: var(--hp-font);
-  font-size: 1rem;
-  min-height: 380px;
-}
-
-.hanpangan-app .laporan-box .placeholder-text {
-  color: #aab;
-  font-style: italic;
-}
-
-.hanpangan-app .laporan-box .placeholder-text i {
-  color: var(--hp-gold);
-  margin-right: 8px;
-}
-
-.hanpangan-app .laporan-box:not(.empty):hover {
-  background: #fcfdff;
-}
-
-/* ============================================================
-   TOAST
-   ============================================================ */
-.hanpangan-app .toast {
-  position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--hp-primary);
-  color: var(--hp-white);
-  padding: 0.8rem 2rem;
-  border-radius: var(--hp-radius-sm);
-  font-family: var(--hp-font);
-  font-size: 0.9rem;
-  font-weight: 500;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.4s ease;
-  z-index: 9999;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-}
-
-.hanpangan-app .toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-.hanpangan-app .toast i {
-  margin-right: 8px;
-}
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
-.hanpangan-app .app-footer {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--hp-gray-light);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  font-size: 0.7rem;
-  color: var(--hp-gray);
-}
-
-.hanpangan-app .app-footer .left {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
-
-.hanpangan-app .app-footer .left .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--hp-green-light);
-  display: inline-block;
-  animation: hp-pulse-dot 2s infinite;
-}
-
-@keyframes hp-pulse-dot {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-.hanpangan-app .app-footer .right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.hanpangan-app .app-footer .right .badge {
-  background: var(--hp-gray-light);
-  padding: 0.2rem 0.8rem;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.65rem;
-}
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (max-width: 768px) {
-  .hanpangan-app .container { padding: 1.2rem; margin: 1rem auto; }
-  .hanpangan-app .app-header h1 { font-size: 1.3rem; }
-  .hanpangan-app .info-jadwal { flex-direction: column; align-items: stretch; text-align: center; }
-  .hanpangan-app .info-jadwal .nama { font-size: 1.1rem; }
-  .hanpangan-app .info-jadwal .status { align-self: center; }
-  .hanpangan-app .form-row { flex-direction: column; }
-  .hanpangan-app .field-group { min-width: 100%; }
-  .hanpangan-app .btn-group { justify-content: center; }
-  .hanpangan-app .btn { flex: 1; justify-content: center; min-width: 80px; }
-  .hanpangan-app .laporan-box { padding: 1rem; font-size: 0.9rem; min-height: 250px; }
-  .hanpangan-app .laporan-box.empty { min-height: 200px; font-size: 0.9rem; }
-  .hanpangan-app .app-footer { flex-direction: column; text-align: center; }
-}
-
-@media (max-width: 480px) {
-  .hanpangan-app .container { padding: 0.8rem; margin: 0.5rem auto; }
-  .hanpangan-app .app-header h1 { font-size: 1.1rem; }
-  .hanpangan-app .info-jadwal { padding: 1rem; }
-  .hanpangan-app .info-jadwal .nama { font-size: 1rem; }
-  .hanpangan-app .info-jadwal .epoch-info { font-size: 0.6rem; }
-  .hanpangan-app .form-group { padding: 0.8rem; }
-  .hanpangan-app .field-group label { font-size: 0.75rem; min-width: 55px; }
-  .hanpangan-app .field-group select,
-  .hanpangan-app .field-group input { font-size: 0.8rem; padding: 0.4rem 0.6rem; }
-  .hanpangan-app .btn { font-size: 0.75rem; padding: 0.4rem 0.8rem; }
-  .hanpangan-app .laporan-box { padding: 0.8rem; font-size: 0.8rem; min-height: 200px; }
-  .hanpangan-app .laporan-box.empty { min-height: 150px; }
-}
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Jadwal Piket Koramil</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f0f0f0;
+            color: #000000;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 100%;
+            width: 100%;
+            min-height: 100vh;
+            background: #ffffff;
+            padding: 16px 20px;
+            border: none;
+            box-shadow: none;
+        }
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .app-header h1 {
+            font-size: clamp(20px, 4vw, 32px);
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-align: left;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .btn-cetak {
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: clamp(13px, 1vw, 16px);
+            transition: 0.2s;
+        }
+        .btn-cetak:hover {
+            background: #333;
+        }
+        .btn-wa {
+            background: #25D366;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: clamp(13px, 1vw, 16px);
+            transition: 0.2s;
+        }
+        .btn-wa:hover {
+            background: #1da851;
+        }
+        .running-container {
+            background: #0a0a0a;
+            padding: 10px 16px;
+            margin: 0 0 16px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-radius: 0;
+        }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 30s linear infinite;
+            color: #ffd700;
+            font-weight: 700;
+            font-size: clamp(16px, 2.2vw, 24px);
+            padding-left: 100%;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px #ff8c00, 0 0 20px #ff6600;
+            text-align: left;
+        }
+        .running-container:hover .running-text {
+            animation-play-state: paused;
+        }
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-200%);
+            }
+        }
+        .month-picker {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            padding: 8px 0;
+            background: transparent;
+            text-align: left;
+        }
+        .month-picker label {
+            font-weight: 700;
+            font-size: clamp(14px, 1.4vw, 18px);
+            text-align: left;
+        }
+        .month-picker select {
+            padding: 6px 12px;
+            border: 1px solid #000;
+            background: #fff;
+            font-family: inherit;
+            font-size: clamp(14px, 1.2vw, 17px);
+            min-width: 150px;
+            cursor: pointer;
+            text-align: left;
+        }
+        .month-picker .total-hari {
+            margin-left: auto;
+            font-weight: 700;
+            font-size: clamp(14px, 1.2vw, 17px);
+            background: #000;
+            color: #fff;
+            padding: 4px 16px;
+            border-radius: 4px;
+            text-align: left;
+        }
+        .preview-section {
+            padding: 0;
+            background: transparent;
+            margin-top: 0;
+            position: relative;
+        }
+        .preview-section h3 {
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            font-size: clamp(16px, 1.6vw, 22px);
+            text-align: left;
+        }
+        .table-wrapper {
+            overflow: auto;
+            max-height: 70vh;
+            position: relative;
+            border: 1px solid #000000;
+            background: #ffffff;
+        }
+        .excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: clamp(13px, 1.1vw, 16px);
+            table-layout: fixed;
+            border: none;
+        }
+        .excel-table th,
+        .excel-table td {
+            border: 1px solid #000000;
+            padding: 6px 8px;
+            vertical-align: top;
+            text-align: left;
+            background-color: #ffffff;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-line;
+        }
+        .excel-table thead th {
+            background: #d9d9d9;
+            font-weight: 700;
+            white-space: nowrap;
+            border-bottom: 2px solid #000000;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            text-align: left;
+            vertical-align: top;
+            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+        }
+        .excel-table th:nth-child(1),
+        .excel-table td:nth-child(1) {
+            width: 6%;
+            min-width: 40px;
+            max-width: 60px;
+            text-align: left;
+            font-weight: 700;
+            background-color: #f5f5f5;
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            border-right: 2px solid #000000;
+            vertical-align: top;
+        }
+        .excel-table thead th:nth-child(1) {
+            z-index: 15;
+            background: #d9d9d9;
+            border-right: 2px solid #000000;
+            vertical-align: top;
+            text-align: left;
+        }
+        .excel-table th:nth-child(2),
+        .excel-table td:nth-child(2) {
+            width: 22%;
+            min-width: 160px;
+            max-width: 220px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .excel-table th:nth-child(3),
+        .excel-table td:nth-child(3),
+        .excel-table th:nth-child(4),
+        .excel-table td:nth-child(4),
+        .excel-table th:nth-child(5),
+        .excel-table td:nth-child(5) {
+            width: 24%;
+            min-width: 130px;
+            max-width: 200px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .excel-table thead th:nth-child(2),
+        .excel-table thead th:nth-child(3),
+        .excel-table thead th:nth-child(4),
+        .excel-table thead th:nth-child(5) {
+            text-align: left;
+            vertical-align: top;
+        }
+        .excel-table thead th {
+            background: #d9d9d9;
+        }
+        .excel-table td:nth-child(1) {
+            background: #f5f5f5;
+            text-align: left;
+            vertical-align: top;
+        }
+        .excel-table thead th:nth-child(1) {
+            background: #d9d9d9;
+        }
+        .excel-table .no-data {
+            color: #888;
+            text-align: center;
+            padding: 40px 0;
+            font-weight: 600;
+            font-size: clamp(14px, 1.2vw, 18px);
+        }
+        .row-today td {
+            background: #ffff99 !important;
+        }
+        .row-today td:first-child {
+            background: #ffff99 !important;
+            font-weight: 700;
+        }
+        .row-weekend td {
+            background: #ffe6e6 !important;
+        }
+        .row-weekend td:first-child {
+            background: #ffe6e6 !important;
+        }
+        .custom-dropdown-wrapper {
+            position: relative;
+            width: 100%;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .custom-dropdown-display {
+            padding: 2px 4px;
+            background: transparent !important;
+            font-family: inherit;
+            font-size: clamp(12px, 1vw, 14px);
+            font-weight: 600;
+            color: #000;
+            cursor: pointer;
+            min-height: 18px;
+            display: inline-block;
+            border: none;
+            outline: none;
+            width: 100%;
+            white-space: pre-line;
+            line-height: 1.6;
+            pointer-events: auto;
+            user-select: none;
+            text-align: left;
+            vertical-align: top;
+            border-radius: 0;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .custom-dropdown-display:hover {
+            background: #e6f3ff !important;
+            outline: 1px solid #0066cc;
+        }
+        .custom-dropdown-display .placeholder {
+            color: #999;
+            font-style: italic;
+            font-weight: 400;
+        }
+        .custom-dropdown-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ffffff;
+            border: 3px solid #000000;
+            z-index: 99999;
+            padding: 20px 16px;
+            overflow-y: auto;
+            flex-direction: column;
+        }
+        .custom-dropdown-menu.open {
+            display: flex;
+        }
+        .custom-dropdown-menu .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #000;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+        .custom-dropdown-menu .menu-header h2 {
+            font-size: clamp(18px, 2.5vw, 24px);
+            font-weight: 700;
+            text-align: left;
+        }
+        .custom-dropdown-menu .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 10px;
+            flex: 1;
+            align-content: start;
+        }
+        .custom-dropdown-menu .option-item {
+            padding: 12px 16px;
+            border: 2px solid #000;
+            background: #ffffff;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: clamp(14px, 1.2vw, 17px);
+            text-align: left;
+            transition: 0.1s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+        }
+        .custom-dropdown-menu .option-item:hover {
+            background: #f0f0f0;
+        }
+        .custom-dropdown-menu .option-item.selected {
+            background: #000;
+            color: #fff;
+        }
+        .custom-dropdown-menu .option-item.selected:hover {
+            background: #333;
+        }
+        .custom-dropdown-menu .option-item .num-icon {
+            display: none;
+            font-weight: 700;
+            min-width: 20px;
+            text-align: left;
+        }
+        .custom-dropdown-menu .option-item.selected .num-icon {
+            display: inline-block;
+        }
+        .custom-dropdown-menu .no-result {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 40px;
+            color: #888;
+            font-style: italic;
+            font-size: clamp(16px, 1.4vw, 20px);
+        }
+        .custom-dropdown-menu .menu-footer {
+            border-top: 3px solid #000;
+            padding-top: 14px;
+            margin-top: 16px;
+            display: flex;
+            gap: 14px;
+            flex-shrink: 0;
+        }
+        .custom-dropdown-menu .menu-footer button {
+            padding: 12px 24px;
+            border: 2px solid #000;
+            background: #fff;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            flex: 1;
+            font-size: clamp(14px, 1.2vw, 17px);
+            text-align: center;
+        }
+        .custom-dropdown-menu .menu-footer button:hover {
+            background: #e0e0e0;
+        }
+        .custom-dropdown-menu .menu-footer .btn-confirm {
+            background: #000;
+            color: #fff;
+        }
+        .custom-dropdown-menu .menu-footer .btn-confirm:hover {
+            background: #333;
+        }
+        .toast {
+            background: #000;
+            color: #fff;
+            padding: 16px;
+            text-align: center;
+            font-weight: 700;
+            margin-top: 16px;
+            display: none;
+            font-size: clamp(14px, 1.2vw, 18px);
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            min-width: 200px;
+            border: 1px solid #000;
+        }
+        .toast.show {
+            display: block;
+        }
+        .supabase-indicator {
+            position: fixed;
+            top: 14px;
+            right: 14px;
+            width: 18px;
+            height: 18px;
+            z-index: 99999;
+            border: 1px solid #000;
+            border-radius: 50%;
+            background: #ffaa00;
+            box-shadow: 0 0 16px rgba(0, 0, 0, 0.2);
+            animation: blink 1s infinite;
+        }
+        .supabase-indicator.online {
+            background: #00aa00;
+            animation: none;
+        }
+        .supabase-indicator.offline {
+            background: #cc0000;
+            animation: none;
+        }
+        .supabase-indicator.checking {
+            background: #ffaa00;
+            animation: blink 0.5s infinite;
+        }
+        @keyframes blink {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+        .save-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 8px;
+            transition: all 0.3s;
+        }
+        .save-indicator.saving {
+            background: #ffcc00;
+            animation: blink 0.3s infinite;
+        }
+        .save-indicator.saved {
+            background: #00aa00;
+        }
+        .save-indicator.error {
+            background: #cc0000;
+        }
+        .footer-text {
+            text-align: center;
+            font-size: clamp(10px, 0.8vw, 13px);
+            color: #999;
+            margin-top: 18px;
+            border-top: 1px solid #ddd;
+            padding-top: 14px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 12px 14px;
+            }
+            .month-picker {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 8px 0;
+                text-align: left;
+            }
+            .month-picker .total-hari {
+                margin-left: 0;
+                text-align: left;
+            }
+            .excel-table th,
+            .excel-table td {
+                padding: 4px 6px;
+                font-size: 12px;
+                text-align: left;
+                vertical-align: top;
+            }
+            .custom-dropdown-display {
+                font-size: 11px;
+                min-height: 16px;
+                line-height: 1.5;
+                text-align: left;
+            }
+            .custom-dropdown-menu .options-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 8px;
+            }
+            .header-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 8px 10px;
+            }
+            .app-header h1 {
+                font-size: 18px;
+                text-align: left;
+            }
+            .running-text {
+                font-size: 14px;
+                animation-duration: 20px;
+                text-align: left;
+            }
+            .month-picker select {
+                padding: 6px 10px;
+                font-size: 13px;
+                min-width: 120px;
+                text-align: left;
+            }
+            .excel-table th,
+            .excel-table td {
+                padding: 3px 4px;
+                font-size: 10px;
+                text-align: left;
+                vertical-align: top;
+            }
+            .preview-section h3 {
+                font-size: 15px;
+                text-align: left;
+            }
+            .custom-dropdown-display {
+                font-size: 10px;
+                min-height: 14px;
+                line-height: 1.4;
+                text-align: left;
+            }
+            .custom-dropdown-menu {
+                padding: 14px 10px;
+            }
+            .custom-dropdown-menu .options-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+                gap: 6px;
+            }
+            .custom-dropdown-menu .option-item {
+                padding: 10px 12px;
+                font-size: 13px;
+                text-align: left;
+            }
+            .custom-dropdown-menu .menu-footer button {
+                padding: 10px 16px;
+                font-size: 13px;
+                text-align: center;
+            }
+            .toast {
+                font-size: 13px;
+                padding: 12px;
+                min-width: 150px;
+                bottom: 10px;
+                text-align: center;
+            }
+            .supabase-indicator {
+                width: 14px;
+                height: 14px;
+                top: 8px;
+                right: 8px;
+            }
+        }
+        /* Status Worker */
+        .worker-status {
+            background: #f0f0f0;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: clamp(11px, 0.9vw, 14px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .worker-status .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .worker-status .dot.online {
+            background: #00aa00;
+        }
+        .worker-status .dot.offline {
+            background: #cc0000;
+        }
+        .worker-status .dot.checking {
+            background: #ffaa00;
+            animation: blink 1s infinite;
+        }
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+    </style>
 </head>
 <body>
 
-<!-- ===== SEMUA DALAM 1 SCOPE ===== -->
-<div class="hanpangan-app">
+    <div id="supabaseIndicator" class="supabase-indicator checking"></div>
 
-<div class="container">
+    <div class="container">
 
-  <!-- HEADER -->
-  <div class="app-header">
-    <div class="logo-icon"><i class="fas fa-file-alt"></i></div>
-    <h1>Laporan <span>Hanpangan</span></h1>
-    <div class="subtitle">
-      <i class="fas fa-map-marker-alt"></i>
-      KORAMIL 1609-05/SUKASADA
-      <i class="fas fa-circle" style="font-size:4px; color:var(--hp-gold);"></i>
-      KODIM 1609/BULELENG
+        <div class="app-header">
+            <h1>📋 JADWAL PIKET</h1>
+            <div class="header-actions">
+                <div class="header-status">
+                    <div class="worker-status">
+                        <span class="dot" id="workerDot"></span>
+                        <span id="workerStatusText">Memeriksa...</span>
+                    </div>
+                </div>
+                <button id="btnWa" class="btn-wa">
+                    <i class="fab fa-whatsapp"></i> Kirim WA
+                </button>
+                <button id="btnCetak" class="btn-cetak">
+                    <i class="fas fa-print"></i> Cetak
+                </button>
+            </div>
+        </div>
+
+        <div class="running-container">
+            <div class="running-text" id="runningTextJadwal">🌾 Memuat jadwal hanpangan... 🌾</div>
+        </div>
+
+        <div class="month-picker">
+            <label for="bulanSelect">📅 Bulan:</label>
+            <select id="bulanSelect"></select>
+            <span class="total-hari" id="totalHari">Total: 31 hari</span>
+        </div>
+
+        <div class="preview-section">
+            <h3>📋 JADWAL <span id="bulanTahunTitle">Bulan Ini</span></h3>
+            <div id="previewContainer">
+                <div class="no-data">⏳ Memuat data...</div>
+            </div>
+        </div>
+
+        <div id="toastMessage" class="toast"></div>
+
+        <div class="footer-text">Data tersimpan di Supabase • Auto-save on • Trigger 08.00</div>
+
     </div>
-  </div>
 
-  <!-- INSTALL BUTTON (hidden by default, muncul jika PWA siap) -->
-  <button id="installBtn">
-    <i class="fas fa-download"></i> Install App
-  </button>
+    <script>
+        (function() {
+            // ============================================================
+            //  KONFIGURASI - WORKER ANDA
+            // ============================================================
+            const WORKER_URL = 'https://jadwalpkt.dukopbabinsa05.workers.dev';
 
-  <!-- INFO JADWAL -->
-  <div class="info-jadwal">
-    <div class="left">
-      <span class="label"><i class="fas fa-calendar-day"></i> HANPANGAN HARI INI</span>
-      <span class="nama" id="hanpanganNama">
-        <i class="fas fa-user-tie"></i> ⏳ Memuat...
-      </span>
-      <span class="epoch-info" id="epochInfo">⏳ Menghitung epoch...</span>
-    </div>
-    <span class="status loading" id="hanpanganStatus">
-      <i class="fas fa-spinner fa-spin"></i> Memuat data...
-    </span>
-  </div>
+            // ============================================================
+            //  KONFIGURASI - SATRIYO DI INDEKS 0
+            // ============================================================
+            const START_DATE = new Date(2026, 6, 25); // 25 Juli 2026
+            const START_INDEX = 0; // Satriyo di paling atas!
 
-  <!-- FORM -->
-  <div class="form-group">
-    <div class="form-row">
-      <div class="field-group">
-        <label><i class="fas fa-city"></i> Desa</label>
-        <select id="selectDesa">
-          <option value="">-- Pilih Desa --</option>
-        </select>
-      </div>
-      <div class="field-group">
-        <label><i class="fas fa-user"></i> Personel</label>
-        <select id="selectPersonel">
-          <option value="">-- Auto dari Jadwal --</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="field-group">
-        <label><i class="fas fa-calendar-alt"></i> Tanggal</label>
-        <input type="date" id="inputTanggal">
-      </div>
-      <div class="field-group">
-        <label><i class="fas fa-clock"></i> Jam</label>
-        <input type="time" id="inputJam">
-      </div>
-      <div class="field-group" style="flex:0 0 auto;">
-        <span class="info-hari" id="infoHari">-</span>
-      </div>
-    </div>
-  </div>
+            const HANPANGAN_URL = "https://raw.githubusercontent.com/sukasada05/dukops4/main/data/hanpangan.csv";
+            const PIKET_URL = "https://raw.githubusercontent.com/sukasada05/dukops4/main/data/piket.txt";
+            const SUPABASE_URL = 'https://wausfsflcehizpuqdwbg.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhdXNmc2ZsY2VoaXpwdXFkd2JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxMTA3ODQsImV4cCI6MjA5ODY4Njc4NH0.2zF7iogzuTwWoQc451-uKxQdNN1C-qkB0O9Jvz1ZoI0';
 
-  <!-- BUTTONS -->
-  <div class="btn-group">
-    <button class="btn btn-refresh" onclick="window.refreshData()">
-      <i class="fas fa-sync-alt"></i> Refresh
-    </button>
-    <button class="btn btn-copy" onclick="window.salin()">
-      <i class="fas fa-copy"></i> Salin
-    </button>
-    <button class="btn btn-share" onclick="window.bagikan()">
-      <i class="fas fa-share-alt"></i> Share
-    </button>
-    <button class="btn btn-reset" onclick="window.resetLaporan()">
-      <i class="fas fa-undo"></i> Reset
-    </button>
-  </div>
+            const TELEGRAM_TOKEN = '8676517308:AAGlUzkhP_iIMgx5Nd3ODg6fAXJGR0y2BwQ';
+            const TELEGRAM_CHAT_ID = '-1003020813628';
 
-  <!-- LAPORAN -->
-  <div class="laporan-wrapper">
-    <div class="laporan-header">
-      <span class="title"><i class="fas fa-file-alt"></i> LAPORAN KEGIATAN</span>
-      <span class="badge"><i class="fas fa-edit"></i> Klik untuk edit</span>
-    </div>
-    <div class="laporan-box empty" id="laporanDisplay" contenteditable="false">
-      <span class="placeholder-text"><i class="fas fa-pen"></i> Silakan isi data di atas</span>
-    </div>
-  </div>
+            let supabaseClient = null;
+            let isSupabaseConnected = false;
+            let daftarNama = [];
+            let hanpanganData = [];
+            let currentHanpangan = null;
+            let allJadwal = [];
+            let isSaving = false;
+            let isReloading = false;
+            let lastReloadTime = 0;
 
-  <!-- FOOTER -->
-  <div class="app-footer">
-    <div class="left">
-      <span class="dot"></span>
-      <span>Online <span id="totalPersonel">0</span> personel</span>
-    </div>
-    <div class="right">
-      <span class="badge"><i class="fas fa-code-branch"></i> EPOCH</span>
-      <span>KORAMIL 1609-05/SUKASADA</span>
-    </div>
-  </div>
+            let lastTriggerTime = null;
+            let triggerCount = 0;
 
-</div>
+            let isInitialLoad = true;
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
+            const bulanSelect = document.getElementById('bulanSelect');
+            const bulanTahunTitle = document.getElementById('bulanTahunTitle');
+            const previewContainer = document.getElementById('previewContainer');
+            const toast = document.getElementById('toastMessage');
+            const indicator = document.getElementById('supabaseIndicator');
+            const totalHariSpan = document.getElementById('totalHari');
+            const workerDot = document.getElementById('workerDot');
+            const workerStatusText = document.getElementById('workerStatusText');
 
-</div>
+            // ============================================================
+            //  NAMA HARI & BULAN
+            // ============================================================
+            const NAMA_HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const NAMA_BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September",
+                "Oktober", "November", "Desember"
+            ];
 
-<script>
-// ============================================================
-//  KONFIGURASI
-// ============================================================
-const CSV_URL = 'data/personel.csv?t=' + Date.now();
+            // ============================================================
+            //  EPOCH DAY - SATRIYO DI INDEKS 0
+            // ============================================================
+            function getEpochDay(date) {
+                const ref = new Date(2024, 0, 1);
+                ref.setHours(0, 0, 0, 0);
+                const d = new Date(date);
+                d.setHours(0, 0, 0, 0);
+                const diffTime = d.getTime() - ref.getTime();
+                return Math.floor(diffTime / (24 * 60 * 60 * 1000));
+            }
 
-// ============================================================
-//  DOM
-// ============================================================
-const $ = id => document.getElementById(id);
-const ds = $('selectDesa');
-const ps = $('selectPersonel');
-const tg = $('inputTanggal');
-const jm = $('inputJam');
-const ih = $('infoHari');
-const lp = $('laporanDisplay');
+            function getHanpanganToday(data, date) {
+                if (!data || data.length === 0) return null;
 
-let map = {};
-let desaList = [];
-let hanpangan = '';
-let daftarNama = [];
+                const startEpoch = getEpochDay(START_DATE);
+                const todayEpoch = getEpochDay(date);
+                const dayDiff = todayEpoch - startEpoch;
 
-const HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-const BLN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+                const idx = ((START_INDEX + dayDiff) % data.length + data.length) % data.length;
+                return data[idx];
+            }
 
-// ============================================================
-//  FUNGSI BANTU
-// ============================================================
-function now() {
-  const n = new Date();
-  return {
-    d: n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0'),
-    j: String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')
-  };
-}
+            // ============================================================
+            //  FORMAT TANGGAL
+            // ============================================================
+            function formatTanggalIndonesia(date) {
+                return NAMA_HARI[date.getDay()] + ', ' +
+                    date.getDate() + ' ' +
+                    NAMA_BULAN[date.getMonth()] + ' ' +
+                    date.getFullYear();
+            }
 
-function tgl(s) {
-  if (!s) s = now().d;
-  const p = s.split('-');
-  const t = +p[0], b = +p[1]-1, h = +p[2];
-  return {
-    tgl: h+' '+BLN[b]+' '+t,
-    hr: HARI[new Date(t,b,h).getDay()]
-  };
-}
+            function formatTanggalDuaBaris(date) {
+                return NAMA_HARI[date.getDay()] + ',\n' +
+                    date.getDate() + ' ' +
+                    NAMA_BULAN[date.getMonth()] + ' ' +
+                    date.getFullYear();
+            }
 
-// ============================================================
-//  EPOCH HANPANGAN (SAMA DENGAN DUKOPS)
-// ============================================================
-function getHanpanganIndex(arr) {
-  if (!arr || arr.length === 0) return 0;
-  const today = new Date();
-  const epochDays = Math.floor(today.getTime() / (24 * 60 * 60 * 1000));
-  const referenceDate = new Date(2024, 0, 1);
-  const epochDaysRef = Math.floor(referenceDate.getTime() / (24 * 60 * 60 * 1000));
-  let offset = (0 - epochDaysRef) % arr.length;
-  if (offset < 0) offset += arr.length;
-  let index = (epochDays + offset) % arr.length;
-  if (index < 0) index += arr.length;
+            function formatTanggalWA(date) {
+                return NAMA_HARI[date.getDay()] + ', ' +
+                    date.getDate() + ' ' +
+                    NAMA_BULAN[date.getMonth()] + ' ' +
+                    date.getFullYear();
+            }
 
-  $('epochInfo').innerHTML =
-    `<i class="fas fa-calculator"></i> Epoch: ${epochDays} | Ref: ${epochDaysRef} | Offset: ${offset} | Index: ${index} | <i class="fas fa-user-check"></i> ${arr[index]}`;
+            function isWeekend(date) {
+                const day = date.getDay();
+                return day === 0 || day === 6;
+            }
 
-  return index;
-}
+            // ============================================================
+            //  UTILITY
+            // ============================================================
+            function updateIndicator(status) {
+                indicator.className = 'supabase-indicator';
+                if (status === 'online') {
+                    indicator.classList.add('online');
+                } else if (status === 'offline') {
+                    indicator.classList.add('offline');
+                } else {
+                    indicator.classList.add('checking');
+                }
+            }
 
-// ============================================================
-//  LOAD CSV
-// ============================================================
-async function loadCSV() {
-  try {
-    const res = await fetch(CSV_URL);
-    if (!res.ok) throw new Error('CSV tidak ditemukan');
-    const text = await res.text();
-    const lines = text.trim().split('\n').filter(l => l.trim());
-    if (lines.length < 2) throw new Error('CSV kosong');
+            function fetchText(url) {
+                return fetch(url + '?t=' + Date.now())
+                    .then(r => {
+                        if (!r.ok) throw new Error('HTTP ' + r.status);
+                        return r.text();
+                    })
+                    .catch(() => null);
+            }
 
-    const header = lines[0].split(',').map(h => h.trim());
-    const idxNama = header.indexOf('nama');
-    const idxDesa = header.indexOf('desa');
-    const idxStatus = header.indexOf('status');
-    if (idxNama === -1 || idxDesa === -1) throw new Error('Format CSV salah');
+            function showToast(msg, type = 'info') {
+                toast.textContent = msg;
+                toast.style.background = type === 'success' ? '#0066cc' : (type === 'error' ? '#cc0000' : '#000');
+                toast.classList.add('show');
+                clearTimeout(toast._hideTimer);
+                toast._hideTimer = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 4000);
+            }
 
-    map = {};
-    desaList = [];
-    daftarNama = [];
+            // ============================================================
+            //  UPDATE WORKER STATUS
+            // ============================================================
+            async function checkWorkerStatus() {
+                try {
+                    const response = await fetch(WORKER_URL + '/health');
+                    if (response.ok) {
+                        const data = await response.json();
+                        workerDot.className = 'dot online';
+                        workerStatusText.textContent = '✅ Worker Online';
+                        console.log('✅ Worker online:', data);
+                    } else {
+                        workerDot.className = 'dot offline';
+                        workerStatusText.textContent = '❌ Worker Error';
+                    }
+                } catch (e) {
+                    workerDot.className = 'dot offline';
+                    workerStatusText.textContent = '❌ Worker Offline';
+                    console.warn('⚠️ Worker tidak dapat dijangkau:', e.message);
+                }
+            }
 
-    for (let i = 1; i < lines.length; i++) {
-      const row = lines[i].split(',').map(c => c.trim());
-      const nama = row[idxNama] || '';
-      const desa = row[idxDesa] || '';
-      const status = row[idxStatus] || 'Desa';
-      if (nama && desa) {
-        map[nama] = { desa, status };
-        daftarNama.push(nama);
-        if (!desaList.includes(desa)) desaList.push(desa);
-      }
-    }
-    if (Object.keys(map).length === 0) throw new Error('Tidak ada data');
+            // ============================================================
+            //  UPDATE HANPANGAN DISPLAY
+            // ============================================================
+            function updateHanpanganDisplay() {
+                const today = new Date();
+                currentHanpangan = getHanpanganToday(hanpanganData, today);
 
-    const idx = getHanpanganIndex(daftarNama);
-    hanpangan = daftarNama[idx] || '';
+                const runningText = document.getElementById('runningTextJadwal');
+                if (currentHanpangan) {
+                    runningText.textContent = '🌾 JADWAL HANPANGAN HARI INI: ' +
+                        (currentHanpangan.nama || 'Tidak ada') +
+                        ' (Desa ' + (currentHanpangan.desa || '-') + ') 🌾';
+                } else {
+                    runningText.textContent = '🌾 Memuat jadwal hanpangan... 🌾';
+                }
 
-    // POPULATE DESA
-    ds.innerHTML = '<option value="">-- Pilih Desa --</option>';
-    desaList.sort().forEach(d => {
-      const o = document.createElement('option');
-      o.value = d;
-      o.textContent = d;
-      ds.appendChild(o);
-    });
+                console.log('📌 Hanpangan hari ini:', currentHanpangan);
+                console.log('📌 Epoch day:', getEpochDay(today));
+                console.log('📌 Total data:', hanpanganData.length);
+            }
 
-    // POPULATE PERSONEL
-    ps.innerHTML = '<option value="">-- Auto dari Jadwal --</option>';
-    daftarNama.forEach(n => {
-      const o = document.createElement('option');
-      o.value = n;
-      o.textContent = n;
-      ps.appendChild(o);
-    });
+            // ============================================================
+            //  PARSE CSV
+            // ============================================================
+            function parseCSV(csvText) {
+                console.log('📄 Raw CSV data length:', csvText.length);
 
-    // AUTO SET
-    $('hanpanganNama').innerHTML = `<i class="fas fa-user-tie"></i> ${hanpangan || '-'}`;
-    $('hanpanganStatus').innerHTML = `<i class="fas fa-check-circle"></i> ${Object.keys(map).length} personel`;
-    $('hanpanganStatus').className = 'status';
-    $('totalPersonel').textContent = Object.keys(map).length;
+                const lines = csvText.trim().split('\n');
+                console.log('📄 Total lines:', lines.length);
 
-    if (hanpangan) {
-      const ex = [...ps.options].some(o => o.value === hanpangan);
-      if (ex) ps.value = hanpangan;
-    }
-    if (hanpangan && map[hanpangan]) {
-      const d = map[hanpangan].desa;
-      const ex2 = [...ds.options].some(o => o.value === d);
-      if (ex2) ds.value = d;
-    }
+                if (lines.length < 2) {
+                    console.warn('⚠️ CSV terlalu pendek');
+                    return [];
+                }
 
-    const { d, j } = now();
-    tg.value = d;
-    jm.value = j;
-    const { hr } = tgl(d);
-    ih.textContent = hr;
+                const headerLine = lines[0];
+                let delimiter = '\t';
+                if (headerLine.includes('\t')) delimiter = '\t';
+                else if (headerLine.includes(',')) delimiter = ',';
+                else if (headerLine.includes(';')) delimiter = ';';
+                console.log('📄 Menggunakan delimiter:', delimiter === '\t' ? 'TAB' : delimiter);
 
-    generate();
+                const data = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
 
-  } catch (e) {
-    $('hanpanganStatus').innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${e.message}`;
-    $('hanpanganStatus').className = 'status error';
-    $('epochInfo').innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${e.message}`;
-    console.error(e);
-  }
-}
+                    const cols = line.split(delimiter);
+                    if (cols.length >= 3) {
+                        data.push({
+                            nama: cols[0].trim(),
+                            desa: cols[1].trim(),
+                            status: cols[2].trim()
+                        });
+                    }
+                }
 
-// ============================================================
-//  GENERATE LAPORAN
-// ============================================================
-function generate() {
-  const desa = ds.value;
-  if (!desa || !tg.value || !jm.value) {
-    lp.innerHTML = '<span class="placeholder-text"><i class="fas fa-pen"></i> Silakan isi data di atas</span>';
-    lp.className = 'laporan-box empty';
-    lp.contentEditable = 'false';
-    return;
-  }
+                console.log('✅ Parse CSV success:', data.length, 'data');
+                return data;
+            }
 
-  const { tgl: t, hr: h } = tgl(tg.value);
-  const jam = jm.value.replace(':', '.');
-  ih.textContent = h;
+            // ============================================================
+            //  LOAD DATA
+            // ============================================================
+            async function loadPiket() {
+                try {
+                    const data = await fetchText(PIKET_URL);
+                    if (data) {
+                        daftarNama = data.trim().split('\n').filter(l => l.trim()).map(n => n.trim());
+                        console.log('✅ Load piket.txt success:', daftarNama.length, 'nama');
+                        return true;
+                    }
+                    console.warn('⚠️ Gagal load piket.txt');
+                    return false;
+                } catch (e) {
+                    console.error('❌ Error load piket.txt:', e);
+                    return false;
+                }
+            }
 
-  let p = ps.value || hanpangan;
-  const st = map[p]?.status || 'Desa';
+            async function loadHanpangan() {
+                try {
+                    console.log('🔄 Loading hanpangan from:', HANPANGAN_URL);
+                    const data = await fetchText(HANPANGAN_URL);
 
-  const txt = `*KORAMIL 1609-05/SUKASADA*
+                    if (!data) {
+                        console.warn('⚠️ Gagal load hanpangan.csv');
+                        return false;
+                    }
 
-*Perihal : GERAKAN ANTISIPASI DARURAT PANGAN NASIONAL OLEH KORAMIL 1609-05/SUKASADA.*
+                    hanpanganData = parseCSV(data);
+                    console.log('✅ Load hanpangan.csv success:', hanpanganData.length, 'data');
 
-*Yth. Dandim 1609/Buleleng*
-Cc. Kasdim
+                    if (hanpanganData.length === 0) {
+                        console.warn('⚠️ Hanpangan.csv kosong');
+                        return false;
+                    }
 
-Ijin melaporkan, Menindak lanjuti Perintah Danrem 163/WSA tentang Hanpangan pada hari ${h}, tanggal  ${t}. Satuan Koramil 1609-05/Sukasada telah melaksanakan kegiatan *GERAKAN ANTISIPASI DARURAT PANGAN NASIONAL* dalam rangka Ketahanan Pangan Nasional di wilayah Koramil 1609-05/Sukasada, dengan rincian kegiatan sbb :
+                    updateHanpanganDisplay();
+                    return true;
+                } catch (e) {
+                    console.error('❌ Error load hanpangan:', e);
+                    return false;
+                }
+            }
 
-A. PIPANISASI       : NIHIL
+            // ============================================================
+            //  HANPANGAN SCHEDULER (00.02 - No Telegram)
+            // ============================================================
+            function setupHanpanganScheduler() {
+                console.log('⏰ Setting up hanpangan scheduler at 00:02...');
 
-B. SUMUR BOR     : NIHIL
+                function checkAndUpdateHanpangan() {
+                    const now = new Date();
+                    const hours = now.getHours();
+                    const minutes = now.getMinutes();
+                    const seconds = now.getSeconds();
 
-C. POMPANISASI : 2 Unit
+                    if (hours === 0 && minutes === 2 && seconds <= 30) {
+                        if (!window._hanpanganUpdatedToday) {
+                            console.log('⏰ 00.02 - Mengupdate hanpangan (No Telegram)');
+                            window._hanpanganUpdatedToday = true;
 
-D. GERAKAN ANTISIPASI DARURAT PANGAN  NASIONAL sbb :
+                            const today = new Date();
+                            const newHanpangan = getHanpanganToday(hanpanganData, today);
 
--*Babinsa ${st} ${desa}*
+                            if (newHanpangan && JSON.stringify(newHanpangan) !== JSON.stringify(currentHanpangan)) {
+                                currentHanpangan = newHanpangan;
+                                updateHanpanganDisplay();
+                                console.log('✅ Hanpangan updated (No Telegram):', currentHanpangan);
+                            } else {
+                                console.log('ℹ️ Hanpangan tidak berubah');
+                            }
 
-Pada hari ${h}, ${t}  pukul ${jam} Wita. Babinsa ${st} ${desa}, ${p} melaksanakan  monitoring ketahanan pangan di wilayah ${st} ${desa}. Kegiatan ini dilakukan sebagai bentuk pendampingan kepada para petani setelah tanam padi dengan ketersediaan air sangat mencukupi. Monitoring ini adalah upaya mendukung program Ketahanan Pangan Nasional.
+                            setTimeout(() => {
+                                window._hanpanganUpdatedToday = false;
+                            }, 60000);
+                        }
+                    } else if (hours === 0 && minutes === 3 && seconds === 0) {
+                        window._hanpanganUpdatedToday = false;
+                    }
+                }
 
-Kegiatan berjalan tertib lancar dan aman.
+                setInterval(checkAndUpdateHanpangan, 5000);
+                console.log('✅ Hanpangan scheduler aktif (00.02 - No Telegram)');
+            }
 
-Demikian yang dapat kami laporkan, selanjutnya mohon petunjuk, UMP.`;
+            // ============================================================
+            //  SUPABASE
+            // ============================================================
+            async function initSupabase() {
+                updateIndicator('checking');
+                try {
+                    if (typeof supabase === 'undefined') {
+                        console.error('❌ Supabase JS tidak ditemukan');
+                        updateIndicator('offline');
+                        return false;
+                    }
+                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    const { error } = await supabaseClient.from('jadwal_piket').select('id').limit(1);
+                    if (error) {
+                        console.error('❌ Supabase connection error:', error);
+                        updateIndicator('offline');
+                        isSupabaseConnected = false;
+                        return false;
+                    }
+                    isSupabaseConnected = true;
+                    updateIndicator('online');
+                    console.log('✅ Supabase connected');
+                    await loadAllJadwal();
+                    return true;
+                } catch (e) {
+                    console.error('❌ Supabase init error:', e);
+                    updateIndicator('offline');
+                    isSupabaseConnected = false;
+                    return false;
+                }
+            }
 
-  lp.textContent = txt;
-  lp.className = 'laporan-box';
-  lp.contentEditable = 'true';
-}
+            async function loadAllJadwal() {
+                const now = Date.now();
+                if (now - lastReloadTime < 1000) {
+                    console.log('⏳ Skip reload, too frequent');
+                    return;
+                }
+                lastReloadTime = now;
 
-// ============================================================
-//  EVENT
-// ============================================================
-ds.onchange = () => {
-  const d = ds.value;
-  const p = Object.keys(map).find(k => map[k].desa === d);
-  if (p) ps.value = p;
-  generate();
-};
+                if (isReloading) {
+                    console.log('⏳ Already reloading');
+                    return;
+                }
 
-ps.onchange = () => {
-  const n = ps.value;
-  if (n && map[n]) {
-    const d = map[n].desa;
-    const ex = [...ds.options].some(o => o.value === d);
-    if (ex) ds.value = d;
-  }
-  generate();
-};
+                if (!supabaseClient || !isSupabaseConnected) {
+                    previewContainer.innerHTML = '<div class="no-data">⚠️ Supabase tidak terhubung</div>';
+                    return;
+                }
 
-tg.oninput = () => {
-  if (tg.value) {
-    const { hr } = tgl(tg.value);
-    ih.textContent = hr;
-  } else {
-    ih.textContent = '-';
-  }
-  generate();
-};
+                isReloading = true;
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('jadwal_piket')
+                        .select('*')
+                        .order('tanggal_jadwal', { ascending: true });
+                    if (error) throw error;
+                    allJadwal = data || [];
+                    console.log('✅ Load jadwal success:', allJadwal.length, 'records');
+                    renderPreview(allJadwal);
 
-jm.oninput = generate;
+                    if (isInitialLoad) {
+                        isInitialLoad = false;
+                        console.log('✅ Initial load selesai, notifikasi Telegram tidak dikirim');
+                    }
+                } catch (e) {
+                    console.error('❌ Gagal load jadwal:', e);
+                    previewContainer.innerHTML = '<div class="no-data">❌ Gagal memuat data</div>';
+                } finally {
+                    isReloading = false;
+                }
+            }
 
-// ============================================================
-//  UTILITY (WINDOW SCOPE UNTUK TOMBOL)
-// ============================================================
-window.resetLaporan = function() {
-  ds.value = '';
-  ps.value = '';
-  tg.value = '';
-  jm.value = '';
-  ih.textContent = '-';
-  lp.innerHTML = '<span class="placeholder-text"><i class="fas fa-pen"></i> Silakan isi data di atas</span>';
-  lp.className = 'laporan-box empty';
-  lp.contentEditable = 'false';
-  toast('↺ Laporan direset', 'info');
-};
+            function showSaveIndicator(element, status) {
+                if (!element) return;
+                let indicator = element.querySelector('.save-indicator');
+                if (!indicator) {
+                    indicator = document.createElement('span');
+                    indicator.className = 'save-indicator';
+                    element.appendChild(indicator);
+                }
+                indicator.className = 'save-indicator ' + status;
 
-function toast(msg, type = 'info') {
-  const t = $('toast');
-  const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
-  t.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> ${msg}`;
-  t.className = `toast ${type}`;
-  t.classList.add('show');
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove('show'), 3000);
-}
+                if (status === 'saved' || status === 'error') {
+                    setTimeout(() => {
+                        indicator.className = 'save-indicator';
+                    }, 2000);
+                }
+            }
 
-window.salin = function() {
-  if (lp.classList.contains('empty')) return toast('⚠️ Belum ada laporan', 'error');
-  navigator.clipboard.writeText(lp.textContent)
-    .then(() => toast('✅ Laporan disalin!', 'success'))
-    .catch(() => toast('❌ Gagal menyalin', 'error'));
-};
+            // ============================================================
+            //  SAVE JADWAL
+            // ============================================================
+            async function saveJadwal(tanggal, jenis, nama) {
+                if (!supabaseClient || !isSupabaseConnected) {
+                    showToast('⚠️ Supabase tidak terhubung!', 'error');
+                    return false;
+                }
 
-window.bagikan = function() {
-  if (lp.classList.contains('empty')) return toast('⚠️ Belum ada laporan', 'error');
-  const t = lp.textContent;
-  if (navigator.share) {
-    navigator.share({ title: 'Laporan Hanpangan', text: t })
-      .catch(() => {});
-  } else {
-    navigator.clipboard.writeText(t)
-      .then(() => toast('📤 Laporan disalin untuk dibagikan', 'success'))
-      .catch(() => toast('❌ Gagal membagikan', 'error'));
-  }
-};
+                if (isSaving) return false;
+                isSaving = true;
 
-window.refreshData = async function() {
-  $('hanpanganStatus').innerHTML = `<i class="fas fa-spinner fa-spin"></i> Memuat...`;
-  $('hanpanganStatus').className = 'status loading';
-  $('epochInfo').innerHTML = `<i class="fas fa-spinner fa-spin"></i> Menghitung epoch...`;
-  await loadCSV();
-  toast('✅ Data refreshed', 'success');
-};
+                const cells = document.querySelectorAll(`td[data-jenis="${jenis}"]`);
+                let targetCell = null;
+                for (let cell of cells) {
+                    const row = cell.closest('tr');
+                    if (row && row.dataset.tanggal === tanggal) {
+                        targetCell = cell;
+                        break;
+                    }
+                }
 
-// ============================================================
-//  INSTALL BUTTON PWA
-// ============================================================
-let deferredPrompt;
+                if (targetCell) {
+                    showSaveIndicator(targetCell, 'saving');
+                }
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  const installBtn = document.getElementById('installBtn');
-  if (installBtn) {
-    installBtn.style.display = 'block';
-    installBtn.onclick = async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          installBtn.style.display = 'none';
-          toast('✅ Aplikasi berhasil diinstall!', 'success');
-        }
-        deferredPrompt = null;
-      }
-    };
-  }
-});
+                try {
+                    const { data: existing, error: findErr } = await supabaseClient
+                        .from('jadwal_piket')
+                        .select('id, nama1, nama2')
+                        .eq('tanggal_jadwal', tanggal)
+                        .eq('jenis', jenis)
+                        .maybeSingle();
+                    if (findErr) throw findErr;
 
-window.addEventListener('appinstalled', () => {
-  const installBtn = document.getElementById('installBtn');
-  if (installBtn) installBtn.style.display = 'none';
-  deferredPrompt = null;
-});
+                    const oldValue = existing ? (existing.nama1 || '') : '';
+                    const newValue = nama || '';
 
-// CEK JIKA SUDAH DALAM MODE STANDALONE (PWA)
-if (window.matchMedia('(display-mode: standalone)').matches) {
-  const installBtn = document.getElementById('installBtn');
-  if (installBtn) installBtn.style.display = 'none';
-}
+                    if (oldValue === newValue) {
+                        console.log('⏳ Tidak ada perubahan data, skip save');
+                        if (targetCell) {
+                            showSaveIndicator(targetCell, 'saved');
+                            setTimeout(() => {
+                                showSaveIndicator(targetCell, '');
+                            }, 1000);
+                        }
+                        isSaving = false;
+                        return true;
+                    }
 
-// ============================================================
-//  START
-// ============================================================
-loadCSV();
+                    let result;
+                    if (existing) {
+                        result = await supabaseClient
+                            .from('jadwal_piket')
+                            .update({
+                                nama1: nama || null,
+                                nama2: null,
+                                tanggal_input: new Date().toISOString()
+                            })
+                            .eq('id', existing.id);
+                    } else {
+                        result = await supabaseClient
+                            .from('jadwal_piket')
+                            .insert([{
+                                tanggal_jadwal: tanggal,
+                                jenis: jenis,
+                                nama1: nama || null,
+                                nama2: null,
+                                tanggal_input: new Date().toISOString()
+                            }]);
+                    }
+                    if (result.error) throw result.error;
 
-// ============================================================
-//  PWA SERVICE WORKER REGISTRATION
-// ============================================================
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/Hanpangan/sw.js')
-      .then(function(reg) {
-        console.log('✅ Service Worker registered');
-      })
-      .catch(function(err) {
-        console.log('❌ Service Worker registration failed:', err);
-      });
-  });
-}
-</script>
+                    console.log('✅ Save success:', tanggal, jenis, nama);
+
+                    if (targetCell) {
+                        showSaveIndicator(targetCell, 'saved');
+                    }
+
+                    if (nama && nama.trim() !== '') {
+                        const jenisLabel = jenis.replace('_hari_ini', '').toUpperCase();
+                        const tgl = new Date(tanggal + 'T00:00:00');
+                        const tglStr = formatTanggalIndonesia(tgl);
+
+                        const names = nama.split(',').map(s => s.trim()).filter(s => s);
+                        let namaFormatted = '';
+                        if (names.length > 0) {
+                            namaFormatted = names.map((n, i) => (i + 1) + '. ' + n).join('\n');
+                        }
+
+                        const pesan = `📋 *Jadwal Piket Diupdate !*\n\n` +
+                            `📅 Tanggal: ${tglStr}\n` +
+                            `👤 ${jenisLabel}:\n${namaFormatted}\n\n` +
+                            `🔄 Data jadwal telah diperbarui.`;
+
+                        await sendToTelegram(pesan);
+                    }
+
+                    setTimeout(() => {
+                        loadAllJadwal();
+                    }, 500);
+
+                    return true;
+                } catch (e) {
+                    console.error('❌ Gagal simpan:', e);
+                    if (targetCell) {
+                        showSaveIndicator(targetCell, 'error');
+                    }
+                    showToast('❌ Gagal simpan: ' + e.message, 'error');
+                    return false;
+                } finally {
+                    isSaving = false;
+                }
+            }
+
+            // ============================================================
+            //  BULAN
+            // ============================================================
+            function populateBulan() {
+                const now = new Date();
+                const currentMonth = now.getMonth();
+                const currentYear = now.getFullYear();
+
+                const allMonths = [];
+                for (let year = currentYear - 2; year <= currentYear + 2; year++) {
+                    for (let m = 0; m < 12; m++) {
+                        allMonths.push({
+                            value: year + '-' + String(m + 1).padStart(2, '0'),
+                            label: NAMA_BULAN[m] + ' ' + year,
+                            year: year,
+                            month: m
+                        });
+                    }
+                }
+
+                const filtered = allMonths.filter(m => m.year >= 2026);
+
+                bulanSelect.innerHTML = '';
+                filtered.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m.value;
+                    opt.textContent = m.label;
+                    bulanSelect.appendChild(opt);
+                });
+
+                const currentKey = currentYear + '-' + String(currentMonth + 1).padStart(2, '0');
+                if (filtered.some(m => m.value === currentKey)) {
+                    bulanSelect.value = currentKey;
+                } else {
+                    bulanSelect.value = '2026-01';
+                }
+
+                updateTotalHari();
+            }
+
+            function getBulanTahun() {
+                const val = bulanSelect.value;
+                const parts = val.split('-');
+                return { bulan: parseInt(parts[1]) - 1, tahun: parseInt(parts[0]) };
+            }
+
+            function updateTitle() {
+                const { bulan, tahun } = getBulanTahun();
+                bulanTahunTitle.textContent = NAMA_BULAN[bulan] + ' ' + tahun;
+            }
+
+            function updateTotalHari() {
+                const { bulan, tahun } = getBulanTahun();
+                const daysInMonth = new Date(tahun, bulan + 1, 0).getDate();
+                totalHariSpan.textContent = 'Total: ' + daysInMonth + ' hari';
+            }
+
+            // ============================================================
+            //  DROPDOWN
+            // ============================================================
+            function createCustomDropdown(tanggal, jenis, currentValue) {
+                const wrapper = document.createElement('span');
+                wrapper.className = 'custom-dropdown-wrapper';
+                wrapper.style.display = 'inline-block';
+                wrapper.style.width = '100%';
+                wrapper.style.position = 'relative';
+
+                const display = document.createElement('span');
+                display.className = 'custom-dropdown-display';
+                display.dataset.tanggal = tanggal;
+                display.dataset.jenis = jenis;
+                display.style.display = 'inline-block';
+                display.style.width = '100%';
+                display.style.whiteSpace = 'pre-line';
+                display.style.lineHeight = '1.6';
+                display.style.textAlign = 'left';
+                display.style.verticalAlign = 'top';
+
+                const menu = document.createElement('div');
+                menu.className = 'custom-dropdown-menu';
+
+                const header = document.createElement('div');
+                header.className = 'menu-header';
+                const title = document.createElement('h2');
+                title.textContent = '📋 Pilih Nama';
+                title.style.textAlign = 'left';
+                header.appendChild(title);
+                menu.appendChild(header);
+
+                const optionsGrid = document.createElement('div');
+                optionsGrid.className = 'options-grid';
+                menu.appendChild(optionsGrid);
+
+                const footer = document.createElement('div');
+                footer.className = 'menu-footer';
+                const confirmBtn = document.createElement('button');
+                confirmBtn.className = 'btn-confirm';
+                confirmBtn.textContent = '✅ OK';
+                footer.appendChild(confirmBtn);
+                menu.appendChild(footer);
+
+                wrapper.appendChild(display);
+                wrapper.appendChild(menu);
+
+                let selectedNames = [];
+                if (currentValue && currentValue !== '') {
+                    selectedNames = currentValue.split(', ').filter(n => n.trim());
+                }
+
+                let isOpen = false;
+
+                function formatDisplay() {
+                    if (selectedNames.length === 0) return '— Pilih —';
+                    return selectedNames.map((name, i) => (i + 1) + '. ' + name).join('\n');
+                }
+
+                function renderOptions() {
+                    let html = '';
+                    if (daftarNama.length === 0) {
+                        html = '<div class="no-result">⚠️ Nama tidak ditemukan. Cek koneksi internet.</div>';
+                    } else {
+                        daftarNama.forEach(n => {
+                            const isSelected = selectedNames.includes(n);
+                            let num = '';
+                            if (isSelected) {
+                                num = (selectedNames.indexOf(n) + 1);
+                            }
+                            html += `
+                                <div class="option-item ${isSelected ? 'selected' : ''}" data-name="${n}">
+                                    <span class="num-icon">${num}</span>
+                                    ${n}
+                                </div>
+                            `;
+                        });
+                    }
+                    optionsGrid.innerHTML = html;
+
+                    optionsGrid.querySelectorAll('.option-item').forEach(el => {
+                        el.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const name = this.dataset.name;
+                            const idx = selectedNames.indexOf(name);
+                            if (idx > -1) {
+                                selectedNames.splice(idx, 1);
+                                this.classList.remove('selected');
+                            } else {
+                                selectedNames.push(name);
+                                this.classList.add('selected');
+                            }
+                            updateDisplay();
+                            renderOptions();
+                        });
+                    });
+                }
+
+                function updateDisplay() {
+                    display.innerHTML = '';
+                    if (selectedNames.length === 0) {
+                        const ph = document.createElement('span');
+                        ph.className = 'placeholder';
+                        ph.textContent = '— Pilih —';
+                        ph.style.textAlign = 'left';
+                        display.appendChild(ph);
+                    } else {
+                        const formatted = document.createTextNode(formatDisplay());
+                        display.appendChild(formatted);
+                    }
+                }
+
+                function openMenu() {
+                    if (daftarNama.length === 0) {
+                        showToast('⚠️ Daftar nama belum dimuat. Cek koneksi.', 'error');
+                        return;
+                    }
+                    menu.classList.add('open');
+                    isOpen = true;
+                    renderOptions();
+                }
+
+                function closeMenu() {
+                    menu.classList.remove('open');
+                    isOpen = false;
+                }
+
+                display.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (isOpen) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
+                });
+
+                confirmBtn.addEventListener('click', function() {
+                    closeMenu();
+                    const finalValue = selectedNames.join(', ');
+                    saveJadwal(tanggal, jenis, finalValue);
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (!wrapper.contains(e.target) && !menu.contains(e.target)) {
+                        closeMenu();
+                    }
+                });
+
+                renderOptions();
+                updateDisplay();
+
+                return wrapper;
+            }
+
+            // ============================================================
+            //  RENDER PREVIEW
+            // ============================================================
+            function renderPreview(data) {
+                const { bulan, tahun } = getBulanTahun();
+                updateTitle();
+                updateTotalHari();
+
+                const filtered = data.filter(item => {
+                    const parts = item.tanggal_jadwal.split('-');
+                    const itemBulan = parseInt(parts[1]) - 1;
+                    const itemTahun = parseInt(parts[0]);
+                    return itemBulan === bulan && itemTahun === tahun;
+                });
+
+                const daysInMonth = new Date(tahun, bulan + 1, 0).getDate();
+                const allDates = [];
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const key = tahun + '-' + String(bulan + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+                    allDates.push(key);
+                }
+
+                const today = new Date();
+                const isCurrentMonth = (tahun === today.getFullYear() && bulan === today.getMonth());
+
+                let sortedDates = [];
+                if (isCurrentMonth) {
+                    const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(
+                        today.getDate()).padStart(2, '0');
+                    const fromToday = [];
+                    const beforeToday = [];
+                    allDates.forEach(dateKey => {
+                        if (dateKey >= todayStr) {
+                            fromToday.push(dateKey);
+                        } else {
+                            beforeToday.push(dateKey);
+                        }
+                    });
+                    sortedDates = fromToday.concat(beforeToday);
+                } else {
+                    sortedDates = allDates.slice();
+                }
+
+                const grouped = {};
+                filtered.forEach(item => {
+                    const key = item.tanggal_jadwal;
+                    if (!grouped[key]) {
+                        grouped[key] = { koramil: '', kediaman: '', makodim: '' };
+                    }
+                    if (item.jenis === 'koramil_hari_ini') {
+                        grouped[key].koramil = item.nama1 || '';
+                    } else if (item.jenis === 'kediaman_hari_ini') {
+                        grouped[key].kediaman = item.nama1 || '';
+                    } else if (item.jenis === 'makodim_hari_ini') {
+                        grouped[key].makodim = item.nama1 || '';
+                    }
+                });
+
+                const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(
+                    today.getDate()).padStart(2, '0');
+
+                let html = `
+                    <div class="table-wrapper">
+                        <table class="excel-table">
+                            <thead>
+                                <tr>
+                                    <th>NO</th>
+                                    <th>TANGGAL</th>
+                                    <th>KORAMIL</th>
+                                    <th>KEDIAMAN</th>
+                                    <th>MAKODIM</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                sortedDates.forEach((dateKey, index) => {
+                    const entry = grouped[dateKey] || { koramil: '', kediaman: '', makodim: '' };
+                    const parts = dateKey.split('-');
+                    const d = new Date(parts[0], parts[1] - 1, parts[2]);
+                    const dateStr = formatTanggalDuaBaris(d);
+                    const isToday = (dateKey === todayStr);
+                    const isWeekendDay = isWeekend(d);
+                    let rowClass = '';
+                    if (isToday) rowClass += ' row-today';
+                    if (isWeekendDay) rowClass += ' row-weekend';
+                    html += `
+                        <tr class="${rowClass}" data-tanggal="${dateKey}">
+                            <td style="font-weight:700;text-align:left;vertical-align:top;">${index+1}</td>
+                            <td style="text-align:left;vertical-align:top;">${dateStr}</td>
+                            <td data-jenis="koramil_hari_ini" style="text-align:left;vertical-align:top;"></td>
+                            <td data-jenis="kediaman_hari_ini" style="text-align:left;vertical-align:top;"></td>
+                            <td data-jenis="makodim_hari_ini" style="text-align:left;vertical-align:top;"></td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                previewContainer.innerHTML = html;
+
+                const rows = previewContainer.querySelectorAll('tr[data-tanggal]');
+                rows.forEach(row => {
+                    const tanggal = row.dataset.tanggal;
+                    const cells = row.querySelectorAll('td[data-jenis]');
+                    cells.forEach(cell => {
+                        const jenis = cell.dataset.jenis;
+                        const key = jenis.replace('_hari_ini', '');
+                        const currentValue = (grouped[tanggal] && grouped[tanggal][key]) || '';
+                        const dropdown = createCustomDropdown(tanggal, jenis, currentValue);
+                        cell.innerHTML = '';
+                        cell.style.padding = '2px 4px';
+                        cell.style.background = 'transparent';
+                        cell.style.textAlign = 'left';
+                        cell.style.verticalAlign = 'top';
+                        cell.appendChild(dropdown);
+                    });
+                });
+            }
+
+            // ============================================================
+            //  CETAK PDF
+            // ============================================================
+            function cetakJadwal() {
+                const { bulan, tahun } = getBulanTahun();
+                const daysInMonth = new Date(tahun, bulan + 1, 0).getDate();
+
+                const allDates = [];
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const key = tahun + '-' + String(bulan + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+                    allDates.push(key);
+                }
+
+                const filtered = allJadwal.filter(item => {
+                    const parts = item.tanggal_jadwal.split('-');
+                    const itemBulan = parseInt(parts[1]) - 1;
+                    const itemTahun = parseInt(parts[0]);
+                    return itemBulan === bulan && itemTahun === tahun;
+                });
+
+                const grouped = {};
+                filtered.forEach(item => {
+                    const key = item.tanggal_jadwal;
+                    if (!grouped[key]) grouped[key] = { koramil: '', kediaman: '', makodim: '' };
+                    if (item.jenis === 'koramil_hari_ini') grouped[key].koramil = item.nama1 || '';
+                    else if (item.jenis === 'kediaman_hari_ini') grouped[key].kediaman = item.nama1 || '';
+                    else if (item.jenis === 'makodim_hari_ini') grouped[key].makodim = item.nama1 || '';
+                });
+
+                function formatNamaWithNumber(namaStr) {
+                    if (!namaStr) return '';
+                    const names = namaStr.split(',').map(s => s.trim()).filter(s => s);
+                    if (names.length === 0) return '';
+                    return names.map((n, i) => (i + 1) + '. ' + n).join('\n');
+                }
+
+                const today = new Date();
+                const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(
+                    today.getDate()).padStart(2, '0');
+
+                let printHtml = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Jadwal Piket Koramil</title>
+                    <style>
+                        @page {
+                            size: A4;
+                            margin-top: 1cm;
+                            margin-bottom: 1cm;
+                            margin-left: 1.5cm;
+                            margin-right: 1cm;
+                        }
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            color: #000;
+                            background: #fff;
+                            font-size: 11pt;
+                            line-height: 1.5;
+                        }
+                        .kop {
+                            text-align: left;
+                            margin-bottom: 12px;
+                            font-size: 11pt;
+                            font-weight: bold;
+                        }
+                        .kop .kodim {
+                            font-weight: bold;
+                            font-size: 11pt;
+                            text-transform: uppercase;
+                        }
+                        .kop .koramil {
+                            font-weight: bold;
+                            font-size: 11pt;
+                            text-transform: uppercase;
+                        }
+                        .kop hr {
+                            width: 220px;
+                            margin: 4px 0;
+                            border: 1px solid #000;
+                        }
+                        .judul {
+                            text-align: center;
+                            font-weight: bold;
+                            font-size: 11pt;
+                            text-transform: uppercase;
+                            margin: 14px 0 10px 0;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-family: Arial, sans-serif;
+                            font-size: 11pt;
+                            border: 1px solid #000;
+                        }
+                        th, td {
+                            border: 1px solid #000;
+                            padding: 2px 4px;
+                            text-align: left;
+                            vertical-align: top;
+                            word-wrap: break-word;
+                            overflow-wrap: break-word;
+                            white-space: pre-line;
+                        }
+                        th {
+                            background: #d9d9d9;
+                            font-weight: 700;
+                            font-size: 12pt;
+                        }
+                        .no-col { width: 6%; text-align: center; }
+                        .tgl-col { width: 18%; }
+                        .nama-col { width: 28%; }
+                        .nama-col-kediaman { width: 24%; }
+                        .nama-col-makodim { width: 24%; }
+                        .row-weekend td { background: #ffe6e6; }
+                        .row-today td { background: #ffff99; }
+                        @media print {
+                            .no-col, .tgl-col, .nama-col, .nama-col-kediaman, .nama-col-makodim {
+                                text-align: left;
+                                vertical-align: top;
+                            }
+                            .no-col { text-align: center; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="kop">
+                        <div class="kodim">KODIM 1609/BULELENG</div>
+                        <div class="koramil">KORAMIL 1609-05/SUKASADA</div>
+                        <hr>
+                    </div>
+                    <div class="judul">DAFTAR JADWAL PIKET KORAMIL 1609-05/SUKASADA</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="no-col">NO</th>
+                                <th class="tgl-col">TANGGAL</th>
+                                <th class="nama-col">KORAMIL</th>
+                                <th class="nama-col-kediaman">KEDIAMAN</th>
+                                <th class="nama-col-makodim">MAKODIM</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                allDates.forEach((dateKey, index) => {
+                    const entry = grouped[dateKey] || { koramil: '', kediaman: '', makodim: '' };
+                    const parts = dateKey.split('-');
+                    const d = new Date(parts[0], parts[1] - 1, parts[2]);
+                    const dateStr = formatTanggalDuaBaris(d);
+                    const isToday = (dateKey === todayStr);
+                    const isWeekendDay = isWeekend(d);
+                    let rowClass = '';
+                    if (isToday) rowClass += ' row-today';
+                    if (isWeekendDay) rowClass += ' row-weekend';
+
+                    const koramil = formatNamaWithNumber(entry.koramil);
+                    const kediaman = formatNamaWithNumber(entry.kediaman);
+                    const makodim = formatNamaWithNumber(entry.makodim);
+
+                    printHtml += `
+                        <tr class="${rowClass}">
+                            <td class="no-col">${index+1}</td>
+                            <td class="tgl-col">${dateStr}</td>
+                            <td class="nama-col">${koramil}</td>
+                            <td class="nama-col-kediaman">${kediaman}</td>
+                            <td class="nama-col-makodim">${makodim}</td>
+                        </tr>
+                    `;
+                });
+
+                printHtml += `
+                        </tbody>
+                    </table>
+                </body>
+                </html>
+                `;
+
+                const printWindow = window.open('', '_blank', 'width=800,height=600');
+                if (!printWindow) {
+                    showToast('⚠️ Izinkan popup untuk mencetak.', 'error');
+                    return;
+                }
+                printWindow.document.write(printHtml);
+                printWindow.document.close();
+                printWindow.focus();
+                printWindow.print();
+            }
+
+            // ============================================================
+            //  KIRIM KE TELEGRAM
+            // ============================================================
+            async function sendToTelegram(message) {
+                console.log('📤 Mengirim ke Telegram...');
+
+                if (!TELEGRAM_TOKEN || TELEGRAM_TOKEN === '') {
+                    console.error('❌ TELEGRAM_TOKEN tidak dikonfigurasi');
+                    showToast('⚠️ Token Telegram tidak dikonfigurasi!', 'error');
+                    return false;
+                }
+
+                if (!TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === '') {
+                    console.error('❌ TELEGRAM_CHAT_ID tidak dikonfigurasi');
+                    showToast('⚠️ Chat ID Telegram tidak dikonfigurasi!', 'error');
+                    return false;
+                }
+
+                const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            chat_id: TELEGRAM_CHAT_ID,
+                            text: message,
+                            parse_mode: 'Markdown'
+                        })
+                    });
+
+                    const responseData = await response.json();
+
+                    if (!response.ok) {
+                        console.error('❌ Telegram error:', responseData);
+                        let errorMsg = '⚠️ Gagal kirim ke Telegram';
+                        if (responseData.description) {
+                            errorMsg += ': ' + responseData.description;
+                        }
+                        showToast(errorMsg, 'error');
+                        return false;
+                    } else {
+                        console.log('✅ Pesan terkirim ke Telegram');
+                        return true;
+                    }
+                } catch (e) {
+                    console.error('❌ Error sending to Telegram:', e);
+                    showToast('⚠️ Gagal kirim ke Telegram: ' + e.message, 'error');
+                    return false;
+                }
+            }
+
+            // ============================================================
+            //  KIRIM JADWAL (TRIGGER 08.00)
+            // ============================================================
+            async function sendScheduleToTelegram() {
+                console.log('📤 Mengirim jadwal ke Telegram (Trigger 08.00)...');
+
+                try {
+                    const today = new Date();
+                    const tomorrow = new Date(today);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+
+                    const todayStr = today.getFullYear() + '-' +
+                        String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(today.getDate()).padStart(2, '0');
+
+                    const tomorrowStr = tomorrow.getFullYear() + '-' +
+                        String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(tomorrow.getDate()).padStart(2, '0');
+
+                    if (!supabaseClient || !isSupabaseConnected) {
+                        console.warn('⚠️ Supabase tidak terhubung, tidak bisa kirim jadwal');
+                        showToast('⚠️ Supabase tidak terhubung!', 'error');
+                        return false;
+                    }
+
+                    const { data, error } = await supabaseClient
+                        .from('jadwal_piket')
+                        .select('*')
+                        .in('tanggal_jadwal', [todayStr, tomorrowStr]);
+
+                    if (error) {
+                        console.error('❌ Gagal ambil data jadwal:', error);
+                        showToast('❌ Gagal ambil data jadwal', 'error');
+                        return false;
+                    }
+
+                    const grouped = {};
+                    data.forEach(item => {
+                        const key = item.tanggal_jadwal;
+                        if (!grouped[key]) {
+                            grouped[key] = { koramil: '', kediaman: '', makodim: '' };
+                        }
+                        if (item.jenis === 'koramil_hari_ini') {
+                            grouped[key].koramil = item.nama1 || '';
+                        } else if (item.jenis === 'kediaman_hari_ini') {
+                            grouped[key].kediaman = item.nama1 || '';
+                        } else if (item.jenis === 'makodim_hari_ini') {
+                            grouped[key].makodim = item.nama1 || '';
+                        }
+                    });
+
+                    const tglHariIni = formatTanggalWA(today);
+                    const tglBesok = formatTanggalWA(tomorrow);
+
+                    let pesan = '';
+                    pesan += '_____________________________\n';
+                    pesan += '*KORAMIL 1609-05/SUKASADA*\n';
+                    pesan += '    *JADWAL DINAS DALAM*\n';
+                    pesan += '_____________________________\n\n';
+
+                    function formatNamaWA(namaStr) {
+                        if (!namaStr) return '';
+                        const names = namaStr.split(',').map(s => s.trim()).filter(s => s);
+                        if (names.length === 0) return '';
+                        return names.map((n, i) => '   ' + (i + 1) + '. ' + n).join('\n');
+                    }
+
+                    let sections = [];
+                    let letter = 'A';
+
+                    function addSection(date, names, type) {
+                        if (names && names.trim() !== '') {
+                            let label = letter + '.';
+                            let title = date;
+                            if (type) title += ' (' + type + ')';
+                            sections.push({ label, title, names });
+                            letter = String.fromCharCode(letter.charCodeAt(0) + 1);
+                        }
+                    }
+
+                    const koramilHariIni = grouped[todayStr]?.koramil || '';
+                    const koramilBesok = grouped[tomorrowStr]?.koramil || '';
+                    const kediamanHariIni = grouped[todayStr]?.kediaman || '';
+                    const kediamanBesok = grouped[tomorrowStr]?.kediaman || '';
+                    const makodimHariIni = grouped[todayStr]?.makodim || '';
+                    const makodimBesok = grouped[tomorrowStr]?.makodim || '';
+
+                    addSection(tglHariIni, koramilHariIni, '');
+                    addSection(tglBesok, koramilBesok, '');
+                    addSection(tglHariIni, kediamanHariIni, 'Kediaman');
+                    addSection(tglBesok, kediamanBesok, 'Kediaman');
+                    addSection(tglHariIni, makodimHariIni, 'Makodim');
+                    addSection(tglBesok, makodimBesok, 'Makodim');
+
+                    if (sections.length === 0) {
+                        pesan += 'Belum ada data jadwal untuk hari ini dan besok.\n\n';
+                    } else {
+                        sections.forEach((sec, idx) => {
+                            pesan += sec.label + ' ' + sec.title + '\n';
+                            pesan += formatNamaWA(sec.names) + '\n';
+                            if (idx < sections.length - 1) {
+                                pesan += '\n';
+                            }
+                        });
+                        pesan += '\n';
+                    }
+
+                    if (currentHanpangan) {
+                        pesan += '*🌾Jadwal Hanpangan hari ini :* ' + currentHanpangan.nama;
+                        pesan += ' (Desa ' + currentHanpangan.desa + ')\n';
+                    } else {
+                        pesan += '*🌾Jadwal Hanpangan hari ini :* Belum tersedia\n';
+                    }
+                    pesan += '\n*Demikian MMP.*';
+
+                    const success = await sendToTelegram(pesan);
+
+                    if (success) {
+                        lastTriggerTime = new Date();
+                        triggerCount++;
+                        console.log('✅ Trigger jadwal berhasil dikirim');
+                    }
+
+                    return success;
+                } catch (e) {
+                    console.error('❌ Error send schedule:', e);
+                    showToast('❌ Error: ' + e.message, 'error');
+                    return false;
+                }
+            }
+
+            // ============================================================
+            //  KIRIM WHATSAPP
+            // ============================================================
+            async function kirimWhatsApp() {
+                if (!supabaseClient || !isSupabaseConnected) {
+                    showToast('⚠️ Supabase tidak terhubung!', 'error');
+                    return;
+                }
+
+                try {
+                    const today = new Date();
+                    const tomorrow = new Date(today);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+
+                    const todayStr = today.getFullYear() + '-' +
+                        String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(today.getDate()).padStart(2, '0');
+
+                    const tomorrowStr = tomorrow.getFullYear() + '-' +
+                        String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(tomorrow.getDate()).padStart(2, '0');
+
+                    const { data, error } = await supabaseClient
+                        .from('jadwal_piket')
+                        .select('*')
+                        .in('tanggal_jadwal', [todayStr, tomorrowStr]);
+
+                    if (error) throw error;
+
+                    const grouped = {};
+                    data.forEach(item => {
+                        const key = item.tanggal_jadwal;
+                        if (!grouped[key]) {
+                            grouped[key] = { koramil: '', kediaman: '', makodim: '' };
+                        }
+                        if (item.jenis === 'koramil_hari_ini') {
+                            grouped[key].koramil = item.nama1 || '';
+                        } else if (item.jenis === 'kediaman_hari_ini') {
+                            grouped[key].kediaman = item.nama1 || '';
+                        } else if (item.jenis === 'makodim_hari_ini') {
+                            grouped[key].makodim = item.nama1 || '';
+                        }
+                    });
+
+                    const tglHariIni = formatTanggalWA(today);
+                    const tglBesok = formatTanggalWA(tomorrow);
+
+                    let pesan = '';
+                    pesan += '_____________________________\n';
+                    pesan += '*KORAMIL 1609-05/SUKASADA*\n';
+                    pesan += '    *JADWAL DINAS DALAM*\n';
+                    pesan += '_____________________________\n\n';
+
+                    function formatNamaWA(namaStr) {
+                        if (!namaStr) return '';
+                        const names = namaStr.split(',').map(s => s.trim()).filter(s => s);
+                        if (names.length === 0) return '';
+                        return names.map((n, i) => '   ' + (i + 1) + '. ' + n).join('\n');
+                    }
+
+                    let sections = [];
+                    let letter = 'A';
+
+                    function addSection(date, names, type) {
+                        if (names && names.trim() !== '') {
+                            let label = letter + '.';
+                            let title = date;
+                            if (type) title += ' (' + type + ')';
+                            sections.push({ label, title, names });
+                            letter = String.fromCharCode(letter.charCodeAt(0) + 1);
+                        }
+                    }
+
+                    const koramilHariIni = grouped[todayStr]?.koramil || '';
+                    const koramilBesok = grouped[tomorrowStr]?.koramil || '';
+                    const kediamanHariIni = grouped[todayStr]?.kediaman || '';
+                    const kediamanBesok = grouped[tomorrowStr]?.kediaman || '';
+                    const makodimHariIni = grouped[todayStr]?.makodim || '';
+                    const makodimBesok = grouped[tomorrowStr]?.makodim || '';
+
+                    addSection(tglHariIni, koramilHariIni, '');
+                    addSection(tglBesok, koramilBesok, '');
+                    addSection(tglHariIni, kediamanHariIni, 'Kediaman');
+                    addSection(tglBesok, kediamanBesok, 'Kediaman');
+                    addSection(tglHariIni, makodimHariIni, 'Makodim');
+                    addSection(tglBesok, makodimBesok, 'Makodim');
+
+                    if (sections.length === 0) {
+                        pesan += 'Belum ada data jadwal untuk hari ini dan besok.\n\n';
+                    } else {
+                        sections.forEach((sec, idx) => {
+                            pesan += sec.label + ' ' + sec.title + '\n';
+                            pesan += formatNamaWA(sec.names) + '\n';
+                            if (idx < sections.length - 1) {
+                                pesan += '\n';
+                            }
+                        });
+                        pesan += '\n';
+                    }
+
+                    if (currentHanpangan) {
+                        pesan += '*🌾Jadwal Hanpangan hari ini :* ' + currentHanpangan.nama;
+                        pesan += ' (Desa ' + currentHanpangan.desa + ')\n';
+                    } else {
+                        pesan += '*🌾Jadwal Hanpangan hari ini :* Belum tersedia\n';
+                    }
+                    pesan += '\n*Demikian MMP.*';
+
+                    await sendToTelegram(pesan);
+
+                    const encoded = encodeURIComponent(pesan);
+                    const waUrl = 'https://wa.me/?text=' + encoded;
+                    window.open(waUrl, '_blank');
+
+                    showToast('✅ Pesan WhatsApp siap dikirim!', 'success');
+
+                } catch (e) {
+                    console.error('❌ Error kirim WhatsApp:', e);
+                    showToast('❌ Gagal menyiapkan pesan WhatsApp: ' + e.message, 'error');
+                }
+            }
+
+            // ============================================================
+            //  TRIGGER JADWAL (08.00) - JALAN DI BROWSER
+            // ============================================================
+            function setupScheduledTrigger() {
+                console.log('⏰ Setting up scheduled trigger at 08.00...');
+
+                function checkAndTrigger() {
+                    const now = new Date();
+                    const hours = now.getHours();
+                    const minutes = now.getMinutes();
+                    const seconds = now.getSeconds();
+
+                    // 08.00 WITA = 00.00 UTC
+                    if (hours === 0 && minutes === 0 && seconds <= 30) {
+                        if (!window._triggerSentToday) {
+                            console.log('⏰ Trigger 08.00 - mengirim jadwal ke Telegram');
+                            window._triggerSentToday = true;
+
+                            // Kirim via Worker (biar konsisten)
+                            fetch(WORKER_URL + '/trigger-jadwal')
+                                .then(res => res.json())
+                                .then(data => {
+                                    console.log('✅ Trigger via worker:', data);
+                                })
+                                .catch(err => {
+                                    console.warn('⚠️ Worker trigger gagal, fallback ke local');
+                                    sendScheduleToTelegram();
+                                });
+
+                            setTimeout(() => {
+                                window._triggerSentToday = false;
+                            }, 60000);
+                        }
+                    } else if (hours === 0 && minutes === 1 && seconds === 0) {
+                        window._triggerSentToday = false;
+                    }
+                }
+
+                setInterval(checkAndTrigger, 5000);
+                setTimeout(checkAndTrigger, 3000);
+
+                console.log('✅ Scheduled trigger aktif (08.00 WITA) via Worker');
+            }
+
+            // ============================================================
+            //  AUTO-REFRESH
+            // ============================================================
+            let refreshInterval = null;
+
+            function startAutoRefresh() {
+                if (refreshInterval) {
+                    clearInterval(refreshInterval);
+                }
+                refreshInterval = setInterval(() => {
+                    if (isSupabaseConnected && !isSaving && !isReloading) {
+                        loadAllJadwal();
+                    }
+                }, 30000);
+                console.log('🔄 Auto-refresh aktif (30 detik)');
+            }
+
+            // ============================================================
+            //  INIT
+            // ============================================================
+            async function init() {
+                console.log('🚀 Initializing...');
+                console.log('📅 START_DATE:', START_DATE.toISOString().split('T')[0]);
+                console.log('📌 START_INDEX:', START_INDEX);
+                console.log('🌐 WORKER_URL:', WORKER_URL);
+
+                // Cek worker status
+                await checkWorkerStatus();
+
+                const [piketLoaded, hanpanganLoaded] = await Promise.all([
+                    loadPiket(),
+                    loadHanpangan()
+                ]);
+
+                if (!piketLoaded) {
+                    showToast('⚠️ Gagal load daftar nama dari GitHub', 'error');
+                }
+                if (!hanpanganLoaded) {
+                    showToast('⚠️ Gagal load hanpangan dari GitHub', 'error');
+                }
+
+                populateBulan();
+                await initSupabase();
+
+                // Event listeners
+                bulanSelect.addEventListener('change', function() {
+                    loadAllJadwal();
+                });
+
+                document.getElementById('btnCetak').addEventListener('click', function() {
+                    cetakJadwal();
+                });
+
+                document.getElementById('btnWa').addEventListener('click', function() {
+                    kirimWhatsApp();
+                });
+
+                setupScheduledTrigger();
+                setupHanpanganScheduler();
+                startAutoRefresh();
+
+                // Cek worker status setiap 5 menit
+                setInterval(checkWorkerStatus, 300000);
+
+                console.log('✅ Initialization complete');
+                console.log('📊 Daftar nama:', daftarNama.length, 'orang');
+                console.log('📊 Hanpangan:', hanpanganData.length, 'data');
+                console.log('📊 Current Hanpangan:', currentHanpangan);
+                console.log('📊 Supabase:', isSupabaseConnected ? 'Connected' : 'Disconnected');
+                console.log('⏰ Trigger jadwal aktif setiap 08.00 WITA');
+                console.log('⏰ Hanpangan auto-update setiap 00.02 WITA (No Telegram)');
+                console.log('📱 Notifikasi Telegram hanya dikirim saat ada UPDATE jadwal');
+                console.log('🔄 Sistem menggunakan epoch day dengan START_INDEX=0');
+                console.log('🌐 Worker terhubung di:', WORKER_URL);
+            }
+
+            document.addEventListener('DOMContentLoaded', init);
+
+            window.__app = {
+                loadAllJadwal,
+                saveJadwal,
+                daftarNama,
+                allJadwal,
+                hanpanganData,
+                currentHanpangan,
+                isSupabaseConnected,
+                reload: loadAllJadwal,
+                cetak: cetakJadwal,
+                kirimWhatsApp: kirimWhatsApp,
+                sendToTelegram: sendToTelegram,
+                sendScheduleToTelegram: sendScheduleToTelegram,
+                loadHanpangan: loadHanpangan,
+                parseCSV: parseCSV,
+                getEpochDay: getEpochDay,
+                getHanpanganToday: getHanpanganToday,
+                updateHanpanganDisplay: updateHanpanganDisplay,
+                START_DATE: START_DATE,
+                START_INDEX: START_INDEX,
+                WORKER_URL: WORKER_URL,
+                checkWorkerStatus: checkWorkerStatus
+            };
+
+        })();
+    </script>
 
 </body>
 </html>
