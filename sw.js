@@ -1,18 +1,20 @@
+// ============================================================
+//  SERVICE WORKER - HANPANGAN PWA
+//  KORAMIL 1609-05/SUKASADA
+// ============================================================
+
 const CACHE_NAME = 'hanpangan-v1';
 const urlsToCache = [
-  '/Hanpangan/',
-  '/Hanpangan/index.html',
-  '/Hanpangan/manifest.json',
-  '/Hanpangan/favicon.ico',
-  '/Hanpangan/favicon-32x32.png',
-  '/Hanpangan/favicon-16x16.png',
-  '/Hanpangan/apple-touch-icon.png',
-  '/Hanpangan/android-chrome-192x192.png',
-  '/Hanpangan/android-chrome-512x512.png',
-  '/Hanpangan/data/personel.csv'
+  '/',
+  '/index.html',
+  '/manifest.json'
 ];
 
+// ============================================================
+//  INSTALL - Cache asset utama
+// ============================================================
 self.addEventListener('install', function(event) {
+  console.log('📦 Service Worker installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(function(cache) {
@@ -20,12 +22,20 @@ self.addEventListener('install', function(event) {
         return cache.addAll(urlsToCache);
       })
       .then(function() {
+        console.log('✅ Service Worker installed successfully');
         return self.skipWaiting();
+      })
+      .catch(function(error) {
+        console.error('❌ Failed to cache assets:', error);
       })
   );
 });
 
+// ============================================================
+//  ACTIVATE - Hapus cache lama
+// ============================================================
 self.addEventListener('activate', function(event) {
+  console.log('🚀 Service Worker activating...');
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
       return Promise.all(
@@ -37,30 +47,60 @@ self.addEventListener('activate', function(event) {
         })
       );
     }).then(function() {
+      console.log('✅ Service Worker activated successfully');
       return self.clients.claim();
     })
   );
 });
 
+// ============================================================
+//  FETCH - Cache First Strategy
+// ============================================================
 self.addEventListener('fetch', function(event) {
+  // Skip cross-origin requests
+  if (!event.request.url.startsWith(self.location.origin)) {
+    return;
+  }
+
+  // Skip non-GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
-      .then(function(response) {
-        if (response) {
-          return response;
+      .then(function(cachedResponse) {
+        if (cachedResponse) {
+          console.log('📦 Serving from cache:', event.request.url);
+          return cachedResponse;
         }
-        var fetchRequest = event.request.clone();
-        return fetch(fetchRequest).then(function(response) {
-          if (!response || response.status !== 200 || response.type !== 'basic') {
+
+        return fetch(event.request)
+          .then(function(response) {
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+
+            var responseToCache = response.clone();
+            caches.open(CACHE_NAME)
+              .then(function(cache) {
+                try {
+                  cache.put(event.request, responseToCache);
+                  console.log('💾 Cached:', event.request.url);
+                } catch (error) {
+                  console.warn('⚠️ Failed to cache:', event.request.url, error);
+                }
+              });
+
             return response;
-          }
-          var responseToCache = response.clone();
-          caches.open(CACHE_NAME)
-            .then(function(cache) {
-              cache.put(event.request, responseToCache);
+          })
+          .catch(function(error) {
+            console.warn('⚠️ Network request failed:', event.request.url, error);
+            return new Response('Network Error', {
+              status: 503,
+              statusText: 'Service Unavailable'
             });
-          return response;
-        });
+          });
       })
   );
 });
