@@ -82,13 +82,13 @@
             background: linear-gradient(135deg, #25D366 0%, #0088cc 100%);
             color: #fff;
             border: none;
-            padding: 8px 16px;
+            padding: 8px 20px;
             border-radius: 4px;
             cursor: pointer;
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             font-size: clamp(13px, 1vw, 16px);
             transition: 0.2s;
         }
@@ -98,6 +98,11 @@
         }
         .btn-kirim i {
             margin-right: 2px;
+        }
+        .btn-kirim:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
         .running-container {
             background: #0a0a0a;
@@ -457,9 +462,19 @@
             z-index: 9999;
             min-width: 200px;
             border: 1px solid #000;
+            border-radius: 8px;
         }
         .toast.show {
             display: block;
+        }
+        .toast.success {
+            background: #0066cc;
+        }
+        .toast.error {
+            background: #cc0000;
+        }
+        .toast.info {
+            background: #000;
         }
         .supabase-indicator {
             position: fixed;
@@ -655,6 +670,19 @@
             gap: 12px;
             flex-wrap: wrap;
         }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -743,6 +771,7 @@
             const totalHariSpan = document.getElementById('totalHari');
             const workerDot = document.getElementById('workerDot');
             const workerStatusText = document.getElementById('workerStatusText');
+            const btnKirim = document.getElementById('btnKirim');
 
             // ============================================================
             //  NAMA HARI & BULAN
@@ -827,8 +856,7 @@
 
             function showToast(msg, type = 'info') {
                 toast.textContent = msg;
-                toast.style.background = type === 'success' ? '#0066cc' : (type === 'error' ? '#cc0000' : '#000');
-                toast.classList.add('show');
+                toast.className = 'toast show ' + type;
                 clearTimeout(toast._hideTimer);
                 toast._hideTimer = setTimeout(() => {
                     toast.classList.remove('show');
@@ -1195,40 +1223,17 @@
             }
 
             // ============================================================
-            //  KIRIM JADWAL KE TELEGRAM VIA WORKER
-            // ============================================================
-            async function sendScheduleToTelegram() {
-                console.log('📤 Mengirim jadwal ke Telegram via Worker...');
-
-                try {
-                    showToast('⏳ Mengirim jadwal...', 'info');
-
-                    const response = await fetch(WORKER_URL + '/trigger-jadwal');
-                    const result = await response.json();
-
-                    if (result.status === 'success') {
-                        showToast('✅ Jadwal terkirim ke Telegram!', 'success');
-                        console.log('✅ Jadwal terkirim:', result);
-                        return true;
-                    } else {
-                        showToast('⚠️ Gagal kirim jadwal', 'error');
-                        return false;
-                    }
-                } catch (e) {
-                    console.error('❌ Error:', e);
-                    showToast('⚠️ Gagal kirim jadwal: ' + e.message, 'error');
-                    return false;
-                }
-            }
-
-            // ============================================================
-            //  KIRIM KE WHATSAPP + TELEGRAM (1 FUNGSI)
+            //  KIRIM KE WHATSAPP + TELEGRAM (1 FUNGSI - LANGSUNG KIRIM!)
             // ============================================================
             async function kirimKeWhatsAppDanTelegram() {
                 if (!supabaseClient || !isSupabaseConnected) {
                     showToast('⚠️ Supabase tidak terhubung!', 'error');
                     return;
                 }
+
+                // Disable tombol saat proses
+                btnKirim.disabled = true;
+                btnKirim.innerHTML = '<span class="spinner"></span> Mengirim...';
 
                 try {
                     showToast('⏳ Menyiapkan pesan...', 'info');
@@ -1331,17 +1336,17 @@
                     pesan += '\n*Demikian MMP.*';
 
                     // ============================================================
-                    //  1. KIRIM KE TELEGRAM VIA WORKER
+                    //  1. KIRIM KE TELEGRAM VIA WORKER (LANGSUNG, TANPA POPUP)
                     // ============================================================
                     console.log('📤 Mengirim ke Telegram via Worker...');
                     const telegramResult = await sendToTelegramViaWorker(pesan);
 
                     // ============================================================
-                    //  2. KIRIM KE WHATSAPP (Buka WA dengan pesan)
+                    //  2. KIRIM KE WHATSAPP (LANGSUNG BUKA WA, TANPA POPUP KONFIRMASI)
                     // ============================================================
                     console.log('📤 Membuka WhatsApp...');
                     const encoded = encodeURIComponent(pesan);
-                    const waUrl = 'https://wa.me/?text=' + encoded;
+                    const waUrl = 'https://api.whatsapp.com/send?text=' + encoded;
                     window.open(waUrl, '_blank');
 
                     // ============================================================
@@ -1356,6 +1361,10 @@
                 } catch (e) {
                     console.error('❌ Error:', e);
                     showToast('❌ Gagal: ' + e.message, 'error');
+                } finally {
+                    // Enable tombol kembali
+                    btnKirim.disabled = false;
+                    btnKirim.innerHTML = '<i class="fab fa-whatsapp"></i> <i class="fab fa-telegram-plane"></i> Kirim WA & Telegram';
                 }
             }
 
@@ -1997,7 +2006,7 @@
                 console.log('📊 Supabase:', isSupabaseConnected ? 'Connected' : 'Disconnected');
                 console.log('⏰ Trigger jadwal aktif setiap 08.00 WITA via Worker');
                 console.log('⏰ Hanpangan auto-update setiap 00.02 WITA (No Telegram)');
-                console.log('📱 1 Tombol untuk WhatsApp + Telegram (AMAN!)');
+                console.log('📱 1 Tombol untuk WhatsApp + Telegram (LANGSUNG KIRIM!)');
                 console.log('🌐 Worker terhubung di:', WORKER_URL);
             }
 
