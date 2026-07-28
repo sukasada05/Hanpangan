@@ -864,23 +864,22 @@
             // ============================================================
             //  UPDATE HANPANGAN DISPLAY
             // ============================================================
-            function updateHanpanganDisplay() {
-                const today = new Date();
-                currentHanpangan = getHanpanganToday(hanpanganData, today);
+function updateHanpanganDisplay() {
+    const today = new Date();
+    currentHanpangan = getHanpanganToday(hanpanganData, today);
 
-                const runningText = document.getElementById('runningTextJadwal');
-                if (currentHanpangan) {
-                    runningText.textContent = '🌾 JADWAL HANPANGAN HARI INI: ' +
-                        (currentHanpangan.nama || 'Tidak ada') +
-                        ' (Desa ' + (currentHanpangan.desa || '-') + ') 🌾';
-                } else {
-                    runningText.textContent = '🌾 Memuat jadwal hanpangan... 🌾';
-                }
+    const runningText = document.getElementById('runningTextJadwal');
+    if (currentHanpangan) {
+        runningText.textContent = '🌾 JADWAL HANPANGAN HARI INI: ' +
+            (currentHanpangan.nama || 'Tidak ada') + ' 🌾';
+    } else {
+        runningText.textContent = '🌾 Memuat jadwal hanpangan... 🌾';
+    }
 
-                console.log('📌 Hanpangan hari ini:', currentHanpangan);
-                console.log('📌 Epoch day:', getEpochDay(today));
-                console.log('📌 Total data:', hanpanganData.length);
-            }
+    console.log('📌 Hanpangan hari ini:', currentHanpangan);
+    console.log('📌 Epoch day:', getEpochDay(today));
+    console.log('📌 Total data:', hanpanganData.length);
+}
 
             // ============================================================
             //  PARSE CSV
