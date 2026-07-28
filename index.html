@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Jadwal Piket Koramil</title>
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="/Hanpangan/manifest.json" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
@@ -1939,6 +1939,23 @@
             }
 
             // ============================================================
+            //  REGISTER SERVICE WORKER
+            // ============================================================
+            function registerServiceWorker() {
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('/Hanpangan/sw.js')
+                        .then(function(reg) {
+                            console.log('✅ Service Worker registered:', reg);
+                        })
+                        .catch(function(err) {
+                            console.warn('⚠️ Service Worker registration failed:', err);
+                        });
+                } else {
+                    console.log('ℹ️ Service Worker not supported');
+                }
+            }
+
+            // ============================================================
             //  AUTO-REFRESH
             // ============================================================
             let refreshInterval = null;
@@ -1953,23 +1970,6 @@
                     }
                 }, 30000);
                 console.log('🔄 Auto-refresh aktif (30 detik)');
-            }
-
-            // ============================================================
-            //  REGISTER SERVICE WORKER
-            // ============================================================
-            function registerServiceWorker() {
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('/sw.js')
-                        .then(function(reg) {
-                            console.log('✅ Service Worker registered:', reg);
-                        })
-                        .catch(function(err) {
-                            console.warn('⚠️ Service Worker registration failed:', err);
-                        });
-                } else {
-                    console.log('ℹ️ Service Worker not supported');
-                }
             }
 
             // ============================================================
