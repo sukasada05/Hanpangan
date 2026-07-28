@@ -5,9 +5,9 @@
 
 const CACHE_NAME = 'hanpangan-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json'
+  '/Hanpangan/',
+  '/Hanpangan/index.html',
+  '/Hanpangan/manifest.json'
 ];
 
 // ============================================================
