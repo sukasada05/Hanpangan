@@ -1080,6 +1080,44 @@
             }
 
             // ============================================================
+            //  RESET DROPDOWN SETELAH SAVE
+            // ============================================================
+            function resetDropdownAfterSave(cell) {
+                if (!cell) return;
+                
+                // Cari dropdown display di dalam cell
+                const display = cell.querySelector('.custom-dropdown-display');
+                if (!display) return;
+                
+                // Reset ke placeholder
+                const placeholder = document.createElement('span');
+                placeholder.className = 'placeholder';
+                placeholder.textContent = '— Pilih —';
+                placeholder.style.textAlign = 'left';
+                
+                // Kosongkan display dan tambahkan placeholder
+                display.innerHTML = '';
+                display.appendChild(placeholder);
+                
+                // Update selectedNames menjadi array kosong
+                // Cari wrapper dan update data internal
+                const wrapper = cell.querySelector('.custom-dropdown-wrapper');
+                if (wrapper) {
+                    // Hapus menu options yang ada
+                    const menu = wrapper.querySelector('.custom-dropdown-menu');
+                    if (menu) {
+                        const optionsGrid = menu.querySelector('.options-grid');
+                        if (optionsGrid) {
+                            // Hapus class selected dari semua option
+                            optionsGrid.querySelectorAll('.option-item').forEach(el => {
+                                el.classList.remove('selected');
+                            });
+                        }
+                    }
+                }
+            }
+
+            // ============================================================
             //  SAVE JADWAL
             // ============================================================
             async function saveJadwal(tanggal, jenis, nama) {
@@ -1155,6 +1193,15 @@
 
                     if (targetCell) {
                         showSaveIndicator(targetCell, 'saved');
+                        
+                        // ==== RESET DROPDOWN SETELAH SAVE ====
+                        // Jika berhasil disimpan, reset dropdown ke placeholder
+                        if (nama && nama.trim() !== '') {
+                            // Tunggu sebentar agar user melihat perubahan
+                            setTimeout(() => {
+                                resetDropdownAfterSave(targetCell);
+                            }, 1000);
+                        }
                     }
 
                     if (nama && nama.trim() !== '') {
@@ -2045,7 +2092,6 @@
                 cetak: cetakJadwal,
                 kirimKeWhatsAppDanTelegram: kirimKeWhatsAppDanTelegram,
                 sendToTelegramViaWorker: sendToTelegramViaWorker,
-                sendScheduleToTelegram: sendScheduleToTelegram,
                 loadHanpangan: loadHanpangan,
                 parseCSV: parseCSV,
                 getEpochDay: getEpochDay,
