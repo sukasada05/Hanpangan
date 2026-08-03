@@ -738,13 +738,9 @@
     <script>
         (function() {
             // ============================================================
-            //  KONFIGURASI - WORKER (TANPA TOKEN DI HTML!)
+            //  KONFIGURASI
             // ============================================================
             const WORKER_URL = 'https://jadwalpkt.dukopbabinsa05.workers.dev';
-
-            // ============================================================
-            //  KONFIGURASI - SATRIYO DI INDEKS 0
-            // ============================================================
             const START_DATE = new Date(2026, 6, 25);
             const START_INDEX = 0;
 
@@ -774,16 +770,13 @@
             const workerStatusText = document.getElementById('workerStatusText');
             const btnKirim = document.getElementById('btnKirim');
 
-            // ============================================================
-            //  NAMA HARI & BULAN
-            // ============================================================
             const NAMA_HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
             const NAMA_BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September",
                 "Oktober", "November", "Desember"
             ];
 
             // ============================================================
-            //  EPOCH DAY
+            //  UTILITY FUNCTIONS
             // ============================================================
             function getEpochDay(date) {
                 const ref = new Date(2024, 0, 1);
@@ -803,9 +796,6 @@
                 return data[idx];
             }
 
-            // ============================================================
-            //  FORMAT TANGGAL
-            // ============================================================
             function formatTanggalIndonesia(date) {
                 return NAMA_HARI[date.getDay()] + ', ' +
                     date.getDate() + ' ' +
@@ -832,9 +822,6 @@
                 return day === 0 || day === 6;
             }
 
-            // ============================================================
-            //  UTILITY
-            // ============================================================
             function updateIndicator(status) {
                 indicator.className = 'supabase-indicator';
                 if (status === 'online') {
@@ -865,16 +852,16 @@
             }
 
             // ============================================================
-            //  UPDATE WORKER STATUS
+            //  WORKER STATUS
             // ============================================================
             async function checkWorkerStatus() {
                 try {
-                    const response = await fetch(WORKER_URL + '/health');
+                    const response = await fetch(WORKER_URL + '/health', {
+                        signal: AbortSignal.timeout(3000)
+                    });
                     if (response.ok) {
-                        const data = await response.json();
                         workerDot.className = 'dot online';
                         workerStatusText.textContent = '✅ Worker Online';
-                        console.log('✅ Worker online:', data);
                     } else {
                         workerDot.className = 'dot offline';
                         workerStatusText.textContent = '❌ Worker Error';
@@ -882,17 +869,15 @@
                 } catch (e) {
                     workerDot.className = 'dot offline';
                     workerStatusText.textContent = '❌ Worker Offline';
-                    console.warn('⚠️ Worker tidak dapat dijangkau:', e.message);
                 }
             }
 
             // ============================================================
-            //  UPDATE HANPANGAN DISPLAY
+            //  UPDATE HANPANGAN
             // ============================================================
             function updateHanpanganDisplay() {
                 const today = new Date();
                 currentHanpangan = getHanpanganToday(hanpanganData, today);
-
                 const runningText = document.getElementById('runningTextJadwal');
                 if (currentHanpangan) {
                     runningText.textContent = '🌾 JADWAL HANPANGAN HARI INI: ' +
@@ -900,23 +885,16 @@
                 } else {
                     runningText.textContent = '🌾 Memuat jadwal hanpangan... 🌾';
                 }
-
-                console.log('📌 Hanpangan hari ini:', currentHanpangan);
             }
 
-            // ============================================================
-            //  PARSE CSV
-            // ============================================================
             function parseCSV(csvText) {
                 const lines = csvText.trim().split('\n');
                 if (lines.length < 2) return [];
-
                 const headerLine = lines[0];
                 let delimiter = '\t';
                 if (headerLine.includes('\t')) delimiter = '\t';
                 else if (headerLine.includes(',')) delimiter = ',';
                 else if (headerLine.includes(';')) delimiter = ';';
-
                 const data = [];
                 for (let i = 1; i < lines.length; i++) {
                     const line = lines[i].trim();
@@ -941,12 +919,10 @@
                     const data = await fetchText(PIKET_URL);
                     if (data) {
                         daftarNama = data.trim().split('\n').filter(l => l.trim()).map(n => n.trim());
-                        console.log('✅ Load piket.txt success:', daftarNama.length, 'nama');
                         return true;
                     }
                     return false;
                 } catch (e) {
-                    console.error('❌ Error load piket.txt:', e);
                     return false;
                 }
             }
@@ -956,46 +932,11 @@
                     const data = await fetchText(HANPANGAN_URL);
                     if (!data) return false;
                     hanpanganData = parseCSV(data);
-                    console.log('✅ Load hanpangan.csv success:', hanpanganData.length, 'data');
                     updateHanpanganDisplay();
                     return true;
                 } catch (e) {
-                    console.error('❌ Error load hanpangan:', e);
                     return false;
                 }
-            }
-
-            // ============================================================
-            //  HANPANGAN SCHEDULER (00.02 - No Telegram)
-            // ============================================================
-            function setupHanpanganScheduler() {
-                function checkAndUpdateHanpangan() {
-                    const now = new Date();
-                    const hours = now.getHours();
-                    const minutes = now.getMinutes();
-                    const seconds = now.getSeconds();
-
-                    if (hours === 0 && minutes === 2 && seconds <= 30) {
-                        if (!window._hanpanganUpdatedToday) {
-                            console.log('⏰ 00.02 - Mengupdate hanpangan (No Telegram)');
-                            window._hanpanganUpdatedToday = true;
-                            const today = new Date();
-                            const newHanpangan = getHanpanganToday(hanpanganData, today);
-                            if (newHanpangan && JSON.stringify(newHanpangan) !== JSON.stringify(currentHanpangan)) {
-                                currentHanpangan = newHanpangan;
-                                updateHanpanganDisplay();
-                                console.log('✅ Hanpangan updated:', currentHanpangan);
-                            }
-                            setTimeout(() => {
-                                window._hanpanganUpdatedToday = false;
-                            }, 60000);
-                        }
-                    } else if (hours === 0 && minutes === 3 && seconds === 0) {
-                        window._hanpanganUpdatedToday = false;
-                    }
-                }
-                setInterval(checkAndUpdateHanpangan, 5000);
-                console.log('✅ Hanpangan scheduler aktif (00.02 - No Telegram)');
             }
 
             // ============================================================
@@ -1005,25 +946,21 @@
                 updateIndicator('checking');
                 try {
                     if (typeof supabase === 'undefined') {
-                        console.error('❌ Supabase JS tidak ditemukan');
                         updateIndicator('offline');
                         return false;
                     }
                     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                     const { error } = await supabaseClient.from('jadwal_piket').select('id').limit(1);
                     if (error) {
-                        console.error('❌ Supabase connection error:', error);
                         updateIndicator('offline');
                         isSupabaseConnected = false;
                         return false;
                     }
                     isSupabaseConnected = true;
                     updateIndicator('online');
-                    console.log('✅ Supabase connected');
                     await loadAllJadwal();
                     return true;
                 } catch (e) {
-                    console.error('❌ Supabase init error:', e);
                     updateIndicator('offline');
                     isSupabaseConnected = false;
                     return false;
@@ -1049,14 +986,11 @@
                         .order('tanggal_jadwal', { ascending: true });
                     if (error) throw error;
                     allJadwal = data || [];
-                    console.log('✅ Load jadwal success:', allJadwal.length, 'records');
                     renderPreview(allJadwal);
                     if (isInitialLoad) {
                         isInitialLoad = false;
-                        console.log('✅ Initial load selesai');
                     }
                 } catch (e) {
-                    console.error('❌ Gagal load jadwal:', e);
                     previewContainer.innerHTML = '<div class="no-data">❌ Gagal memuat data</div>';
                 } finally {
                     isReloading = false;
@@ -1080,42 +1014,33 @@
             }
 
             // ============================================================
-            //  RESET DROPDOWN SETELAH SAVE - VERSI YANG BENAR!
+            //  RESET DROPDOWN - PASTI HILANG CENTANG!
             // ============================================================
             function resetDropdownAfterSave(cell) {
                 if (!cell) return;
                 
-                // Cari dropdown display di dalam cell
                 const display = cell.querySelector('.custom-dropdown-display');
                 if (!display) return;
                 
-                // === RESET TAMPILAN DISPLAY ===
-                // Reset ke placeholder
+                // Reset display ke placeholder
                 const placeholder = document.createElement('span');
                 placeholder.className = 'placeholder';
                 placeholder.textContent = '— Pilih —';
                 placeholder.style.textAlign = 'left';
-                
-                // Kosongkan display dan tambahkan placeholder
                 display.innerHTML = '';
                 display.appendChild(placeholder);
                 
-                // === RESET MENU DROPDOWN ===
-                // Cari wrapper dan update data internal
+                // Reset semua centang di menu
                 const wrapper = cell.querySelector('.custom-dropdown-wrapper');
                 if (wrapper) {
                     const menu = wrapper.querySelector('.custom-dropdown-menu');
                     if (menu) {
                         const optionsGrid = menu.querySelector('.options-grid');
                         if (optionsGrid) {
-                            // Hapus class selected dari semua option
                             optionsGrid.querySelectorAll('.option-item').forEach(el => {
                                 el.classList.remove('selected');
-                                // Hapus icon angka
                                 const numIcon = el.querySelector('.num-icon');
-                                if (numIcon) {
-                                    numIcon.textContent = '';
-                                }
+                                if (numIcon) numIcon.textContent = '';
                             });
                         }
                     }
@@ -1123,7 +1048,28 @@
             }
 
             // ============================================================
-            //  SAVE JADWAL
+            //  KIRIM TELEGRAM - TANPA ERROR TOAST!
+            // ============================================================
+            async function sendToTelegramViaWorker(message) {
+                try {
+                    const response = await fetch(WORKER_URL + '/send-message', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: message }),
+                        signal: AbortSignal.timeout(5000)
+                    });
+                    if (!response.ok) return false;
+                    const result = await response.json();
+                    return result.success === true;
+                } catch (e) {
+                    // Silent fail - hanya log
+                    console.log('ℹ️ Telegram notif skip (worker offline)');
+                    return false;
+                }
+            }
+
+            // ============================================================
+            //  SAVE JADWAL - FALLBACK: TETAP SAVE KE SUPABASE!
             // ============================================================
             async function saveJadwal(tanggal, jenis, nama) {
                 if (!supabaseClient || !isSupabaseConnected) {
@@ -1149,6 +1095,7 @@
                 }
 
                 try {
+                    // Cek existing data
                     const { data: existing, error: findErr } = await supabaseClient
                         .from('jadwal_piket')
                         .select('id, nama1, nama2')
@@ -1160,17 +1107,17 @@
                     const oldValue = existing ? (existing.nama1 || '') : '';
                     const newValue = nama || '';
 
+                    // Jika sama, skip
                     if (oldValue === newValue) {
                         if (targetCell) {
                             showSaveIndicator(targetCell, 'saved');
-                            setTimeout(() => {
-                                showSaveIndicator(targetCell, '');
-                            }, 1000);
+                            setTimeout(() => showSaveIndicator(targetCell, ''), 1000);
                         }
                         isSaving = false;
                         return true;
                     }
 
+                    // SAVE KE SUPABASE (PRIORITAS UTAMA!)
                     let result;
                     if (existing) {
                         result = await supabaseClient
@@ -1196,41 +1143,39 @@
 
                     console.log('✅ Save success:', tanggal, jenis, nama);
 
+                    // RESET DROPDOWN
                     if (targetCell) {
                         showSaveIndicator(targetCell, 'saved');
-                        
-                        // ==== RESET DROPDOWN SETELAH SAVE ====
-                        // Jika berhasil disimpan, reset dropdown ke placeholder
                         if (nama && nama.trim() !== '') {
-                            // Tunggu sebentar agar user melihat perubahan
                             setTimeout(() => {
                                 resetDropdownAfterSave(targetCell);
                             }, 1000);
                         }
                     }
 
+                    // KIRIM TELEGRAM (optional - tidak memblock)
                     if (nama && nama.trim() !== '') {
-                        const jenisLabel = jenis.replace('_hari_ini', '').toUpperCase();
-                        const tgl = new Date(tanggal + 'T00:00:00');
-                        const tglStr = formatTanggalIndonesia(tgl);
-
-                        const names = nama.split(',').map(s => s.trim()).filter(s => s);
-                        let namaFormatted = '';
-                        if (names.length > 0) {
-                            namaFormatted = names.map((n, i) => (i + 1) + '. ' + n).join('\n');
+                        try {
+                            const jenisLabel = jenis.replace('_hari_ini', '').toUpperCase();
+                            const tgl = new Date(tanggal + 'T00:00:00');
+                            const tglStr = formatTanggalIndonesia(tgl);
+                            const names = nama.split(',').map(s => s.trim()).filter(s => s);
+                            let namaFormatted = '';
+                            if (names.length > 0) {
+                                namaFormatted = names.map((n, i) => (i + 1) + '. ' + n).join('\n');
+                            }
+                            const pesan = `📋 *Jadwal Piket Diupdate !*\n\n` +
+                                `📅 Tanggal: ${tglStr}\n` +
+                                `👤 ${jenisLabel}:\n${namaFormatted}\n\n` +
+                                `🔄 Data jadwal telah diperbarui.`;
+                            await sendToTelegramViaWorker(pesan);
+                        } catch (e) {
+                            // Telegram gagal, tapi data sudah tersimpan
                         }
-
-                        const pesan = `📋 *Jadwal Piket Diupdate !*\n\n` +
-                            `📅 Tanggal: ${tglStr}\n` +
-                            `👤 ${jenisLabel}:\n${namaFormatted}\n\n` +
-                            `🔄 Data jadwal telah diperbarui.`;
-
-                        await sendToTelegramViaWorker(pesan);
                     }
 
-                    setTimeout(() => {
-                        loadAllJadwal();
-                    }, 500);
+                    // Reload data
+                    setTimeout(() => loadAllJadwal(), 500);
 
                     return true;
                 } catch (e) {
@@ -1246,37 +1191,7 @@
             }
 
             // ============================================================
-            //  KIRIM KE TELEGRAM VIA WORKER (TANPA TOKEN DI HTML!)
-            // ============================================================
-            async function sendToTelegramViaWorker(message) {
-                console.log('📤 Mengirim ke Telegram via Worker...');
-
-                try {
-                    const response = await fetch(WORKER_URL + '/send-message', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ message: message })
-                    });
-
-                    const result = await response.json();
-
-                    if (result.success) {
-                        console.log('✅ Pesan terkirim ke Telegram via Worker');
-                        return true;
-                    } else {
-                        console.error('❌ Gagal kirim via Worker:', result);
-                        return false;
-                    }
-                } catch (e) {
-                    console.error('❌ Error sending to Telegram:', e);
-                    return false;
-                }
-            }
-
-            // ============================================================
-            //  KIRIM KE WHATSAPP + TELEGRAM (1 FUNGSI - LANGSUNG KIRIM!)
+            //  KIRIM WA + TELEGRAM
             // ============================================================
             async function kirimKeWhatsAppDanTelegram() {
                 if (!supabaseClient || !isSupabaseConnected) {
@@ -1284,13 +1199,10 @@
                     return;
                 }
 
-                // Disable tombol saat proses
                 btnKirim.disabled = true;
                 btnKirim.innerHTML = '<span class="spinner"></span> Mengirim...';
 
                 try {
-                    showToast('⏳ Menyiapkan pesan...', 'info');
-
                     const today = new Date();
                     const tomorrow = new Date(today);
                     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -1298,7 +1210,6 @@
                     const todayStr = today.getFullYear() + '-' +
                         String(today.getMonth() + 1).padStart(2, '0') + '-' +
                         String(today.getDate()).padStart(2, '0');
-
                     const tomorrowStr = tomorrow.getFullYear() + '-' +
                         String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' +
                         String(tomorrow.getDate()).padStart(2, '0');
@@ -1313,16 +1224,10 @@
                     const grouped = {};
                     data.forEach(item => {
                         const key = item.tanggal_jadwal;
-                        if (!grouped[key]) {
-                            grouped[key] = { koramil: '', kediaman: '', makodim: '' };
-                        }
-                        if (item.jenis === 'koramil_hari_ini') {
-                            grouped[key].koramil = item.nama1 || '';
-                        } else if (item.jenis === 'kediaman_hari_ini') {
-                            grouped[key].kediaman = item.nama1 || '';
-                        } else if (item.jenis === 'makodim_hari_ini') {
-                            grouped[key].makodim = item.nama1 || '';
-                        }
+                        if (!grouped[key]) grouped[key] = { koramil: '', kediaman: '', makodim: '' };
+                        if (item.jenis === 'koramil_hari_ini') grouped[key].koramil = item.nama1 || '';
+                        else if (item.jenis === 'kediaman_hari_ini') grouped[key].kediaman = item.nama1 || '';
+                        else if (item.jenis === 'makodim_hari_ini') grouped[key].makodim = item.nama1 || '';
                     });
 
                     const tglHariIni = formatTanggalWA(today);
@@ -1354,19 +1259,12 @@
                         }
                     }
 
-                    const koramilHariIni = grouped[todayStr]?.koramil || '';
-                    const koramilBesok = grouped[tomorrowStr]?.koramil || '';
-                    const kediamanHariIni = grouped[todayStr]?.kediaman || '';
-                    const kediamanBesok = grouped[tomorrowStr]?.kediaman || '';
-                    const makodimHariIni = grouped[todayStr]?.makodim || '';
-                    const makodimBesok = grouped[tomorrowStr]?.makodim || '';
-
-                    addSection(tglHariIni, koramilHariIni, '');
-                    addSection(tglBesok, koramilBesok, '');
-                    addSection(tglHariIni, kediamanHariIni, 'Kediaman');
-                    addSection(tglBesok, kediamanBesok, 'Kediaman');
-                    addSection(tglHariIni, makodimHariIni, 'Makodim');
-                    addSection(tglBesok, makodimBesok, 'Makodim');
+                    addSection(tglHariIni, grouped[todayStr]?.koramil || '', '');
+                    addSection(tglBesok, grouped[tomorrowStr]?.koramil || '', '');
+                    addSection(tglHariIni, grouped[todayStr]?.kediaman || '', 'Kediaman');
+                    addSection(tglBesok, grouped[tomorrowStr]?.kediaman || '', 'Kediaman');
+                    addSection(tglHariIni, grouped[todayStr]?.makodim || '', 'Makodim');
+                    addSection(tglBesok, grouped[tomorrowStr]?.makodim || '', 'Makodim');
 
                     if (sections.length === 0) {
                         pesan += 'Belum ada data jadwal untuk hari ini dan besok.\n\n';
@@ -1374,9 +1272,7 @@
                         sections.forEach((sec, idx) => {
                             pesan += sec.label + ' ' + sec.title + '\n';
                             pesan += formatNamaWA(sec.names) + '\n';
-                            if (idx < sections.length - 1) {
-                                pesan += '\n';
-                            }
+                            if (idx < sections.length - 1) pesan += '\n';
                         });
                         pesan += '\n';
                     }
@@ -1388,34 +1284,19 @@
                     }
                     pesan += '\n*Demikian MMP.*';
 
-                    // ============================================================
-                    //  1. KIRIM KE TELEGRAM VIA WORKER (LANGSUNG, TANPA POPUP)
-                    // ============================================================
-                    console.log('📤 Mengirim ke Telegram via Worker...');
-                    const telegramResult = await sendToTelegramViaWorker(pesan);
+                    // Kirim Telegram (via worker)
+                    await sendToTelegramViaWorker(pesan);
 
-                    // ============================================================
-                    //  2. KIRIM KE WHATSAPP (LANGSUNG BUKA WA, TANPA POPUP KONFIRMASI)
-                    // ============================================================
-                    console.log('📤 Membuka WhatsApp...');
+                    // Buka WhatsApp
                     const encoded = encodeURIComponent(pesan);
                     const waUrl = 'https://api.whatsapp.com/send?text=' + encoded;
                     window.open(waUrl, '_blank');
 
-                    // ============================================================
-                    //  3. NOTIFIKASI HASIL
-                    // ============================================================
-                    if (telegramResult) {
-                        showToast('✅ Pesan terkirim ke Telegram & WhatsApp!', 'success');
-                    } else {
-                        showToast('⚠️ Telegram gagal, tapi WhatsApp terbuka', 'error');
-                    }
+                    showToast('✅ Pesan dikirim ke WhatsApp & Telegram!', 'success');
 
                 } catch (e) {
-                    console.error('❌ Error:', e);
                     showToast('❌ Gagal: ' + e.message, 'error');
                 } finally {
-                    // Enable tombol kembali
                     btnKirim.disabled = false;
                     btnKirim.innerHTML = '<i class="fab fa-whatsapp"></i> <i class="fab fa-telegram-plane"></i> Kirim WA & Telegram';
                 }
@@ -1540,7 +1421,7 @@
                 function renderOptions() {
                     let html = '';
                     if (daftarNama.length === 0) {
-                        html = '<div class="no-result">⚠️ Nama tidak ditemukan. Cek koneksi internet.</div>';
+                        html = '<div class="no-result">⚠️ Nama tidak ditemukan.</div>';
                     } else {
                         daftarNama.forEach(n => {
                             const isSelected = selectedNames.includes(n);
@@ -1596,7 +1477,7 @@
 
                 function openMenu() {
                     if (daftarNama.length === 0) {
-                        showToast('⚠️ Daftar nama belum dimuat. Cek koneksi.', 'error');
+                        showToast('⚠️ Daftar nama belum dimuat.', 'error');
                         return;
                     }
                     menu.classList.add('open');
@@ -1760,7 +1641,7 @@
             }
 
             // ============================================================
-            //  CETAK PDF
+            //  CETAK
             // ============================================================
             function cetakJadwal() {
                 const { bulan, tahun } = getBulanTahun();
@@ -1952,11 +1833,9 @@
             }
 
             // ============================================================
-            //  TRIGGER JADWAL (08.00) - VIA WORKER
+            //  SCHEDULER
             // ============================================================
             function setupScheduledTrigger() {
-                console.log('⏰ Setting up scheduled trigger at 08.00...');
-
                 function checkAndTrigger() {
                     const now = new Date();
                     const hours = now.getHours();
@@ -1965,21 +1844,15 @@
 
                     if (hours === 0 && minutes === 0 && seconds <= 30) {
                         if (!window._triggerSentToday) {
-                            console.log('⏰ Trigger 08.00 - mengirim jadwal ke Telegram via Worker');
                             window._triggerSentToday = true;
-
                             fetch(WORKER_URL + '/trigger-jadwal')
                                 .then(res => res.json())
                                 .then(data => {
-                                    console.log('✅ Trigger via worker:', data);
                                     if (data.status === 'success') {
                                         showToast('✅ Jadwal otomatis terkirim!', 'success');
                                     }
                                 })
-                                .catch(err => {
-                                    console.warn('⚠️ Worker trigger gagal:', err);
-                                });
-
+                                .catch(() => {});
                             setTimeout(() => {
                                 window._triggerSentToday = false;
                             }, 60000);
@@ -1988,59 +1861,60 @@
                         window._triggerSentToday = false;
                     }
                 }
-
                 setInterval(checkAndTrigger, 5000);
-                setTimeout(checkAndTrigger, 3000);
-                console.log('✅ Scheduled trigger aktif (08.00 WITA) via Worker');
             }
 
-            // ============================================================
-            //  REGISTER SERVICE WORKER
-            // ============================================================
+            function setupHanpanganScheduler() {
+                function checkAndUpdateHanpangan() {
+                    const now = new Date();
+                    const hours = now.getHours();
+                    const minutes = now.getMinutes();
+                    const seconds = now.getSeconds();
+
+                    if (hours === 0 && minutes === 2 && seconds <= 30) {
+                        if (!window._hanpanganUpdatedToday) {
+                            window._hanpanganUpdatedToday = true;
+                            const today = new Date();
+                            const newHanpangan = getHanpanganToday(hanpanganData, today);
+                            if (newHanpangan && JSON.stringify(newHanpangan) !== JSON.stringify(currentHanpangan)) {
+                                currentHanpangan = newHanpangan;
+                                updateHanpanganDisplay();
+                            }
+                            setTimeout(() => {
+                                window._hanpanganUpdatedToday = false;
+                            }, 60000);
+                        }
+                    } else if (hours === 0 && minutes === 3 && seconds === 0) {
+                        window._hanpanganUpdatedToday = false;
+                    }
+                }
+                setInterval(checkAndUpdateHanpangan, 5000);
+            }
+
             function registerServiceWorker() {
                 if ('serviceWorker' in navigator) {
                     navigator.serviceWorker.register('/Hanpangan/sw.js')
-                        .then(function(reg) {
-                            console.log('✅ Service Worker registered:', reg);
-                        })
-                        .catch(function(err) {
-                            console.warn('⚠️ Service Worker registration failed:', err);
-                        });
-                } else {
-                    console.log('ℹ️ Service Worker not supported');
+                        .then(() => console.log('✅ SW registered'))
+                        .catch(() => console.log('ℹ️ SW not registered'));
                 }
             }
 
-            // ============================================================
-            //  AUTO-REFRESH
-            // ============================================================
             let refreshInterval = null;
 
             function startAutoRefresh() {
-                if (refreshInterval) {
-                    clearInterval(refreshInterval);
-                }
+                if (refreshInterval) clearInterval(refreshInterval);
                 refreshInterval = setInterval(() => {
                     if (isSupabaseConnected && !isSaving && !isReloading) {
                         loadAllJadwal();
                     }
                 }, 30000);
-                console.log('🔄 Auto-refresh aktif (30 detik)');
             }
 
             // ============================================================
             //  INIT
             // ============================================================
             async function init() {
-                console.log('🚀 Initializing...');
-                console.log('📅 START_DATE:', START_DATE.toISOString().split('T')[0]);
-                console.log('📌 START_INDEX:', START_INDEX);
-                console.log('🌐 WORKER_URL:', WORKER_URL);
-                console.log('🔒 TOKEN di Worker (AMAN!), tidak ada di HTML');
-
-                // Register Service Worker
                 registerServiceWorker();
-
                 await checkWorkerStatus();
 
                 const [piketLoaded, hanpanganLoaded] = await Promise.all([
@@ -2049,42 +1923,23 @@
                 ]);
 
                 if (!piketLoaded) {
-                    showToast('⚠️ Gagal load daftar nama dari GitHub', 'error');
+                    showToast('⚠️ Gagal load daftar nama', 'error');
                 }
                 if (!hanpanganLoaded) {
-                    showToast('⚠️ Gagal load hanpangan dari GitHub', 'error');
+                    showToast('⚠️ Gagal load hanpangan', 'error');
                 }
 
                 populateBulan();
                 await initSupabase();
 
-                bulanSelect.addEventListener('change', function() {
-                    loadAllJadwal();
-                });
-
-                document.getElementById('btnCetak').addEventListener('click', function() {
-                    cetakJadwal();
-                });
-
-                document.getElementById('btnKirim').addEventListener('click', function() {
-                    kirimKeWhatsAppDanTelegram();
-                });
+                bulanSelect.addEventListener('change', loadAllJadwal);
+                document.getElementById('btnCetak').addEventListener('click', cetakJadwal);
+                document.getElementById('btnKirim').addEventListener('click', kirimKeWhatsAppDanTelegram);
 
                 setupScheduledTrigger();
                 setupHanpanganScheduler();
                 startAutoRefresh();
-
                 setInterval(checkWorkerStatus, 300000);
-
-                console.log('✅ Initialization complete');
-                console.log('📊 Daftar nama:', daftarNama.length, 'orang');
-                console.log('📊 Hanpangan:', hanpanganData.length, 'data');
-                console.log('📊 Current Hanpangan:', currentHanpangan);
-                console.log('📊 Supabase:', isSupabaseConnected ? 'Connected' : 'Disconnected');
-                console.log('⏰ Trigger jadwal aktif setiap 08.00 WITA via Worker');
-                console.log('⏰ Hanpangan auto-update setiap 00.02 WITA (No Telegram)');
-                console.log('📱 1 Tombol untuk WhatsApp + Telegram (LANGSUNG KIRIM!)');
-                console.log('🌐 Worker terhubung di:', WORKER_URL);
             }
 
             document.addEventListener('DOMContentLoaded', init);
@@ -2099,17 +1954,9 @@
                 isSupabaseConnected,
                 reload: loadAllJadwal,
                 cetak: cetakJadwal,
-                kirimKeWhatsAppDanTelegram: kirimKeWhatsAppDanTelegram,
-                sendToTelegramViaWorker: sendToTelegramViaWorker,
-                loadHanpangan: loadHanpangan,
-                parseCSV: parseCSV,
-                getEpochDay: getEpochDay,
-                getHanpanganToday: getHanpanganToday,
-                updateHanpanganDisplay: updateHanpanganDisplay,
-                START_DATE: START_DATE,
-                START_INDEX: START_INDEX,
-                WORKER_URL: WORKER_URL,
-                checkWorkerStatus: checkWorkerStatus
+                kirimKeWhatsAppDanTelegram,
+                sendToTelegramViaWorker,
+                checkWorkerStatus
             };
 
         })();
