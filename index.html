@@ -1014,41 +1014,46 @@
             }
 
             // ============================================================
-            //  RESET DROPDOWN - PASTI HILANG CENTANG!
+            //  RESET DROPDOWN - FINAL VERSION!
             // ============================================================
             function resetDropdownAfterSave(cell) {
                 if (!cell) return;
-                
-                const display = cell.querySelector('.custom-dropdown-display');
-                if (!display) return;
-                
-                // Reset display ke placeholder
-                const placeholder = document.createElement('span');
-                placeholder.className = 'placeholder';
-                placeholder.textContent = '— Pilih —';
-                placeholder.style.textAlign = 'left';
-                display.innerHTML = '';
-                display.appendChild(placeholder);
-                
-                // Reset semua centang di menu
+
                 const wrapper = cell.querySelector('.custom-dropdown-wrapper');
-                if (wrapper) {
-                    const menu = wrapper.querySelector('.custom-dropdown-menu');
-                    if (menu) {
-                        const optionsGrid = menu.querySelector('.options-grid');
-                        if (optionsGrid) {
-                            optionsGrid.querySelectorAll('.option-item').forEach(el => {
-                                el.classList.remove('selected');
-                                const numIcon = el.querySelector('.num-icon');
-                                if (numIcon) numIcon.textContent = '';
-                            });
-                        }
+                if (!wrapper) return;
+
+                // 🔥 PANGGIL FUNGSI RESET DARI WRAPPER
+                if (wrapper._resetDropdown) {
+                    wrapper._resetDropdown();
+                    return;
+                }
+
+                // FALLBACK: Reset manual jika tidak ada fungsi reset
+                const display = wrapper.querySelector('.custom-dropdown-display');
+                if (display) {
+                    const placeholder = document.createElement('span');
+                    placeholder.className = 'placeholder';
+                    placeholder.textContent = '— Pilih —';
+                    placeholder.style.textAlign = 'left';
+                    display.innerHTML = '';
+                    display.appendChild(placeholder);
+                }
+
+                const menu = wrapper.querySelector('.custom-dropdown-menu');
+                if (menu) {
+                    const optionsGrid = menu.querySelector('.options-grid');
+                    if (optionsGrid) {
+                        optionsGrid.querySelectorAll('.option-item').forEach(el => {
+                            el.classList.remove('selected');
+                            const numIcon = el.querySelector('.num-icon');
+                            if (numIcon) numIcon.textContent = '';
+                        });
                     }
                 }
             }
 
             // ============================================================
-            //  KIRIM TELEGRAM - TANPA ERROR TOAST!
+            //  KIRIM TELEGRAM
             // ============================================================
             async function sendToTelegramViaWorker(message) {
                 try {
@@ -1062,14 +1067,13 @@
                     const result = await response.json();
                     return result.success === true;
                 } catch (e) {
-                    // Silent fail - hanya log
                     console.log('ℹ️ Telegram notif skip (worker offline)');
                     return false;
                 }
             }
 
             // ============================================================
-            //  SAVE JADWAL - FALLBACK: TETAP SAVE KE SUPABASE!
+            //  SAVE JADWAL
             // ============================================================
             async function saveJadwal(tanggal, jenis, nama) {
                 if (!supabaseClient || !isSupabaseConnected) {
@@ -1095,7 +1099,6 @@
                 }
 
                 try {
-                    // Cek existing data
                     const { data: existing, error: findErr } = await supabaseClient
                         .from('jadwal_piket')
                         .select('id, nama1, nama2')
@@ -1107,7 +1110,6 @@
                     const oldValue = existing ? (existing.nama1 || '') : '';
                     const newValue = nama || '';
 
-                    // Jika sama, skip
                     if (oldValue === newValue) {
                         if (targetCell) {
                             showSaveIndicator(targetCell, 'saved');
@@ -1117,7 +1119,6 @@
                         return true;
                     }
 
-                    // SAVE KE SUPABASE (PRIORITAS UTAMA!)
                     let result;
                     if (existing) {
                         result = await supabaseClient
@@ -1153,7 +1154,7 @@
                         }
                     }
 
-                    // KIRIM TELEGRAM (optional - tidak memblock)
+                    // Kirim Telegram (optional)
                     if (nama && nama.trim() !== '') {
                         try {
                             const jenisLabel = jenis.replace('_hari_ini', '').toUpperCase();
@@ -1174,7 +1175,6 @@
                         }
                     }
 
-                    // Reload data
                     setTimeout(() => loadAllJadwal(), 500);
 
                     return true;
@@ -1191,176 +1191,7 @@
             }
 
             // ============================================================
-            //  KIRIM WA + TELEGRAM
-            // ============================================================
-            async function kirimKeWhatsAppDanTelegram() {
-                if (!supabaseClient || !isSupabaseConnected) {
-                    showToast('⚠️ Supabase tidak terhubung!', 'error');
-                    return;
-                }
-
-                btnKirim.disabled = true;
-                btnKirim.innerHTML = '<span class="spinner"></span> Mengirim...';
-
-                try {
-                    const today = new Date();
-                    const tomorrow = new Date(today);
-                    tomorrow.setDate(tomorrow.getDate() + 1);
-
-                    const todayStr = today.getFullYear() + '-' +
-                        String(today.getMonth() + 1).padStart(2, '0') + '-' +
-                        String(today.getDate()).padStart(2, '0');
-                    const tomorrowStr = tomorrow.getFullYear() + '-' +
-                        String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' +
-                        String(tomorrow.getDate()).padStart(2, '0');
-
-                    const { data, error } = await supabaseClient
-                        .from('jadwal_piket')
-                        .select('*')
-                        .in('tanggal_jadwal', [todayStr, tomorrowStr]);
-
-                    if (error) throw error;
-
-                    const grouped = {};
-                    data.forEach(item => {
-                        const key = item.tanggal_jadwal;
-                        if (!grouped[key]) grouped[key] = { koramil: '', kediaman: '', makodim: '' };
-                        if (item.jenis === 'koramil_hari_ini') grouped[key].koramil = item.nama1 || '';
-                        else if (item.jenis === 'kediaman_hari_ini') grouped[key].kediaman = item.nama1 || '';
-                        else if (item.jenis === 'makodim_hari_ini') grouped[key].makodim = item.nama1 || '';
-                    });
-
-                    const tglHariIni = formatTanggalWA(today);
-                    const tglBesok = formatTanggalWA(tomorrow);
-
-                    let pesan = '';
-                    pesan += '_____________________________\n';
-                    pesan += '*KORAMIL 1609-05/SUKASADA*\n';
-                    pesan += '    *JADWAL DINAS DALAM*\n';
-                    pesan += '_____________________________\n\n';
-
-                    function formatNamaWA(namaStr) {
-                        if (!namaStr) return '';
-                        const names = namaStr.split(',').map(s => s.trim()).filter(s => s);
-                        if (names.length === 0) return '';
-                        return names.map((n, i) => '   ' + (i + 1) + '. ' + n).join('\n');
-                    }
-
-                    let sections = [];
-                    let letter = 'A';
-
-                    function addSection(date, names, type) {
-                        if (names && names.trim() !== '') {
-                            let label = letter + '.';
-                            let title = date;
-                            if (type) title += ' (' + type + ')';
-                            sections.push({ label, title, names });
-                            letter = String.fromCharCode(letter.charCodeAt(0) + 1);
-                        }
-                    }
-
-                    addSection(tglHariIni, grouped[todayStr]?.koramil || '', '');
-                    addSection(tglBesok, grouped[tomorrowStr]?.koramil || '', '');
-                    addSection(tglHariIni, grouped[todayStr]?.kediaman || '', 'Kediaman');
-                    addSection(tglBesok, grouped[tomorrowStr]?.kediaman || '', 'Kediaman');
-                    addSection(tglHariIni, grouped[todayStr]?.makodim || '', 'Makodim');
-                    addSection(tglBesok, grouped[tomorrowStr]?.makodim || '', 'Makodim');
-
-                    if (sections.length === 0) {
-                        pesan += 'Belum ada data jadwal untuk hari ini dan besok.\n\n';
-                    } else {
-                        sections.forEach((sec, idx) => {
-                            pesan += sec.label + ' ' + sec.title + '\n';
-                            pesan += formatNamaWA(sec.names) + '\n';
-                            if (idx < sections.length - 1) pesan += '\n';
-                        });
-                        pesan += '\n';
-                    }
-
-                    if (currentHanpangan) {
-                        pesan += '🌾 *JADWAL HANPANGAN HARI INI:* ' + currentHanpangan.nama + ' 🌾\n';
-                    } else {
-                        pesan += '🌾 *JADWAL HANPANGAN HARI INI:* Belum tersedia 🌾\n';
-                    }
-                    pesan += '\n*Demikian MMP.*';
-
-                    // Kirim Telegram (via worker)
-                    await sendToTelegramViaWorker(pesan);
-
-                    // Buka WhatsApp
-                    const encoded = encodeURIComponent(pesan);
-                    const waUrl = 'https://api.whatsapp.com/send?text=' + encoded;
-                    window.open(waUrl, '_blank');
-
-                    showToast('✅ Pesan dikirim ke WhatsApp & Telegram!', 'success');
-
-                } catch (e) {
-                    showToast('❌ Gagal: ' + e.message, 'error');
-                } finally {
-                    btnKirim.disabled = false;
-                    btnKirim.innerHTML = '<i class="fab fa-whatsapp"></i> <i class="fab fa-telegram-plane"></i> Kirim WA & Telegram';
-                }
-            }
-
-            // ============================================================
-            //  BULAN
-            // ============================================================
-            function populateBulan() {
-                const now = new Date();
-                const currentMonth = now.getMonth();
-                const currentYear = now.getFullYear();
-
-                const allMonths = [];
-                for (let year = currentYear - 2; year <= currentYear + 2; year++) {
-                    for (let m = 0; m < 12; m++) {
-                        allMonths.push({
-                            value: year + '-' + String(m + 1).padStart(2, '0'),
-                            label: NAMA_BULAN[m] + ' ' + year,
-                            year: year,
-                            month: m
-                        });
-                    }
-                }
-
-                const filtered = allMonths.filter(m => m.year >= 2026);
-
-                bulanSelect.innerHTML = '';
-                filtered.forEach(m => {
-                    const opt = document.createElement('option');
-                    opt.value = m.value;
-                    opt.textContent = m.label;
-                    bulanSelect.appendChild(opt);
-                });
-
-                const currentKey = currentYear + '-' + String(currentMonth + 1).padStart(2, '0');
-                if (filtered.some(m => m.value === currentKey)) {
-                    bulanSelect.value = currentKey;
-                } else {
-                    bulanSelect.value = '2026-01';
-                }
-
-                updateTotalHari();
-            }
-
-            function getBulanTahun() {
-                const val = bulanSelect.value;
-                const parts = val.split('-');
-                return { bulan: parseInt(parts[1]) - 1, tahun: parseInt(parts[0]) };
-            }
-
-            function updateTitle() {
-                const { bulan, tahun } = getBulanTahun();
-                bulanTahunTitle.textContent = NAMA_BULAN[bulan] + ' ' + tahun;
-            }
-
-            function updateTotalHari() {
-                const { bulan, tahun } = getBulanTahun();
-                const daysInMonth = new Date(tahun, bulan + 1, 0).getDate();
-                totalHariSpan.textContent = 'Total: ' + daysInMonth + ' hari';
-            }
-
-            // ============================================================
-            //  DROPDOWN
+            //  DROPDOWN - DENGAN FUNGSI RESET YANG BENAR!
             // ============================================================
             function createCustomDropdown(tanggal, jenis, currentValue) {
                 const wrapper = document.createElement('span');
@@ -1410,6 +1241,26 @@
                 if (currentValue && currentValue !== '') {
                     selectedNames = currentValue.split(', ').filter(n => n.trim());
                 }
+
+                // 🔥 FUNGSI RESET YANG SEBENARNYA!
+                function resetDropdown() {
+                    // Kosongkan selectedNames
+                    selectedNames.length = 0;
+
+                    // Update display ke placeholder
+                    const placeholder = document.createElement('span');
+                    placeholder.className = 'placeholder';
+                    placeholder.textContent = '— Pilih —';
+                    placeholder.style.textAlign = 'left';
+                    display.innerHTML = '';
+                    display.appendChild(placeholder);
+
+                    // Render ulang options (tanpa selected)
+                    renderOptions();
+                }
+
+                // Simpan fungsi reset ke wrapper
+                wrapper._resetDropdown = resetDropdown;
 
                 let isOpen = false;
 
@@ -1638,6 +1489,173 @@
                         cell.appendChild(dropdown);
                     });
                 });
+            }
+
+            // ============================================================
+            //  BULAN
+            // ============================================================
+            function populateBulan() {
+                const now = new Date();
+                const currentMonth = now.getMonth();
+                const currentYear = now.getFullYear();
+
+                const allMonths = [];
+                for (let year = currentYear - 2; year <= currentYear + 2; year++) {
+                    for (let m = 0; m < 12; m++) {
+                        allMonths.push({
+                            value: year + '-' + String(m + 1).padStart(2, '0'),
+                            label: NAMA_BULAN[m] + ' ' + year,
+                            year: year,
+                            month: m
+                        });
+                    }
+                }
+
+                const filtered = allMonths.filter(m => m.year >= 2026);
+
+                bulanSelect.innerHTML = '';
+                filtered.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m.value;
+                    opt.textContent = m.label;
+                    bulanSelect.appendChild(opt);
+                });
+
+                const currentKey = currentYear + '-' + String(currentMonth + 1).padStart(2, '0');
+                if (filtered.some(m => m.value === currentKey)) {
+                    bulanSelect.value = currentKey;
+                } else {
+                    bulanSelect.value = '2026-01';
+                }
+
+                updateTotalHari();
+            }
+
+            function getBulanTahun() {
+                const val = bulanSelect.value;
+                const parts = val.split('-');
+                return { bulan: parseInt(parts[1]) - 1, tahun: parseInt(parts[0]) };
+            }
+
+            function updateTitle() {
+                const { bulan, tahun } = getBulanTahun();
+                bulanTahunTitle.textContent = NAMA_BULAN[bulan] + ' ' + tahun;
+            }
+
+            function updateTotalHari() {
+                const { bulan, tahun } = getBulanTahun();
+                const daysInMonth = new Date(tahun, bulan + 1, 0).getDate();
+                totalHariSpan.textContent = 'Total: ' + daysInMonth + ' hari';
+            }
+
+            // ============================================================
+            //  KIRIM WA + TELEGRAM
+            // ============================================================
+            async function kirimKeWhatsAppDanTelegram() {
+                if (!supabaseClient || !isSupabaseConnected) {
+                    showToast('⚠️ Supabase tidak terhubung!', 'error');
+                    return;
+                }
+
+                btnKirim.disabled = true;
+                btnKirim.innerHTML = '<span class="spinner"></span> Mengirim...';
+
+                try {
+                    const today = new Date();
+                    const tomorrow = new Date(today);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+
+                    const todayStr = today.getFullYear() + '-' +
+                        String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(today.getDate()).padStart(2, '0');
+                    const tomorrowStr = tomorrow.getFullYear() + '-' +
+                        String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(tomorrow.getDate()).padStart(2, '0');
+
+                    const { data, error } = await supabaseClient
+                        .from('jadwal_piket')
+                        .select('*')
+                        .in('tanggal_jadwal', [todayStr, tomorrowStr]);
+
+                    if (error) throw error;
+
+                    const grouped = {};
+                    data.forEach(item => {
+                        const key = item.tanggal_jadwal;
+                        if (!grouped[key]) grouped[key] = { koramil: '', kediaman: '', makodim: '' };
+                        if (item.jenis === 'koramil_hari_ini') grouped[key].koramil = item.nama1 || '';
+                        else if (item.jenis === 'kediaman_hari_ini') grouped[key].kediaman = item.nama1 || '';
+                        else if (item.jenis === 'makodim_hari_ini') grouped[key].makodim = item.nama1 || '';
+                    });
+
+                    const tglHariIni = formatTanggalWA(today);
+                    const tglBesok = formatTanggalWA(tomorrow);
+
+                    let pesan = '';
+                    pesan += '_____________________________\n';
+                    pesan += '*KORAMIL 1609-05/SUKASADA*\n';
+                    pesan += '    *JADWAL DINAS DALAM*\n';
+                    pesan += '_____________________________\n\n';
+
+                    function formatNamaWA(namaStr) {
+                        if (!namaStr) return '';
+                        const names = namaStr.split(',').map(s => s.trim()).filter(s => s);
+                        if (names.length === 0) return '';
+                        return names.map((n, i) => '   ' + (i + 1) + '. ' + n).join('\n');
+                    }
+
+                    let sections = [];
+                    let letter = 'A';
+
+                    function addSection(date, names, type) {
+                        if (names && names.trim() !== '') {
+                            let label = letter + '.';
+                            let title = date;
+                            if (type) title += ' (' + type + ')';
+                            sections.push({ label, title, names });
+                            letter = String.fromCharCode(letter.charCodeAt(0) + 1);
+                        }
+                    }
+
+                    addSection(tglHariIni, grouped[todayStr]?.koramil || '', '');
+                    addSection(tglBesok, grouped[tomorrowStr]?.koramil || '', '');
+                    addSection(tglHariIni, grouped[todayStr]?.kediaman || '', 'Kediaman');
+                    addSection(tglBesok, grouped[tomorrowStr]?.kediaman || '', 'Kediaman');
+                    addSection(tglHariIni, grouped[todayStr]?.makodim || '', 'Makodim');
+                    addSection(tglBesok, grouped[tomorrowStr]?.makodim || '', 'Makodim');
+
+                    if (sections.length === 0) {
+                        pesan += 'Belum ada data jadwal untuk hari ini dan besok.\n\n';
+                    } else {
+                        sections.forEach((sec, idx) => {
+                            pesan += sec.label + ' ' + sec.title + '\n';
+                            pesan += formatNamaWA(sec.names) + '\n';
+                            if (idx < sections.length - 1) pesan += '\n';
+                        });
+                        pesan += '\n';
+                    }
+
+                    if (currentHanpangan) {
+                        pesan += '🌾 *JADWAL HANPANGAN HARI INI:* ' + currentHanpangan.nama + ' 🌾\n';
+                    } else {
+                        pesan += '🌾 *JADWAL HANPANGAN HARI INI:* Belum tersedia 🌾\n';
+                    }
+                    pesan += '\n*Demikian MMP.*';
+
+                    await sendToTelegramViaWorker(pesan);
+
+                    const encoded = encodeURIComponent(pesan);
+                    const waUrl = 'https://api.whatsapp.com/send?text=' + encoded;
+                    window.open(waUrl, '_blank');
+
+                    showToast('✅ Pesan dikirim ke WhatsApp & Telegram!', 'success');
+
+                } catch (e) {
+                    showToast('❌ Gagal: ' + e.message, 'error');
+                } finally {
+                    btnKirim.disabled = false;
+                    btnKirim.innerHTML = '<i class="fab fa-whatsapp"></i> <i class="fab fa-telegram-plane"></i> Kirim WA & Telegram';
+                }
             }
 
             // ============================================================
