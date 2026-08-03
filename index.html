@@ -1080,7 +1080,7 @@
             }
 
             // ============================================================
-            //  RESET DROPDOWN SETELAH SAVE
+            //  RESET DROPDOWN SETELAH SAVE - VERSI YANG BENAR!
             // ============================================================
             function resetDropdownAfterSave(cell) {
                 if (!cell) return;
@@ -1089,6 +1089,7 @@
                 const display = cell.querySelector('.custom-dropdown-display');
                 if (!display) return;
                 
+                // === RESET TAMPILAN DISPLAY ===
                 // Reset ke placeholder
                 const placeholder = document.createElement('span');
                 placeholder.className = 'placeholder';
@@ -1099,11 +1100,10 @@
                 display.innerHTML = '';
                 display.appendChild(placeholder);
                 
-                // Update selectedNames menjadi array kosong
+                // === RESET MENU DROPDOWN ===
                 // Cari wrapper dan update data internal
                 const wrapper = cell.querySelector('.custom-dropdown-wrapper');
                 if (wrapper) {
-                    // Hapus menu options yang ada
                     const menu = wrapper.querySelector('.custom-dropdown-menu');
                     if (menu) {
                         const optionsGrid = menu.querySelector('.options-grid');
@@ -1111,6 +1111,11 @@
                             // Hapus class selected dari semua option
                             optionsGrid.querySelectorAll('.option-item').forEach(el => {
                                 el.classList.remove('selected');
+                                // Hapus icon angka
+                                const numIcon = el.querySelector('.num-icon');
+                                if (numIcon) {
+                                    numIcon.textContent = '';
+                                }
                             });
                         }
                     }
@@ -1561,9 +1566,13 @@
                             if (idx > -1) {
                                 selectedNames.splice(idx, 1);
                                 this.classList.remove('selected');
+                                const numIcon = this.querySelector('.num-icon');
+                                if (numIcon) numIcon.textContent = '';
                             } else {
                                 selectedNames.push(name);
                                 this.classList.add('selected');
+                                const numIcon = this.querySelector('.num-icon');
+                                if (numIcon) numIcon.textContent = (selectedNames.indexOf(name) + 1);
                             }
                             updateDisplay();
                             renderOptions();
