@@ -69,16 +69,16 @@
         }
 
         .custom-dropdown-display {
-            padding: 6px 8px;                  /* padding lebih longgar */
-            background: #fcfcfc !important;    /* latar lebih terang */
+            padding: 6px 8px;
+            background: #fcfcfc !important;
             font-family: 'Segoe UI', Arial, sans-serif;
-            font-size: clamp(14px, 1.1vw, 18px); /* ukuran font lebih besar */
-            font-weight: 700;                  /* lebih tebal */
+            font-size: clamp(14px, 1.1vw, 18px);
+            font-weight: 700;
             color: #000;
             cursor: pointer;
             min-height: 28px;
             display: inline-block;
-            border: 1px solid #aaa;            /* border lebih jelas */
+            border: 1px solid #aaa;
             outline: none;
             width: 100%;
             white-space: pre-line;
@@ -87,7 +87,7 @@
             user-select: none;
             text-align: left;
             vertical-align: top;
-            border-radius: 4px;                /* sudut membulat */
+            border-radius: 4px;
             word-wrap: break-word;
             overflow-wrap: break-word;
             transition: border-color 0.2s, box-shadow 0.2s;
@@ -96,10 +96,15 @@
             border-color: #0066cc;
             box-shadow: 0 0 0 2px rgba(0,102,204,0.2);
         }
+
+        /* --- PERBAIKAN LABEL "--pilih nama--" : HITAM, BESAR, TAJAM --- */
         .custom-dropdown-display .placeholder {
-            color: #666;
-            font-style: italic;
-            font-weight: 400;
+            color: #000000 !important;       /* hitam pekat */
+            font-weight: 900 !important;     /* sangat tebal */
+            font-size: clamp(16px, 1.4vw, 22px) !important; /* lebih besar */
+            font-style: normal !important;   /* hilangkan italic */
+            text-shadow: 0 0 2px rgba(0,0,0,0.1); /* sedikit efek tajam */
+            letter-spacing: 0.5px;
         }
 
         /* --- MENU DROPDOWN (fullscreen popup) --- */
@@ -134,7 +139,6 @@
             font-weight: 700;
             text-align: left;
         }
-        /* Grid pilihan nama — lebih besar dan jelas */
         .custom-dropdown-menu .options-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -143,13 +147,13 @@
             align-content: start;
         }
         .custom-dropdown-menu .option-item {
-            padding: 14px 18px;                /* padding lebih besar */
+            padding: 14px 18px;
             border: 2px solid #000;
             background: #ffffff;
             cursor: pointer;
             font-family: 'Segoe UI', Arial, sans-serif;
-            font-size: clamp(16px, 1.4vw, 22px); /* ukuran font besar */
-            font-weight: 700;                  /* tebal */
+            font-size: clamp(16px, 1.4vw, 22px);
+            font-weight: 700;
             text-align: left;
             transition: 0.15s;
             display: flex;
@@ -247,6 +251,9 @@
             .month-picker .total-hari { margin-left: 0; text-align: left; }
             .excel-table th, .excel-table td { padding: 4px 6px; font-size: 12px; text-align: left; vertical-align: top; }
             .custom-dropdown-display { font-size: 14px; min-height: 24px; line-height: 1.5; padding: 4px 6px; }
+            .custom-dropdown-display .placeholder {
+                font-size: clamp(15px, 1.6vw, 20px) !important;
+            }
             .custom-dropdown-menu .options-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
             .custom-dropdown-menu .option-item { font-size: 16px; padding: 12px 14px; }
             .header-actions { width: 100%; justify-content: flex-start; }
@@ -259,6 +266,9 @@
             .excel-table th, .excel-table td { padding: 3px 4px; font-size: 10px; text-align: left; vertical-align: top; }
             .preview-section h3 { font-size: 15px; text-align: left; }
             .custom-dropdown-display { font-size: 13px; min-height: 20px; line-height: 1.4; padding: 3px 5px; }
+            .custom-dropdown-display .placeholder {
+                font-size: clamp(14px, 1.8vw, 18px) !important;
+            }
             .custom-dropdown-menu { padding: 14px 10px; }
             .custom-dropdown-menu .options-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px; }
             .custom-dropdown-menu .option-item { padding: 10px 12px; font-size: 14px; text-align: left; }
