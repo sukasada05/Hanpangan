@@ -22,6 +22,31 @@
         .header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .btn-cetak { background: #000; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 6px; font-size: clamp(13px, 1vw, 16px); transition: 0.2s; }
         .btn-cetak:hover { background: #333; }
+
+        /* --- TOMBOL RADIO BARU --- */
+        .btn-radio {
+            background: #e63946;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: clamp(13px, 1vw, 16px);
+            transition: 0.2s;
+            text-decoration: none;
+        }
+        .btn-radio:hover {
+            background: #c1121f;
+            transform: scale(1.02);
+        }
+        .btn-radio i {
+            font-size: clamp(14px, 1.1vw, 18px);
+        }
+
         .btn-kirim { background: linear-gradient(135deg, #25D366 0%, #0088cc 100%); color: #fff; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: clamp(13px, 1vw, 16px); transition: 0.2s; }
         .btn-kirim:hover { opacity: 0.9; transform: scale(1.02); }
         .btn-kirim i { margin-right: 2px; }
@@ -60,6 +85,25 @@
         .row-weekend td { background: #ffe6e6 !important; }
         .row-weekend td:first-child { background: #ffe6e6 !important; }
 
+        /* --- PERBAIKAN TANGGAL: HITAM PEKAT, BESAR, TAJAM --- */
+        .excel-table td:nth-child(2) {
+            color: #000000 !important;
+            font-weight: 900 !important;
+            font-size: clamp(15px, 1.3vw, 20px) !important;
+            text-shadow: 0 0 2px rgba(0,0,0,0.15);
+            letter-spacing: 0.3px;
+            line-height: 1.7;
+            background-color: #ffffff !important;
+        }
+        .row-weekend td:nth-child(2) {
+            background-color: #ffe6e6 !important;
+            color: #000000 !important;
+        }
+        .row-today td:nth-child(2) {
+            background-color: #ffff99 !important;
+            color: #000000 !important;
+        }
+
         /* --- DROPDOWN CUSTOM (diperbesar dan tajam) --- */
         .custom-dropdown-wrapper {
             position: relative;
@@ -97,13 +141,12 @@
             box-shadow: 0 0 0 2px rgba(0,102,204,0.2);
         }
 
-        /* --- PERBAIKAN LABEL "--pilih nama--" : HITAM, BESAR, TAJAM --- */
         .custom-dropdown-display .placeholder {
-            color: #000000 !important;       /* hitam pekat */
-            font-weight: 900 !important;     /* sangat tebal */
-            font-size: clamp(16px, 1.4vw, 22px) !important; /* lebih besar */
-            font-style: normal !important;   /* hilangkan italic */
-            text-shadow: 0 0 2px rgba(0,0,0,0.1); /* sedikit efek tajam */
+            color: #000000 !important;
+            font-weight: 900 !important;
+            font-size: clamp(16px, 1.4vw, 22px) !important;
+            font-style: normal !important;
+            text-shadow: 0 0 2px rgba(0,0,0,0.1);
             letter-spacing: 0.5px;
         }
 
@@ -250,6 +293,9 @@
             .month-picker { flex-direction: column; align-items: stretch; text-align: left; }
             .month-picker .total-hari { margin-left: 0; text-align: left; }
             .excel-table th, .excel-table td { padding: 4px 6px; font-size: 12px; text-align: left; vertical-align: top; }
+            .excel-table td:nth-child(2) {
+                font-size: clamp(14px, 1.6vw, 18px) !important;
+            }
             .custom-dropdown-display { font-size: 14px; min-height: 24px; line-height: 1.5; padding: 4px 6px; }
             .custom-dropdown-display .placeholder {
                 font-size: clamp(15px, 1.6vw, 20px) !important;
@@ -264,6 +310,10 @@
             .running-text { font-size: 14px; animation-duration: 20px; text-align: left; }
             .month-picker select { padding: 6px 10px; font-size: 13px; min-width: 120px; text-align: left; }
             .excel-table th, .excel-table td { padding: 3px 4px; font-size: 10px; text-align: left; vertical-align: top; }
+            .excel-table td:nth-child(2) {
+                font-size: clamp(13px, 1.8vw, 16px) !important;
+                line-height: 1.5;
+            }
             .preview-section h3 { font-size: 15px; text-align: left; }
             .custom-dropdown-display { font-size: 13px; min-height: 20px; line-height: 1.4; padding: 3px 5px; }
             .custom-dropdown-display .placeholder {
@@ -310,6 +360,10 @@
                 <button id="btnCetak" class="btn-cetak">
                     <i class="fas fa-print"></i> Cetak
                 </button>
+                <!-- TOMBOL RADIO BARU -->
+                <a href="https://radio.garden/?hl=id" target="_blank" class="btn-radio" id="btnRadio">
+                    <i class="fas fa-broadcast-tower"></i> RADIO
+                </a>
             </div>
         </div>
 
@@ -1041,7 +1095,7 @@
                     html += `
                         <tr class="${rowClass}" data-tanggal="${dateKey}">
                             <td style="font-weight:700;text-align:left;vertical-align:top;">${index+1}</td>
-                            <td style="text-align:left;vertical-align:top;">${dateStr}</td>
+                            <td style="text-align:left;vertical-align:top;font-weight:900;color:#000000;">${dateStr}</td>
                             <td data-jenis="koramil_hari_ini" style="text-align:left;vertical-align:top;"></td>
                             <td data-jenis="kediaman_hari_ini" style="text-align:left;vertical-align:top;"></td>
                             <td data-jenis="makodim_hari_ini" style="text-align:left;vertical-align:top;"></td>
@@ -1355,7 +1409,7 @@
                             font-size: 12pt;
                         }
                         .no-col { width: 6%; text-align: center; }
-                        .tgl-col { width: 18%; }
+                        .tgl-col { width: 18%; font-weight: 900; color: #000; }
                         .nama-col { width: 28%; }
                         .nama-col-kediaman { width: 24%; }
                         .nama-col-makodim { width: 24%; }
