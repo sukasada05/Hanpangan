@@ -23,7 +23,6 @@
         .btn-cetak { background: #000; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 6px; font-size: clamp(13px, 1vw, 16px); transition: 0.2s; }
         .btn-cetak:hover { background: #333; }
 
-        /* --- TOMBOL RADIO BARU --- */
         .btn-radio {
             background: #e63946;
             color: #fff;
@@ -47,7 +46,6 @@
             font-size: clamp(14px, 1.1vw, 18px);
         }
 
-        /* --- TOMBOL KIRIM (HITAM, TEKS PUTIH TERANG & TEBAL, TANPA EMOJI) --- */
         .btn-kirim {
             background: #000000;
             color: #ffffff;
@@ -73,7 +71,6 @@
             cursor: not-allowed;
             transform: none;
         }
-        /* Ikon pada tombol kirim tetap ada (font awesome), tapi tidak ada emoji/emoticon tambahan */
         .btn-kirim i {
             margin-right: 2px;
             color: #ffffff;
@@ -96,23 +93,82 @@
         .preview-section h3 { border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 10px; font-size: clamp(16px, 1.6vw, 22px); text-align: left; }
         .table-wrapper { overflow: auto; max-height: 70vh; position: relative; border: 1px solid #000000; background: #ffffff; }
         .excel-table { width: 100%; border-collapse: collapse; font-size: clamp(13px, 1.1vw, 16px); table-layout: fixed; border: none; }
-        .excel-table th, .excel-table td { border: 1px solid #000000; padding: 6px 8px; vertical-align: top; text-align: left; background-color: #ffffff; word-wrap: break-word; overflow-wrap: break-word; white-space: pre-line; }
-        .excel-table thead th { background: #d9d9d9; font-weight: 700; white-space: nowrap; border-bottom: 2px solid #000000; position: sticky; top: 0; z-index: 10; text-align: left; vertical-align: top; box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1); }
-        .excel-table th:nth-child(1), .excel-table td:nth-child(1) { width: 6%; min-width: 40px; max-width: 60px; text-align: left; font-weight: 700; background-color: #f5f5f5; position: sticky; left: 0; z-index: 5; border-right: 2px solid #000000; vertical-align: top; }
-        .excel-table thead th:nth-child(1) { z-index: 15; background: #d9d9d9; border-right: 2px solid #000000; vertical-align: top; text-align: left; }
-        .excel-table th:nth-child(2), .excel-table td:nth-child(2) { width: 22%; min-width: 160px; max-width: 220px; text-align: left; vertical-align: top; }
-        .excel-table th:nth-child(3), .excel-table td:nth-child(3), .excel-table th:nth-child(4), .excel-table td:nth-child(4), .excel-table th:nth-child(5), .excel-table td:nth-child(5) { width: 24%; min-width: 130px; max-width: 200px; text-align: left; vertical-align: top; }
-        .excel-table thead th:nth-child(2), .excel-table thead th:nth-child(3), .excel-table thead th:nth-child(4), .excel-table thead th:nth-child(5) { text-align: left; vertical-align: top; }
-        .excel-table thead th { background: #d9d9d9; }
-        .excel-table td:nth-child(1) { background: #f5f5f5; text-align: left; vertical-align: top; }
-        .excel-table thead th:nth-child(1) { background: #d9d9d9; }
+        
+        /* ===== HEADER TABEL: HITAM PEKAT + FONT PUTIH TERANG & TEBAL ===== */
+        .excel-table thead th { 
+            background: #000000 !important; 
+            color: #ffffff !important;
+            font-weight: 900 !important;
+            font-size: clamp(14px, 1.2vw, 18px) !important;
+            text-shadow: 0 0 8px rgba(255,255,255,0.15);
+            letter-spacing: 1px;
+            border: 1px solid #000000 !important;
+            padding: 10px 8px !important;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            text-align: center !important;  /* CENTER */
+            vertical-align: middle !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .excel-table thead th:nth-child(1) { 
+            z-index: 15; 
+            border-right: 2px solid #000000 !important; 
+            text-align: center !important;
+        }
+
+        .excel-table th, .excel-table td { 
+            border: 1px solid #000000; 
+            padding: 6px 8px; 
+            vertical-align: top; 
+            text-align: left; 
+            background-color: #ffffff; 
+            color: #000000;
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+            white-space: pre-line; 
+        }
+        
+        .excel-table td { color: #000000; }
+        
+        .excel-table th:nth-child(1), .excel-table td:nth-child(1) { 
+            width: 6%; min-width: 40px; max-width: 60px; 
+            text-align: center; 
+            font-weight: 700; 
+            background-color: #f5f5f5; 
+            position: sticky; 
+            left: 0; 
+            z-index: 5; 
+            border-right: 2px solid #000000; 
+            vertical-align: middle;
+        }
+        .excel-table thead th:nth-child(1) { 
+            z-index: 15; 
+            background: #000000 !important; 
+            border-right: 2px solid #000000 !important; 
+            text-align: center !important;
+        }
+        .excel-table th:nth-child(2), .excel-table td:nth-child(2) { 
+            width: 22%; min-width: 160px; max-width: 220px; 
+            text-align: left; 
+            vertical-align: top; 
+        }
+        .excel-table th:nth-child(3), .excel-table td:nth-child(3),
+        .excel-table th:nth-child(4), .excel-table td:nth-child(4),
+        .excel-table th:nth-child(5), .excel-table td:nth-child(5) { 
+            width: 24%; min-width: 130px; max-width: 200px; 
+            text-align: left; 
+            vertical-align: top; 
+        }
+
         .excel-table .no-data { color: #888; text-align: center; padding: 40px 0; font-weight: 600; font-size: clamp(14px, 1.2vw, 18px); }
         .row-today td { background: #ffff99 !important; }
         .row-today td:first-child { background: #ffff99 !important; font-weight: 700; }
         .row-weekend td { background: #ffe6e6 !important; }
         .row-weekend td:first-child { background: #ffe6e6 !important; }
 
-        /* --- PERBAIKAN TANGGAL: HITAM PEKAT, BESAR, TAJAM --- */
+        /* --- TANGGAL: HITAM PEKAT, BESAR, TAJAM --- */
         .excel-table td:nth-child(2) {
             color: #000000 !important;
             font-weight: 900 !important;
@@ -131,7 +187,7 @@
             color: #000000 !important;
         }
 
-        /* --- DROPDOWN CUSTOM (diperbesar dan tajam) --- */
+        /* --- DROPDOWN --- */
         .custom-dropdown-wrapper {
             position: relative;
             width: 100%;
@@ -177,7 +233,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* --- MENU DROPDOWN (fullscreen popup) --- */
         .custom-dropdown-menu {
             display: none;
             position: fixed;
@@ -314,7 +369,15 @@
 
         .footer-text { text-align: center; font-size: clamp(10px, 0.8vw, 13px); color: #999; margin-top: 18px; border-top: 1px solid #ddd; padding-top: 14px; }
 
-        /* --- RESPONSIF --- */
+        .worker-status { background: #f0f0f0; padding: 6px 12px; border-radius: 4px; font-size: clamp(11px, 0.9vw, 14px); display: flex; align-items: center; gap: 8px; }
+        .worker-status .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .worker-status .dot.online { background: #00aa00; }
+        .worker-status .dot.offline { background: #cc0000; }
+        .worker-status .dot.checking { background: #ffaa00; animation: blink 1s infinite; }
+        .header-status { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #fff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         @media (max-width: 768px) {
             .container { padding: 12px 14px; }
             .month-picker { flex-direction: column; align-items: stretch; text-align: left; }
@@ -330,6 +393,11 @@
             .custom-dropdown-menu .options-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
             .custom-dropdown-menu .option-item { font-size: 16px; padding: 12px 14px; }
             .header-actions { width: 100%; justify-content: flex-start; }
+            .excel-table thead th { 
+                font-size: clamp(12px, 1.5vw, 15px) !important;
+                padding: 8px 4px !important;
+                text-align: center !important;
+            }
         }
         @media (max-width: 480px) {
             .container { padding: 8px 10px; }
@@ -352,16 +420,12 @@
             .custom-dropdown-menu .menu-footer button { padding: 10px 16px; font-size: 14px; text-align: center; }
             .toast { font-size: 13px; padding: 12px; min-width: 150px; bottom: 10px; text-align: center; }
             .supabase-indicator { width: 14px; height: 14px; top: 8px; right: 8px; }
+            .excel-table thead th { 
+                font-size: clamp(11px, 1.5vw, 13px) !important;
+                padding: 6px 3px !important;
+                text-align: center !important;
+            }
         }
-
-        .worker-status { background: #f0f0f0; padding: 6px 12px; border-radius: 4px; font-size: clamp(11px, 0.9vw, 14px); display: flex; align-items: center; gap: 8px; }
-        .worker-status .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-        .worker-status .dot.online { background: #00aa00; }
-        .worker-status .dot.offline { background: #cc0000; }
-        .worker-status .dot.checking { background: #ffaa00; animation: blink 1s infinite; }
-        .header-status { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #fff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -386,7 +450,6 @@
                 <button id="btnCetak" class="btn-cetak">
                     <i class="fas fa-print"></i> Cetak
                 </button>
-                <!-- TOMBOL RADIO BARU -->
                 <a href="https://radio.garden/?hl=id" target="_blank" class="btn-radio" id="btnRadio">
                     <i class="fas fa-broadcast-tower"></i> RADIO
                 </a>
@@ -705,7 +768,6 @@
                     wrapper._resetDropdown();
                     return;
                 }
-                // fallback
                 const display = wrapper.querySelector('.custom-dropdown-display');
                 if (display) {
                     const placeholder = document.createElement('span');
@@ -863,7 +925,7 @@
             }
 
             // ============================================================
-            //  DROPDOWN - dengan tampilan lebih BESAR dan TAJAM
+            //  DROPDOWN
             // ============================================================
             function createCustomDropdown(tanggal, jenis, currentValue) {
                 const wrapper = document.createElement('span');
@@ -1098,11 +1160,11 @@
                         <table class="excel-table">
                             <thead>
                                 <tr>
-                                    <th>NO</th>
-                                    <th>TANGGAL</th>
-                                    <th>KORAMIL</th>
-                                    <th>KEDIAMAN</th>
-                                    <th>MAKODIM</th>
+                                    <th style="text-align:center !important;">NO</th>
+                                    <th style="text-align:center !important;">TANGGAL</th>
+                                    <th style="text-align:center !important;">KORAMIL</th>
+                                    <th style="text-align:center !important;">KEDIAMAN</th>
+                                    <th style="text-align:center !important;">MAKODIM</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1120,7 +1182,7 @@
                     if (isWeekendDay) rowClass += ' row-weekend';
                     html += `
                         <tr class="${rowClass}" data-tanggal="${dateKey}">
-                            <td style="font-weight:700;text-align:left;vertical-align:top;">${index+1}</td>
+                            <td style="font-weight:700;text-align:center;vertical-align:middle;">${index+1}</td>
                             <td style="text-align:left;vertical-align:top;font-weight:900;color:#000000;">${dateStr}</td>
                             <td data-jenis="koramil_hari_ini" style="text-align:left;vertical-align:top;"></td>
                             <td data-jenis="kediaman_hari_ini" style="text-align:left;vertical-align:top;"></td>
@@ -1430,9 +1492,11 @@
                             white-space: pre-line;
                         }
                         th {
-                            background: #d9d9d9;
-                            font-weight: 700;
+                            background: #000000;
+                            color: #ffffff;
+                            font-weight: 900;
                             font-size: 12pt;
+                            text-align: center !important;
                         }
                         .no-col { width: 6%; text-align: center; }
                         .tgl-col { width: 18%; font-weight: 900; color: #000; }
@@ -1460,11 +1524,11 @@
                     <table>
                         <thead>
                             <tr>
-                                <th class="no-col">NO</th>
-                                <th class="tgl-col">TANGGAL</th>
-                                <th class="nama-col">KORAMIL</th>
-                                <th class="nama-col-kediaman">KEDIAMAN</th>
-                                <th class="nama-col-makodim">MAKODIM</th>
+                                <th class="no-col" style="text-align:center !important;">NO</th>
+                                <th class="tgl-col" style="text-align:center !important;">TANGGAL</th>
+                                <th class="nama-col" style="text-align:center !important;">KORAMIL</th>
+                                <th class="nama-col-kediaman" style="text-align:center !important;">KEDIAMAN</th>
+                                <th class="nama-col-makodim" style="text-align:center !important;">MAKODIM</th>
                             </tr>
                         </thead>
                         <tbody>
