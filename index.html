@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Jadwal Piket Koramil</title>
-    <link rel="manifest" href="/Hanpangan/manifest.json" />
+    <link rel="manifest" href="manifest.json" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
@@ -14,7 +14,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { height: 100%; width: 100%; overflow-x: hidden; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f0f0; color: #000000; padding: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
-        .container { max-width: 100%; width: 100%; min-height: 100vh; background: #ffffff; padding: 180px 20px 16px; border: none; box-shadow: none; }
+        .container { max-width: 100%; width: 100%; min-height: 100vh; background: #ffffff; padding: 25px 20px 16px; border: none; box-shadow: none; }
         .sticky-top { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #ffffff; padding: 16px 20px 1px; }
 
         /* --- HEADER --- */
@@ -91,7 +91,7 @@
         .month-picker .total-hari { display: none; }
 
         /* --- TABEL --- */
-        .preview-section { padding: 0; background: transparent; margin-top: 0; position: relative; }
+        .preview-section { padding: 105px 0 0; background: transparent; margin-top: 0; position: relative; }
         .preview-section h3 { display: none; }
         .table-wrapper { overflow: visible; max-height: none; position: relative; border: 1px solid #ffffff; background: #ffffff; }
         .excel-table { width: 100%; border-collapse: collapse; font-size: clamp(13px, 1.1vw, 16px); table-layout: fixed; border: 1px solid #ffffff; }
@@ -449,7 +449,7 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         @media (max-width: 768px) {
-            .container { padding: 180px 14px 12px; }
+            .container { padding: 60px 14px 12px; }
             .sticky-top { padding: 12px 14px 1px; }
             .month-picker { flex-direction: column; align-items: stretch; text-align: left; }
             .month-picker .total-hari { margin-left: 0; text-align: left; }
@@ -471,7 +471,7 @@
             }
         }
         @media (max-width: 480px) {
-            .container { padding: 180px 10px 8px; }
+            .container { padding: 60px 10px 8px; }
             .sticky-top { padding: 8px 10px 1px; }
             .app-header h1 { font-size: 18px; text-align: left; }
             .running-text { font-size: 14px; animation-duration: 20px; text-align: left; }
@@ -1627,7 +1627,7 @@
 
             function registerServiceWorker() {
                 if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('/Hanpangan/sw.js')
+                    navigator.serviceWorker.register('sw.js')
                         .then(() => console.log('✅ SW registered'))
                         .catch(() => console.log('ℹ️ SW not registered'));
                 }
