@@ -19,7 +19,7 @@
         /* --- HEADER --- */
         .app-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 12px; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
         .app-header h1 { font-size: clamp(20px, 4vw, 32px); font-weight: 900; letter-spacing: 2px; text-align: left; }
-        .header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: relative; top: 8px; }
         .btn-cetak { background: #000; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 6px; font-size: clamp(13px, 1vw, 16px); transition: 0.2s; }
         .btn-cetak:hover { background: #333; }
 
@@ -84,15 +84,17 @@
 
         /* --- MONTH PICKER --- */
         .month-picker { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; padding: 8px 0; background: transparent; text-align: left; }
-        .month-picker label { font-weight: 700; font-size: clamp(14px, 1.4vw, 18px); text-align: left; }
+        .header-actions .month-picker { margin-bottom: 0; padding: 0; }
+        .month-picker label { display: none; }
         .month-picker select { padding: 6px 12px; border: 1px solid #000; background: #fff; font-family: inherit; font-size: clamp(14px, 1.2vw, 17px); min-width: 150px; cursor: pointer; text-align: left; }
-        .month-picker .total-hari { margin-left: auto; font-weight: 700; font-size: clamp(14px, 1.2vw, 17px); background: #000; color: #fff; padding: 4px 16px; border-radius: 4px; text-align: left; }
+        .month-picker .total-hari { display: none; }
 
         /* --- TABEL --- */
         .preview-section { padding: 0; background: transparent; margin-top: 0; position: relative; }
-        .preview-section h3 { border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 10px; font-size: clamp(16px, 1.6vw, 22px); text-align: left; }
-        .table-wrapper { overflow: auto; max-height: 70vh; position: relative; border: 1px solid #000000; background: #ffffff; }
-        .excel-table { width: 100%; border-collapse: collapse; font-size: clamp(13px, 1.1vw, 16px); table-layout: fixed; border: none; }
+        .preview-section h3 { display: none; }
+        .table-wrapper { overflow: auto; max-height: 70vh; position: relative; border: 1px solid #ffffff; background: #ffffff; }
+        .excel-table { width: 100%; border-collapse: collapse; font-size: clamp(13px, 1.1vw, 16px); table-layout: fixed; border: 1px solid #ffffff; }
+        .excel-table th, .excel-table td { border-color: #ffffff !important; }
         
         /* ===== HEADER TABEL: HITAM PEKAT + FONT PUTIH TERANG & TEBAL ===== */
         .excel-table thead th { 
@@ -110,7 +112,7 @@
             z-index: 10;
             text-align: center !important;  /* CENTER */
             vertical-align: middle !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            box-shadow: inset 0 -2px 0 #ffffff, 0 2px 4px rgba(0,0,0,0.3);
         }
         .excel-table thead th:nth-child(1) { 
             z-index: 15; 
@@ -119,7 +121,7 @@
         }
 
         .excel-table th, .excel-table td { 
-            border: 1px solid #000000; 
+            border: 1px solid #000000 !important; 
             padding: 6px 8px; 
             vertical-align: top; 
             text-align: left; 
@@ -149,6 +151,8 @@
             border-right: 2px solid #000000 !important; 
             text-align: center !important;
         }
+        .excel-table thead th { border-color: #ffffff !important; }
+        .excel-table thead th:nth-child(1) { border-right-color: #ffffff !important; }
         .excel-table th:nth-child(2), .excel-table td:nth-child(2) { 
             width: 22%; min-width: 160px; max-width: 220px; 
             text-align: left; 
@@ -244,7 +248,7 @@
             border: 3px solid #000000;
             z-index: 99999;
             padding: 20px 16px;
-            overflow-y: auto;
+            overflow: hidden;
             flex-direction: column;
         }
         .custom-dropdown-menu.open {
@@ -268,23 +272,31 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 12px;
-            flex: 1;
+            flex: 0 1 auto;
+            min-height: 0;
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+            grid-auto-rows: max-content;
             align-content: start;
+            align-items: start;
         }
         .custom-dropdown-menu .option-item {
-            padding: 14px 18px;
+            height: fit-content !important;
+            min-height: 0;
+            align-self: start !important;
+            padding: 10px 14px;
             border: 2px solid #000;
             background: #ffffff;
             cursor: pointer;
             font-family: 'Segoe UI', Arial, sans-serif;
             font-size: clamp(16px, 1.4vw, 22px);
             font-weight: 700;
-            text-align: left;
+            line-height: 1.3;
+            text-align: center !important;
             transition: 0.15s;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 10px;
+            display: grid !important;
+            align-content: start;
+            justify-items: center;
             border-radius: 6px;
         }
         .custom-dropdown-menu .option-item:hover {
@@ -320,7 +332,7 @@
         .custom-dropdown-menu .menu-footer {
             border-top: 3px solid #000;
             padding-top: 14px;
-            margin-top: 16px;
+            margin-top: auto;
             display: flex;
             gap: 14px;
             flex-shrink: 0;
@@ -369,7 +381,7 @@
 
         .footer-text { text-align: center; font-size: clamp(10px, 0.8vw, 13px); color: #999; margin-top: 18px; border-top: 1px solid #ddd; padding-top: 14px; }
 
-        .worker-status { background: #f0f0f0; padding: 6px 12px; border-radius: 4px; font-size: clamp(11px, 0.9vw, 14px); display: flex; align-items: center; gap: 8px; }
+        .worker-status { display: none; }
         .worker-status .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
         .worker-status .dot.online { background: #00aa00; }
         .worker-status .dot.offline { background: #cc0000; }
@@ -416,7 +428,7 @@
             }
             .custom-dropdown-menu { padding: 14px 10px; }
             .custom-dropdown-menu .options-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px; }
-            .custom-dropdown-menu .option-item { padding: 10px 12px; font-size: 14px; text-align: left; }
+            .custom-dropdown-menu .option-item { padding: 10px 12px; font-size: 14px; text-align: center; }
             .custom-dropdown-menu .menu-footer button { padding: 10px 16px; font-size: 14px; text-align: center; }
             .toast { font-size: 13px; padding: 12px; min-width: 150px; bottom: 10px; text-align: center; }
             .supabase-indicator { width: 14px; height: 14px; top: 8px; right: 8px; }
@@ -434,14 +446,22 @@
 
     <div class="container">
 
+        <div class="running-container">
+            <div class="running-text" id="runningTextJadwal">🌾 Memuat jadwal hanpangan... 🌾</div>
+        </div>
+
         <div class="app-header">
-            <h1>📋 JADWAL PIKET</h1>
             <div class="header-actions">
                 <div class="header-status">
                     <div class="worker-status">
                         <span class="dot" id="workerDot"></span>
                         <span id="workerStatusText">Memeriksa...</span>
                     </div>
+                </div>
+                <div class="month-picker">
+                    <label for="bulanSelect">📅 Bulan:</label>
+                    <select id="bulanSelect"></select>
+                    <span class="total-hari" id="totalHari">Total: 31 hari</span>
                 </div>
                 <button id="btnKirim" class="btn-kirim">
                     <i class="fab fa-whatsapp"></i>
@@ -450,20 +470,7 @@
                 <button id="btnCetak" class="btn-cetak">
                     <i class="fas fa-print"></i> Cetak
                 </button>
-                <a href="https://radio.garden/?hl=id" target="_blank" class="btn-radio" id="btnRadio">
-                    <i class="fas fa-broadcast-tower"></i> RADIO
-                </a>
             </div>
-        </div>
-
-        <div class="running-container">
-            <div class="running-text" id="runningTextJadwal">🌾 Memuat jadwal hanpangan... 🌾</div>
-        </div>
-
-        <div class="month-picker">
-            <label for="bulanSelect">📅 Bulan:</label>
-            <select id="bulanSelect"></select>
-            <span class="total-hari" id="totalHari">Total: 31 hari</span>
         </div>
 
         <div class="preview-section">
@@ -947,14 +954,6 @@
 
                 const menu = document.createElement('div');
                 menu.className = 'custom-dropdown-menu';
-
-                const header = document.createElement('div');
-                header.className = 'menu-header';
-                const title = document.createElement('h2');
-                title.textContent = '📋 Pilih Nama';
-                title.style.textAlign = 'left';
-                header.appendChild(title);
-                menu.appendChild(header);
 
                 const optionsGrid = document.createElement('div');
                 optionsGrid.className = 'options-grid';
