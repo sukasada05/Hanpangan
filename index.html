@@ -14,7 +14,8 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { height: 100%; width: 100%; overflow-x: hidden; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f0f0; color: #000000; padding: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
-        .container { max-width: 100%; width: 100%; min-height: 100vh; background: #ffffff; padding: 16px 20px; border: none; box-shadow: none; }
+        .container { max-width: 100%; width: 100%; min-height: 100vh; background: #ffffff; padding: 180px 20px 16px; border: none; box-shadow: none; }
+        .sticky-top { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #ffffff; padding: 16px 20px 1px; }
 
         /* --- HEADER --- */
         .app-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 12px; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
@@ -92,7 +93,7 @@
         /* --- TABEL --- */
         .preview-section { padding: 0; background: transparent; margin-top: 0; position: relative; }
         .preview-section h3 { display: none; }
-        .table-wrapper { overflow: auto; max-height: 70vh; position: relative; border: 1px solid #ffffff; background: #ffffff; }
+        .table-wrapper { overflow: visible; max-height: none; position: relative; border: 1px solid #ffffff; background: #ffffff; }
         .excel-table { width: 100%; border-collapse: collapse; font-size: clamp(13px, 1.1vw, 16px); table-layout: fixed; border: 1px solid #ffffff; }
         .excel-table th, .excel-table td { border-color: #ffffff !important; }
         
@@ -194,9 +195,10 @@
         /* --- DROPDOWN --- */
         .custom-dropdown-wrapper {
             position: relative;
-            width: 100%;
+            width: calc(100% + 8px);
+            margin-left: -4px;
             cursor: pointer;
-            display: inline-block;
+            display: block;
         }
 
         .custom-dropdown-display {
@@ -237,12 +239,68 @@
             letter-spacing: 0.5px;
         }
 
+        .name-dropdown {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: #000;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: clamp(14px, 1.1vw, 18px);
+            font-weight: 700;
+            cursor: pointer;
+            color: transparent;
+        }
+        .name-dropdown option { color: #000; }
+        .custom-dropdown-wrapper .name-dropdown {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .selected-names {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 6px 8px;
+            border: 1px solid #aaa;
+            background: #fcfcfc;
+            min-height: 33px;
+            margin-bottom: 0;
+            color: #000;
+            font-weight: 700;
+            line-height: 1.4;
+            white-space: pre-line;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .selected-names.has-value {
+            align-items: flex-start;
+            justify-content: flex-start;
+            text-align: left;
+        }
+        .excel-table td[data-jenis] {
+            position: relative;
+            padding: 0 !important;
+        }
+        .excel-table td[data-jenis] .custom-dropdown-wrapper {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
         .custom-dropdown-menu {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
+            min-height: 33px;
             bottom: 0;
             background: #ffffff;
             border: 3px solid #000000;
@@ -391,7 +449,8 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         @media (max-width: 768px) {
-            .container { padding: 12px 14px; }
+            .container { padding: 180px 14px 12px; }
+            .sticky-top { padding: 12px 14px 1px; }
             .month-picker { flex-direction: column; align-items: stretch; text-align: left; }
             .month-picker .total-hari { margin-left: 0; text-align: left; }
             .excel-table th, .excel-table td { padding: 4px 6px; font-size: 12px; text-align: left; vertical-align: top; }
@@ -412,7 +471,8 @@
             }
         }
         @media (max-width: 480px) {
-            .container { padding: 8px 10px; }
+            .container { padding: 180px 10px 8px; }
+            .sticky-top { padding: 8px 10px 1px; }
             .app-header h1 { font-size: 18px; text-align: left; }
             .running-text { font-size: 14px; animation-duration: 20px; text-align: left; }
             .month-picker select { padding: 6px 10px; font-size: 13px; min-width: 120px; text-align: left; }
@@ -429,6 +489,21 @@
             .custom-dropdown-menu { padding: 14px 10px; }
             .custom-dropdown-menu .options-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px; }
             .custom-dropdown-menu .option-item { padding: 10px 12px; font-size: 14px; text-align: center; }
+            .custom-dropdown-wrapper .name-dropdown:focus {
+                position: fixed;
+                top: 8px;
+                left: 8px;
+                width: calc(100vw - 16px);
+                height: calc(100vh - 16px);
+                padding: 12px;
+                opacity: 1;
+                color: #000;
+                background: #fff;
+                border: 2px solid #000;
+                z-index: 100000;
+                font-size: 18px;
+                line-height: 1.6;
+            }
             .custom-dropdown-menu .menu-footer button { padding: 10px 16px; font-size: 14px; text-align: center; }
             .toast { font-size: 13px; padding: 12px; min-width: 150px; bottom: 10px; text-align: center; }
             .supabase-indicator { width: 14px; height: 14px; top: 8px; right: 8px; }
@@ -446,11 +521,12 @@
 
     <div class="container">
 
-        <div class="running-container">
-            <div class="running-text" id="runningTextJadwal">🌾 Memuat jadwal hanpangan... 🌾</div>
-        </div>
+        <div class="sticky-top">
+            <div class="running-container">
+                <div class="running-text" id="runningTextJadwal">🌾 Memuat jadwal hanpangan... 🌾</div>
+            </div>
 
-        <div class="app-header">
+            <div class="app-header">
             <div class="header-actions">
                 <div class="header-status">
                     <div class="worker-status">
@@ -470,6 +546,7 @@
                 <button id="btnCetak" class="btn-cetak">
                     <i class="fas fa-print"></i> Cetak
                 </button>
+            </div>
             </div>
         </div>
 
@@ -493,7 +570,7 @@
             // ============================================================
             const WORKER_URL = 'https://jadwalpkt.dukopbabinsa05.workers.dev';
             const START_DATE = new Date(2026, 6, 25);
-            const START_INDEX = 0;
+            const START_INDEX = 1;
 
             const HANPANGAN_URL = "https://raw.githubusercontent.com/sukasada05/dukops4/main/data/hanpangan.csv";
             const PIKET_URL = "https://raw.githubusercontent.com/sukasada05/dukops4/main/data/piket.txt";
@@ -779,7 +856,9 @@
                 if (display) {
                     const placeholder = document.createElement('span');
                     placeholder.className = 'placeholder';
-                    placeholder.textContent = '— Pilih —';
+                    const jenis = display.dataset.jenis || '';
+                    const columnName = jenis.replace('_hari_ini', '') || 'Nama';
+                    placeholder.textContent = `--${columnName.toUpperCase()}--`;
                     placeholder.style.textAlign = 'left';
                     display.innerHTML = '';
                     display.appendChild(placeholder);
@@ -891,11 +970,6 @@
 
                     if (targetCell) {
                         showSaveIndicator(targetCell, 'saved');
-                        if (nama && nama.trim() !== '') {
-                            setTimeout(() => {
-                                resetDropdownAfterSave(targetCell);
-                            }, 1000);
-                        }
                     }
 
                     if (nama && nama.trim() !== '') {
@@ -916,8 +990,6 @@
                         } catch (e) {}
                     }
 
-                    setTimeout(() => loadAllJadwal(), 500);
-
                     return true;
                 } catch (e) {
                     console.error('❌ Gagal simpan:', e);
@@ -937,158 +1009,67 @@
             function createCustomDropdown(tanggal, jenis, currentValue) {
                 const wrapper = document.createElement('span');
                 wrapper.className = 'custom-dropdown-wrapper';
-                wrapper.style.display = 'inline-block';
                 wrapper.style.width = '100%';
-                wrapper.style.position = 'relative';
+                const select = document.createElement('select');
+                select.className = 'name-dropdown';
+                select.multiple = true;
+                select.size = 1;
+                select.dataset.tanggal = tanggal;
+                select.dataset.jenis = jenis;
 
-                const display = document.createElement('span');
-                display.className = 'custom-dropdown-display';
-                display.dataset.tanggal = tanggal;
-                display.dataset.jenis = jenis;
-                display.style.display = 'inline-block';
-                display.style.width = '100%';
-                display.style.whiteSpace = 'pre-line';
-                display.style.lineHeight = '1.6';
-                display.style.textAlign = 'left';
-                display.style.verticalAlign = 'top';
+                const selectedDisplay = document.createElement('span');
+                selectedDisplay.className = 'selected-names';
 
-                const menu = document.createElement('div');
-                menu.className = 'custom-dropdown-menu';
+                const columnNames = {
+                    koramil_hari_ini: 'Koramil',
+                    kediaman_hari_ini: 'Kediaman',
+                    makodim_hari_ini: 'Makodim'
+                };
+                    const placeholderText = `--${(columnNames[jenis] || 'Nama').toUpperCase()}--`;
 
-                const optionsGrid = document.createElement('div');
-                optionsGrid.className = 'options-grid';
-                menu.appendChild(optionsGrid);
+                const placeholder = document.createElement('option');
+                placeholder.value = '';
+                placeholder.textContent = placeholderText;
+                placeholder.disabled = true;
+                select.appendChild(placeholder);
 
-                const footer = document.createElement('div');
-                footer.className = 'menu-footer';
-                const confirmBtn = document.createElement('button');
-                confirmBtn.className = 'btn-confirm';
-                confirmBtn.textContent = '✅ OK';
-                footer.appendChild(confirmBtn);
-                menu.appendChild(footer);
+                const savedNames = currentValue ? currentValue.split(',').map(nama => nama.trim()).filter(Boolean) : [];
+                const names = [...new Set([...savedNames, ...daftarNama])];
+                const formatSelectedNames = selected => selected.length > 0
+                    ? selected.map((nama, index) => `${index + 1}. ${nama}`).join('\n')
+                    : placeholderText;
+                const updateSelectedDisplay = selected => {
+                    selectedDisplay.textContent = formatSelectedNames(selected);
+                    selectedDisplay.classList.toggle('has-value', selected.length > 0);
+                };
+                updateSelectedDisplay(savedNames);
 
-                wrapper.appendChild(display);
-                wrapper.appendChild(menu);
-
-                let selectedNames = [];
-                if (currentValue && currentValue !== '') {
-                    selectedNames = currentValue.split(', ').filter(n => n.trim());
-                }
-
-                function resetDropdown() {
-                    selectedNames.length = 0;
-                    const placeholder = document.createElement('span');
-                    placeholder.className = 'placeholder';
-                    placeholder.textContent = '— Pilih —';
-                    placeholder.style.textAlign = 'left';
-                    display.innerHTML = '';
-                    display.appendChild(placeholder);
-                    renderOptions();
-                }
-                wrapper._resetDropdown = resetDropdown;
-
-                let isOpen = false;
-
-                function formatDisplay() {
-                    if (selectedNames.length === 0) return '— Pilih —';
-                    return selectedNames.map((name, i) => (i + 1) + '. ' + name).join('\n');
-                }
-
-                function renderOptions() {
-                    let html = '';
-                    if (daftarNama.length === 0) {
-                        html = '<div class="no-result">⚠️ Nama tidak ditemukan.</div>';
-                    } else {
-                        daftarNama.forEach(n => {
-                            const isSelected = selectedNames.includes(n);
-                            let num = '';
-                            if (isSelected) {
-                                num = (selectedNames.indexOf(n) + 1);
-                            }
-                            html += `
-                                <div class="option-item ${isSelected ? 'selected' : ''}" data-name="${n}">
-                                    <span class="num-icon">${num}</span>
-                                    ${n}
-                                </div>
-                            `;
-                        });
-                    }
-                    optionsGrid.innerHTML = html;
-
-                    optionsGrid.querySelectorAll('.option-item').forEach(el => {
-                        el.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const name = this.dataset.name;
-                            const idx = selectedNames.indexOf(name);
-                            if (idx > -1) {
-                                selectedNames.splice(idx, 1);
-                                this.classList.remove('selected');
-                                const numIcon = this.querySelector('.num-icon');
-                                if (numIcon) numIcon.textContent = '';
-                            } else {
-                                selectedNames.push(name);
-                                this.classList.add('selected');
-                                const numIcon = this.querySelector('.num-icon');
-                                if (numIcon) numIcon.textContent = (selectedNames.indexOf(name) + 1);
-                            }
-                            updateDisplay();
-                            renderOptions();
-                        });
-                    });
-                }
-
-                function updateDisplay() {
-                    display.innerHTML = '';
-                    if (selectedNames.length === 0) {
-                        const ph = document.createElement('span');
-                        ph.className = 'placeholder';
-                        ph.textContent = '— Pilih —';
-                        ph.style.textAlign = 'left';
-                        display.appendChild(ph);
-                    } else {
-                        const formatted = document.createTextNode(formatDisplay());
-                        display.appendChild(formatted);
-                    }
-                }
-
-                function openMenu() {
-                    if (daftarNama.length === 0) {
-                        showToast('⚠️ Daftar nama belum dimuat.', 'error');
-                        return;
-                    }
-                    menu.classList.add('open');
-                    isOpen = true;
-                    renderOptions();
-                }
-
-                function closeMenu() {
-                    menu.classList.remove('open');
-                    isOpen = false;
-                }
-
-                display.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    if (isOpen) {
-                        closeMenu();
-                    } else {
-                        openMenu();
-                    }
+                names.forEach(nama => {
+                    const option = document.createElement('option');
+                    option.value = nama;
+                    option.textContent = nama;
+                    option.selected = savedNames.includes(nama);
+                    select.appendChild(option);
                 });
 
-                confirmBtn.addEventListener('click', function() {
-                    closeMenu();
-                    const finalValue = selectedNames.join(', ');
-                    saveJadwal(tanggal, jenis, finalValue);
+                let saveTimer;
+                select.addEventListener('change', function() {
+                    clearTimeout(saveTimer);
+                    saveTimer = setTimeout(() => {
+                        const selectedNames = Array.from(select.selectedOptions)
+                            .map(option => option.value)
+                            .filter(Boolean);
+                        updateSelectedDisplay(selectedNames);
+                        saveJadwal(tanggal, jenis, selectedNames.join(', '));
+                    }, 300);
                 });
 
-                document.addEventListener('click', function(e) {
-                    if (!wrapper.contains(e.target) && !menu.contains(e.target)) {
-                        closeMenu();
-                    }
-                });
-
-                renderOptions();
-                updateDisplay();
+                wrapper._resetDropdown = () => {
+                    Array.from(select.options).forEach(option => { option.selected = false; });
+                    updateSelectedDisplay([]);
+                };
+                wrapper.appendChild(selectedDisplay);
+                wrapper.appendChild(select);
 
                 return wrapper;
             }
@@ -1212,6 +1193,14 @@
                         cell.style.textAlign = 'left';
                         cell.style.verticalAlign = 'top';
                         cell.appendChild(dropdown);
+                        cell.addEventListener('click', function(event) {
+                            if (event.target.closest('.name-dropdown')) return;
+                            const nameSelect = cell.querySelector('.name-dropdown');
+                            if (nameSelect) {
+                                nameSelect.focus();
+                                nameSelect.click();
+                            }
+                        });
                     });
                 });
             }
