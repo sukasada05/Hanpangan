@@ -12,17 +12,18 @@
     <style>
         /* --- GAYA UMUM --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root { --sticky-top-height: 145px; }
         html, body { height: 100%; width: 100%; overflow-x: hidden; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f0f0; color: #000000; padding: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
-        .container { max-width: 100%; width: 100%; min-height: 100vh; background: #ffffff; padding: 25px 20px 16px; border: none; box-shadow: none; }
-        .sticky-top { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #ffffff; padding: 16px 20px 1px; }
+        .container { max-width: 100%; width: 100%; min-height: 100vh; background: #ffffff; padding: 0 10px 16px; border: none; box-shadow: none; }
+        .sticky-top { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #064e3b; padding: 12px 10px 1px; }
 
         /* --- HEADER --- */
         .app-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 12px; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
         .app-header h1 { font-size: clamp(20px, 4vw, 32px); font-weight: 900; letter-spacing: 2px; text-align: left; }
         .header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: relative; top: 8px; }
-        .btn-cetak { background: #000; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 6px; font-size: clamp(13px, 1vw, 16px); transition: 0.2s; }
-        .btn-cetak:hover { background: #333; }
+        .btn-cetak { background: #000000; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 6px; font-size: clamp(13px, 1vw, 16px); transition: 0.2s; }
+        .btn-cetak:hover { background: #000000; }
 
         .btn-radio {
             background: #e63946;
@@ -64,7 +65,7 @@
             text-shadow: 0 0 4px rgba(255,255,255,0.3);
         }
         .btn-kirim:hover {
-            background: #222222;
+            background: #000000;
             transform: scale(1.02);
         }
         .btn-kirim:disabled {
@@ -78,8 +79,8 @@
         }
 
         /* --- RUNNING TEXT --- */
-        .running-container { background: #0a0a0a; padding: 10px 16px; margin: 0 0 16px 0; overflow: hidden; white-space: nowrap; border-radius: 0; }
-        .running-text { display: inline-block; white-space: nowrap; animation: marquee 30s linear infinite; color: #ffd700; font-weight: 700; font-size: clamp(16px, 2.2vw, 24px); padding-left: 100%; letter-spacing: 1px; text-shadow: 0 0 10px #ff8c00, 0 0 20px #ff6600; text-align: left; }
+        .running-container { background: #064e3b; padding: 10px 16px; margin: 0 0 16px 0; overflow: hidden; white-space: nowrap; border-radius: 0; }
+        .running-text { display: inline-block; white-space: nowrap; animation: marquee 30s linear infinite; color: #ffd700; font-weight: 700; font-size: clamp(16px, 2.2vw, 24px); padding-left: 100%; letter-spacing: 1px; text-align: left; }
         .running-container:hover .running-text { animation-play-state: paused; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-200%); } }
 
@@ -87,11 +88,12 @@
         .month-picker { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; padding: 8px 0; background: transparent; text-align: left; }
         .header-actions .month-picker { margin-bottom: 0; padding: 0; }
         .month-picker label { display: none; }
-        .month-picker select { padding: 6px 12px; border: 1px solid #000; background: #fff; font-family: inherit; font-size: clamp(14px, 1.2vw, 17px); min-width: 150px; cursor: pointer; text-align: left; }
+        .month-picker select { padding: 6px 12px; border: 1px solid #000000; background: #000000; color: #fff; font-family: inherit; font-size: clamp(14px, 1.2vw, 17px); min-width: 150px; cursor: pointer; text-align: left; }
+        .month-picker select option { background: #000000; color: #ffffff; }
         .month-picker .total-hari { display: none; }
 
         /* --- TABEL --- */
-        .preview-section { padding: 105px 0 0; background: transparent; margin-top: 0; position: relative; }
+        .preview-section { padding: calc(var(--sticky-top-height) + 2px) 0 0; background: transparent; margin-top: 0; position: relative; }
         .preview-section h3 { display: none; }
         .table-wrapper { overflow: visible; max-height: none; position: relative; border: 1px solid #ffffff; background: #ffffff; }
         .excel-table { width: 100%; border-collapse: collapse; font-size: clamp(13px, 1.1vw, 16px); table-layout: fixed; border: 1px solid #ffffff; }
@@ -109,7 +111,7 @@
             padding: 10px 8px !important;
             white-space: nowrap;
             position: sticky;
-            top: 0;
+            top: var(--sticky-top-height);
             z-index: 10;
             text-align: center !important;  /* CENTER */
             vertical-align: middle !important;
@@ -180,7 +182,7 @@
             font-size: clamp(15px, 1.3vw, 20px) !important;
             text-shadow: 0 0 2px rgba(0,0,0,0.15);
             letter-spacing: 0.3px;
-            line-height: 1.7;
+            line-height: 1.2;
             background-color: #ffffff !important;
         }
         .row-weekend td:nth-child(2) {
@@ -209,7 +211,7 @@
             font-weight: 700;
             color: #000;
             cursor: pointer;
-            min-height: 28px;
+            min-height: 33px;
             display: inline-block;
             border: 1px solid #aaa;
             outline: none;
@@ -265,14 +267,14 @@
             width: 100%;
             height: 100%;
             box-sizing: border-box;
-            padding: 6px 8px;
+            padding: 3px 6px;
             border: 1px solid #aaa;
             background: #fcfcfc;
-            min-height: 33px;
+            min-height: 28px;
             margin-bottom: 0;
             color: #000;
             font-weight: 700;
-            line-height: 1.4;
+            line-height: 1.2;
             white-space: pre-line;
             cursor: pointer;
             align-items: center;
@@ -426,10 +428,19 @@
         .toast.info { background: #000; }
 
         /* --- INDIKATOR --- */
-        .supabase-indicator { position: fixed; top: 14px; right: 14px; width: 18px; height: 18px; z-index: 99999; border: 1px solid #000; border-radius: 50%; background: #ffaa00; box-shadow: 0 0 16px rgba(0,0,0,0.2); animation: blink 1s infinite; }
-        .supabase-indicator.online { background: #00aa00; animation: none; }
-        .supabase-indicator.offline { background: #cc0000; animation: none; }
-        .supabase-indicator.checking { background: #ffaa00; animation: blink 0.5s infinite; }
+        .supabase-indicator { position: fixed; top: 12px; right: 14px; width: 25px; height: 22px; z-index: 99999; display: flex; align-items: flex-end; justify-content: space-between; gap: 2px; padding: 2px; }
+        .supabase-indicator span { display: block; flex: 1; height: var(--bar-height); border-radius: 2px 2px 0 0; background: #ffaa00; }
+        .supabase-indicator span:nth-child(1) { --bar-height: 5px; }
+        .supabase-indicator span:nth-child(2) { --bar-height: 9px; }
+        .supabase-indicator span:nth-child(3) { --bar-height: 13px; }
+        .supabase-indicator span:nth-child(4) { --bar-height: 17px; }
+        .supabase-indicator.online span { background: #00aa00; }
+        .supabase-indicator.offline span { height: 4px; background: #cc0000; }
+        .supabase-indicator.checking span { animation: signal-rise 0.8s ease-in-out infinite alternate; }
+        .supabase-indicator.checking span:nth-child(2) { animation-delay: 0.15s; }
+        .supabase-indicator.checking span:nth-child(3) { animation-delay: 0.3s; }
+        .supabase-indicator.checking span:nth-child(4) { animation-delay: 0.45s; }
+        @keyframes signal-rise { from { height: 4px; opacity: 0.45; } to { height: var(--bar-height); opacity: 1; } }
         @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         .save-indicator { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-left: 8px; transition: all 0.3s; }
@@ -449,7 +460,7 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         @media (max-width: 768px) {
-            .container { padding: 60px 14px 12px; }
+            .container { padding: 0 14px 12px; }
             .sticky-top { padding: 12px 14px 1px; }
             .month-picker { flex-direction: column; align-items: stretch; text-align: left; }
             .month-picker .total-hari { margin-left: 0; text-align: left; }
@@ -471,7 +482,7 @@
             }
         }
         @media (max-width: 480px) {
-            .container { padding: 60px 10px 8px; }
+            .container { padding: 0 10px 8px; }
             .sticky-top { padding: 8px 10px 1px; }
             .app-header h1 { font-size: 18px; text-align: left; }
             .running-text { font-size: 14px; animation-duration: 20px; text-align: left; }
@@ -479,7 +490,7 @@
             .excel-table th, .excel-table td { padding: 3px 4px; font-size: 10px; text-align: left; vertical-align: top; }
             .excel-table td:nth-child(2) {
                 font-size: clamp(13px, 1.8vw, 16px) !important;
-                line-height: 1.5;
+                line-height: 1.2;
             }
             .preview-section h3 { font-size: 15px; text-align: left; }
             .custom-dropdown-display { font-size: 13px; min-height: 20px; line-height: 1.4; padding: 3px 5px; }
@@ -506,7 +517,7 @@
             }
             .custom-dropdown-menu .menu-footer button { padding: 10px 16px; font-size: 14px; text-align: center; }
             .toast { font-size: 13px; padding: 12px; min-width: 150px; bottom: 10px; text-align: center; }
-            .supabase-indicator { width: 14px; height: 14px; top: 8px; right: 8px; }
+            .supabase-indicator { width: 22px; height: 20px; top: 6px; right: 8px; }
             .excel-table thead th { 
                 font-size: clamp(11px, 1.5vw, 13px) !important;
                 padding: 6px 3px !important;
@@ -517,7 +528,9 @@
 </head>
 <body>
 
-    <div id="supabaseIndicator" class="supabase-indicator checking"></div>
+    <div id="supabaseIndicator" class="supabase-indicator checking" role="img" aria-label="Memeriksa koneksi Supabase">
+        <span></span><span></span><span></span><span></span>
+    </div>
 
     <div class="container">
 
@@ -597,6 +610,17 @@
             const workerDot = document.getElementById('workerDot');
             const workerStatusText = document.getElementById('workerStatusText');
             const btnKirim = document.getElementById('btnKirim');
+            const stickyTop = document.querySelector('.sticky-top');
+
+            function updateStickyTopHeight() {
+                document.documentElement.style.setProperty('--sticky-top-height', stickyTop.offsetHeight + 'px');
+            }
+
+            updateStickyTopHeight();
+            window.addEventListener('resize', updateStickyTopHeight);
+            if ('ResizeObserver' in window) {
+                new ResizeObserver(updateStickyTopHeight).observe(stickyTop);
+            }
 
             const NAMA_HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
             const NAMA_BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September",
@@ -654,10 +678,13 @@
                 indicator.className = 'supabase-indicator';
                 if (status === 'online') {
                     indicator.classList.add('online');
+                    indicator.setAttribute('aria-label', 'Supabase terhubung');
                 } else if (status === 'offline') {
                     indicator.classList.add('offline');
+                    indicator.setAttribute('aria-label', 'Supabase tidak terhubung');
                 } else {
                     indicator.classList.add('checking');
+                    indicator.setAttribute('aria-label', 'Memeriksa koneksi Supabase');
                 }
             }
 
@@ -814,6 +841,7 @@
                         .order('tanggal_jadwal', { ascending: true });
                     if (error) throw error;
                     allJadwal = data || [];
+                    populateBulan();
                     renderPreview(allJadwal);
                     if (isInitialLoad) {
                         isInitialLoad = false;
@@ -1082,40 +1110,10 @@
                 updateTitle();
                 updateTotalHari();
 
-                const filtered = data.filter(item => {
-                    const parts = item.tanggal_jadwal.split('-');
-                    const itemBulan = parseInt(parts[1]) - 1;
-                    const itemTahun = parseInt(parts[0]);
-                    return itemBulan === bulan && itemTahun === tahun;
-                });
-
-                const daysInMonth = new Date(tahun, bulan + 1, 0).getDate();
-                const allDates = [];
-                for (let d = 1; d <= daysInMonth; d++) {
-                    const key = tahun + '-' + String(bulan + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
-                    allDates.push(key);
-                }
-
                 const today = new Date();
-                const isCurrentMonth = (tahun === today.getFullYear() && bulan === today.getMonth());
-
-                let sortedDates = [];
-                if (isCurrentMonth) {
-                    const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(
-                        today.getDate()).padStart(2, '0');
-                    const fromToday = [];
-                    const beforeToday = [];
-                    allDates.forEach(dateKey => {
-                        if (dateKey >= todayStr) {
-                            fromToday.push(dateKey);
-                        } else {
-                            beforeToday.push(dateKey);
-                        }
-                    });
-                    sortedDates = fromToday.concat(beforeToday);
-                } else {
-                    sortedDates = allDates.slice();
-                }
+                const sortedDates = getDisplayDates(bulan, tahun);
+                const displayDateKeys = new Set(sortedDates);
+                const filtered = data.filter(item => displayDateKeys.has(item.tanggal_jadwal));
 
                 const grouped = {};
                 filtered.forEach(item => {
@@ -1212,9 +1210,20 @@
                 const now = new Date();
                 const currentMonth = now.getMonth();
                 const currentYear = now.getFullYear();
+                const selectedMonth = bulanSelect.value;
 
                 const allMonths = [];
-                for (let year = currentYear - 2; year <= currentYear + 2; year++) {
+                const firstScheduleDate = allJadwal.reduce((earliest, item) => {
+                    return !earliest || item.tanggal_jadwal < earliest
+                        ? item.tanggal_jadwal
+                        : earliest;
+                }, '');
+                const earliestScheduleYear = firstScheduleDate
+                    ? parseInt(firstScheduleDate.split('-')[0], 10)
+                    : currentYear - 2;
+                const firstYear = Math.min(currentYear - 2, earliestScheduleYear);
+
+                for (let year = firstYear; year <= currentYear + 2; year++) {
                     for (let m = 0; m < 12; m++) {
                         allMonths.push({
                             value: year + '-' + String(m + 1).padStart(2, '0'),
@@ -1225,10 +1234,8 @@
                     }
                 }
 
-                const filtered = allMonths.filter(m => m.year >= 2026);
-
                 bulanSelect.innerHTML = '';
-                filtered.forEach(m => {
+                allMonths.forEach(m => {
                     const opt = document.createElement('option');
                     opt.value = m.value;
                     opt.textContent = m.label;
@@ -1236,10 +1243,12 @@
                 });
 
                 const currentKey = currentYear + '-' + String(currentMonth + 1).padStart(2, '0');
-                if (filtered.some(m => m.value === currentKey)) {
+                if (allMonths.some(m => m.value === selectedMonth)) {
+                    bulanSelect.value = selectedMonth;
+                } else if (allMonths.some(m => m.value === currentKey)) {
                     bulanSelect.value = currentKey;
                 } else {
-                    bulanSelect.value = '2026-01';
+                    bulanSelect.value = allMonths[0].value;
                 }
 
                 updateTotalHari();
@@ -1249,6 +1258,34 @@
                 const val = bulanSelect.value;
                 const parts = val.split('-');
                 return { bulan: parseInt(parts[1]) - 1, tahun: parseInt(parts[0]) };
+            }
+
+            function getDisplayDates(bulan, tahun) {
+                const today = new Date();
+                const isCurrentMonth = tahun === today.getFullYear() && bulan === today.getMonth();
+                const allDates = [];
+                const monthsToShow = isCurrentMonth ? 2 : 1;
+
+                for (let monthOffset = 0; monthOffset < monthsToShow; monthOffset++) {
+                    const date = new Date(tahun, bulan + monthOffset, 1);
+                    const year = date.getFullYear();
+                    const month = date.getMonth();
+                    const firstDay = monthOffset === 0 && isCurrentMonth ? today.getDate() : 1;
+                    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                    for (let day = firstDay; day <= daysInMonth; day++) {
+                        allDates.push(year + '-' + String(month + 1).padStart(2, '0') + '-' +
+                            String(day).padStart(2, '0'));
+                    }
+                }
+
+                if (!isCurrentMonth) {
+                    const nextMonthFirstDate = new Date(tahun, bulan + 1, 1);
+                    allDates.push(nextMonthFirstDate.getFullYear() + '-' +
+                        String(nextMonthFirstDate.getMonth() + 1).padStart(2, '0') + '-01');
+                }
+
+                return allDates;
             }
 
             function updateTitle() {
@@ -1377,20 +1414,9 @@
             // ============================================================
             function cetakJadwal() {
                 const { bulan, tahun } = getBulanTahun();
-                const daysInMonth = new Date(tahun, bulan + 1, 0).getDate();
-
-                const allDates = [];
-                for (let d = 1; d <= daysInMonth; d++) {
-                    const key = tahun + '-' + String(bulan + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
-                    allDates.push(key);
-                }
-
-                const filtered = allJadwal.filter(item => {
-                    const parts = item.tanggal_jadwal.split('-');
-                    const itemBulan = parseInt(parts[1]) - 1;
-                    const itemTahun = parseInt(parts[0]);
-                    return itemBulan === bulan && itemTahun === tahun;
-                });
+                const allDates = getDisplayDates(bulan, tahun);
+                const displayDateKeys = new Set(allDates);
+                const filtered = allJadwal.filter(item => displayDateKeys.has(item.tanggal_jadwal));
 
                 const grouped = {};
                 filtered.forEach(item => {
@@ -1421,10 +1447,7 @@
                     <style>
                         @page {
                             size: A4;
-                            margin-top: 1cm;
-                            margin-bottom: 1cm;
-                            margin-left: 1.5cm;
-                            margin-right: 1cm;
+                            margin: 1.5cm;
                         }
                         body {
                             font-family: Arial, sans-serif;
@@ -1432,28 +1455,28 @@
                             padding: 0;
                             color: #000;
                             background: #fff;
-                            font-size: 11pt;
-                            line-height: 1.5;
+                            font-size: 9pt;
+                            line-height: 1.25;
                         }
                         .kop {
                             text-align: left;
-                            margin-bottom: 12px;
-                            font-size: 11pt;
+                            margin-bottom: 8px;
+                            font-size: 10pt;
                             font-weight: bold;
                         }
                         .kop .kodim {
                             font-weight: bold;
-                            font-size: 11pt;
+                            font-size: 10pt;
                             text-transform: uppercase;
                         }
                         .kop .koramil {
                             font-weight: bold;
-                            font-size: 11pt;
+                            font-size: 10pt;
                             text-transform: uppercase;
                         }
                         .kop hr {
                             width: 220px;
-                            margin: 4px 0;
+                            margin: 3px 0;
                             border: 1px solid #000;
                         }
                         .judul {
@@ -1461,21 +1484,22 @@
                             font-weight: bold;
                             font-size: 11pt;
                             text-transform: uppercase;
-                            margin: 14px 0 10px 0;
+                            margin: 10px 0 8px;
                         }
                         table {
                             width: 100%;
                             border-collapse: collapse;
                             font-family: Arial, sans-serif;
-                            font-size: 11pt;
+                            font-size: 9pt;
                             border: 1px solid #000;
+                            table-layout: fixed;
                         }
                         th, td {
                             border: 1px solid #000;
-                            padding: 2px 4px;
+                            padding: 3px 4px;
                             text-align: left;
                             vertical-align: top;
-                            word-wrap: break-word;
+                            word-break: normal;
                             overflow-wrap: break-word;
                             white-space: pre-line;
                         }
@@ -1483,22 +1507,46 @@
                             background: #000000;
                             color: #ffffff;
                             font-weight: 900;
-                            font-size: 12pt;
+                            font-size: 9pt;
                             text-align: center !important;
+                            print-color-adjust: exact;
+                            -webkit-print-color-adjust: exact;
                         }
                         .no-col { width: 6%; text-align: center; }
-                        .tgl-col { width: 18%; font-weight: 900; color: #000; }
-                        .nama-col { width: 28%; }
-                        .nama-col-kediaman { width: 24%; }
-                        .nama-col-makodim { width: 24%; }
-                        .row-weekend td { background: #ffe6e6; }
-                        .row-today td { background: #ffff99; }
-                        @media print {
-                            .no-col, .tgl-col, .nama-col, .nama-col-kediaman, .nama-col-makodim {
-                                text-align: left;
-                                vertical-align: top;
+                        .tgl-col { width: 17%; font-weight: 900; color: #000; }
+                        .nama-col { width: 27%; }
+                        .nama-col-kediaman { width: 25%; }
+                        .nama-col-makodim { width: 25%; }
+                        .row-weekend td { background: #ffe6e6; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+                        .row-today td { background: #ffff99; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+                        @media screen {
+                            html { background: #e5e7eb; }
+                            body {
+                                width: 210mm;
+                                max-width: calc(100vw - 32px);
+                                min-height: 297mm;
+                                margin: 16px auto;
+                                padding: 15mm;
+                                box-sizing: border-box;
+                                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
                             }
-                            .no-col { text-align: center; }
+                        }
+                        @media print {
+                            body {
+                                width: auto;
+                                max-width: none;
+                                min-height: 0;
+                                margin: 0;
+                                padding: 0;
+                                box-shadow: none;
+                            }
+                            thead { display: table-header-group; }
+                            tr { break-inside: avoid; page-break-inside: avoid; }
+                            .no-col {
+                                text-align: center;
+                                vertical-align: middle;
+                            }
+                            .tgl-col { text-align: center; }
                         }
                     </style>
                 </head>
@@ -1508,7 +1556,7 @@
                         <div class="koramil">KORAMIL 1609-05/SUKASADA</div>
                         <hr>
                     </div>
-                    <div class="judul">DAFTAR JADWAL PIKET KORAMIL 1609-05/SUKASADA</div>
+                    <div class="judul">DAFTAR JADWAL PIKET KORAMIL 1609-05/SUKASADA<br>${NAMA_BULAN[bulan].toUpperCase()} ${tahun}</div>
                     <table>
                         <thead>
                             <tr>
