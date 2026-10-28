@@ -16,12 +16,17 @@
         html, body { height: 100%; width: 100%; overflow-x: hidden; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f0f0; color: #000000; padding: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
         .container { max-width: 100%; width: 100%; min-height: 100vh; background: #ffffff; padding: 0 10px 16px; border: none; box-shadow: none; }
-        .sticky-top { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #064e3b; padding: 12px 10px 1px; }
+        .sticky-top { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #ffffff; padding: 12px 10px 1px; }
 
         /* --- HEADER --- */
         .app-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 12px; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
         .app-header h1 { font-size: clamp(20px, 4vw, 32px); font-weight: 900; letter-spacing: 2px; text-align: left; }
-        .header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: relative; top: 8px; }
+        .header-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 8px 12px; position: relative; top: 8px; width: 100%; }
+        .header-actions .header-status { display: none; }
+        .header-actions .month-picker { grid-column: 1; grid-row: 1; display: block; min-width: 0; }
+        .header-actions .month-picker select { width: 100%; min-width: 0; }
+        #btnCetak { grid-column: 2; grid-row: 1; width: 100%; justify-content: center; }
+        #btnKirim { grid-column: 1 / -1; grid-row: 2; width: 100%; justify-content: center; }
         .btn-cetak { background: #000000; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 6px; font-size: clamp(13px, 1vw, 16px); transition: 0.2s; }
         .btn-cetak:hover { background: #000000; }
 
@@ -99,15 +104,15 @@
         .excel-table { width: 100%; border-collapse: collapse; font-size: clamp(13px, 1.1vw, 16px); table-layout: fixed; border: 1px solid #ffffff; }
         .excel-table th, .excel-table td { border-color: #ffffff !important; }
         
-        /* ===== HEADER TABEL: HITAM PEKAT + FONT PUTIH TERANG & TEBAL ===== */
+        /* ===== HEADER TABEL: HIJAU TUA + FONT PUTIH TERANG & TEBAL ===== */
         .excel-table thead th { 
-            background: #000000 !important; 
+            background: #064e3b !important; 
             color: #ffffff !important;
             font-weight: 900 !important;
             font-size: clamp(14px, 1.2vw, 18px) !important;
             text-shadow: 0 0 8px rgba(255,255,255,0.15);
             letter-spacing: 1px;
-            border: 1px solid #000000 !important;
+            border: 1px solid #064e3b !important;
             padding: 10px 8px !important;
             white-space: nowrap;
             position: sticky;
@@ -119,7 +124,7 @@
         }
         .excel-table thead th:nth-child(1) { 
             z-index: 15; 
-            border-right: 2px solid #000000 !important; 
+            border-right: 2px solid #064e3b !important; 
             text-align: center !important;
         }
 
@@ -150,8 +155,8 @@
         }
         .excel-table thead th:nth-child(1) { 
             z-index: 15; 
-            background: #000000 !important; 
-            border-right: 2px solid #000000 !important; 
+            background: #064e3b !important; 
+            border-right: 2px solid #064e3b !important; 
             text-align: center !important;
         }
         .excel-table thead th { border-color: #ffffff !important; }
@@ -420,22 +425,15 @@
             background: #222;
         }
 
-        /* --- TOAST --- */
-        .toast { background: #000; color: #fff; padding: 16px; text-align: center; font-weight: 700; margin-top: 16px; display: none; font-size: clamp(14px, 1.2vw, 18px); position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; min-width: 200px; border: 1px solid #000; border-radius: 8px; }
-        .toast.show { display: block; }
-        .toast.success { background: #0066cc; }
-        .toast.error { background: #cc0000; }
-        .toast.info { background: #000; }
-
         /* --- INDIKATOR --- */
         .supabase-indicator { position: fixed; top: 12px; right: 14px; width: 25px; height: 22px; z-index: 99999; display: flex; align-items: flex-end; justify-content: space-between; gap: 2px; padding: 2px; }
-        .supabase-indicator span { display: block; flex: 1; height: var(--bar-height); border-radius: 2px 2px 0 0; background: #ffaa00; }
+        .supabase-indicator span { display: block; flex: 1; height: var(--bar-height); border-radius: 2px 2px 0 0; background: #ffffff; }
+        .supabase-indicator.online span { background: #ffffff; }
         .supabase-indicator span:nth-child(1) { --bar-height: 5px; }
         .supabase-indicator span:nth-child(2) { --bar-height: 9px; }
         .supabase-indicator span:nth-child(3) { --bar-height: 13px; }
         .supabase-indicator span:nth-child(4) { --bar-height: 17px; }
-        .supabase-indicator.online span { background: #00aa00; }
-        .supabase-indicator.offline span { height: 4px; background: #cc0000; }
+        .supabase-indicator.offline span { height: 4px; }
         .supabase-indicator.checking span { animation: signal-rise 0.8s ease-in-out infinite alternate; }
         .supabase-indicator.checking span:nth-child(2) { animation-delay: 0.15s; }
         .supabase-indicator.checking span:nth-child(3) { animation-delay: 0.3s; }
@@ -474,7 +472,7 @@
             }
             .custom-dropdown-menu .options-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
             .custom-dropdown-menu .option-item { font-size: 16px; padding: 12px 14px; }
-            .header-actions { width: 100%; justify-content: flex-start; }
+            .header-actions { width: 100%; }
             .excel-table thead th { 
                 font-size: clamp(12px, 1.5vw, 15px) !important;
                 padding: 8px 4px !important;
@@ -516,7 +514,6 @@
                 line-height: 1.6;
             }
             .custom-dropdown-menu .menu-footer button { padding: 10px 16px; font-size: 14px; text-align: center; }
-            .toast { font-size: 13px; padding: 12px; min-width: 150px; bottom: 10px; text-align: center; }
             .supabase-indicator { width: 22px; height: 20px; top: 6px; right: 8px; }
             .excel-table thead th { 
                 font-size: clamp(11px, 1.5vw, 13px) !important;
@@ -570,8 +567,6 @@
             </div>
         </div>
 
-        <div id="toastMessage" class="toast"></div>
-
         <div class="footer-text">Data tersimpan di Supabase • Auto-save on • Trigger 08.00 via Worker</div>
 
     </div>
@@ -604,7 +599,6 @@
             const bulanSelect = document.getElementById('bulanSelect');
             const bulanTahunTitle = document.getElementById('bulanTahunTitle');
             const previewContainer = document.getElementById('previewContainer');
-            const toast = document.getElementById('toastMessage');
             const indicator = document.getElementById('supabaseIndicator');
             const totalHariSpan = document.getElementById('totalHari');
             const workerDot = document.getElementById('workerDot');
@@ -695,15 +689,6 @@
                         return r.text();
                     })
                     .catch(() => null);
-            }
-
-            function showToast(msg, type = 'info') {
-                toast.textContent = msg;
-                toast.className = 'toast show ' + type;
-                clearTimeout(toast._hideTimer);
-                toast._hideTimer = setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 4000);
             }
 
             // ============================================================
@@ -929,7 +914,7 @@
             // ============================================================
             async function saveJadwal(tanggal, jenis, nama) {
                 if (!supabaseClient || !isSupabaseConnected) {
-                    showToast('⚠️ Supabase tidak terhubung!', 'error');
+                    console.error('Gagal simpan: Supabase tidak terhubung.');
                     return false;
                 }
 
@@ -1024,7 +1009,6 @@
                     if (targetCell) {
                         showSaveIndicator(targetCell, 'error');
                     }
-                    showToast('❌ Gagal simpan: ' + e.message, 'error');
                     return false;
                 } finally {
                     isSaving = false;
@@ -1081,13 +1065,17 @@
                 });
 
                 let saveTimer;
+                let previousSelectedNames = [...savedNames];
                 select.addEventListener('change', function() {
                     clearTimeout(saveTimer);
+                    const selectedNames = Array.from(select.selectedOptions)
+                        .map(option => option.value)
+                        .filter(Boolean);
+                    const removedNames = previousSelectedNames.filter(name => !selectedNames.includes(name));
+
+                    updateSelectedDisplay(selectedNames);
                     saveTimer = setTimeout(() => {
-                        const selectedNames = Array.from(select.selectedOptions)
-                            .map(option => option.value)
-                            .filter(Boolean);
-                        updateSelectedDisplay(selectedNames);
+                        previousSelectedNames = [...selectedNames];
                         saveJadwal(tanggal, jenis, selectedNames.join(', '));
                     }, 300);
                 });
@@ -1304,7 +1292,7 @@
             // ============================================================
             async function kirimKeWhatsAppDanTelegram() {
                 if (!supabaseClient || !isSupabaseConnected) {
-                    showToast('⚠️ Supabase tidak terhubung!', 'error');
+                    console.error('Gagal mengirim: Supabase tidak terhubung.');
                     return;
                 }
 
@@ -1399,10 +1387,10 @@
                     const waUrl = 'https://api.whatsapp.com/send?text=' + encoded;
                     window.open(waUrl, '_blank');
 
-                    showToast('✅ Pesan dikirim ke WhatsApp & Telegram!', 'success');
+                    console.log('Pesan berhasil dikirim ke WhatsApp dan Telegram.');
 
                 } catch (e) {
-                    showToast('❌ Gagal: ' + e.message, 'error');
+                    console.error('Gagal mengirim pesan:', e);
                 } finally {
                     btnKirim.disabled = false;
                     btnKirim.innerHTML = '<i class="fab fa-whatsapp"></i> <i class="fab fa-telegram-plane"></i> Kirim KE WHATSAPP';
@@ -1605,7 +1593,7 @@
 
                 const printWindow = window.open('', '_blank', 'width=800,height=600');
                 if (!printWindow) {
-                    showToast('⚠️ Izinkan popup untuk mencetak.', 'error');
+                    console.error('Jendela cetak tidak dapat dibuka. Periksa pengaturan popup browser.');
                     return;
                 }
                 printWindow.document.write(printHtml);
@@ -1631,7 +1619,7 @@
                                 .then(res => res.json())
                                 .then(data => {
                                     if (data.status === 'success') {
-                                        showToast('✅ Jadwal otomatis terkirim!', 'success');
+                                        console.log('Jadwal otomatis berhasil dikirim.');
                                     }
                                 })
                                 .catch(() => {});
@@ -1705,10 +1693,10 @@
                 ]);
 
                 if (!piketLoaded) {
-                    showToast('⚠️ Gagal load daftar nama', 'error');
+                    console.error('Gagal memuat daftar nama.');
                 }
                 if (!hanpanganLoaded) {
-                    showToast('⚠️ Gagal load hanpangan', 'error');
+                    console.error('Gagal memuat data hanpangan.');
                 }
 
                 populateBulan();
