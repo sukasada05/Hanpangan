@@ -1398,7 +1398,7 @@
             }
 
             // ============================================================
-            //  CETAK (KOP DIUBAH, TABEL TETAP ASLI)
+            //  CETAK (HITAM PUTIH FORMAL, KOP BARU, NOMOR TENGAH)
             // ============================================================
             function cetakJadwal() {
                 const { bulan, tahun } = getBulanTahun();
@@ -1441,31 +1441,49 @@
                     <meta charset="UTF-8">
                     <title>Jadwal Piket Koramil</title>
                     <style>
-                        @page { size: A4; margin: 1.5cm; }
+                        /* --- PENGATURAN KERTAS & NOMOR HALAMAN (TENGAH) --- */
+                        @page { 
+                            size: A4; 
+                            margin: 2cm 1.5cm 1.5cm 1.5cm; /* Margin atas dilebarkan untuk header halaman */
+                            @top-center {
+                                content: "-" counter(page) "-";
+                                font-family: Arial, sans-serif;
+                                font-size: 10pt;
+                                font-weight: bold;
+                                color: #000;
+                                vertical-align: bottom;
+                                padding-bottom: 10px;
+                            }
+                        }
+                        @page :first {
+                            @top-center {
+                                content: none; /* Hilangkan nomor di halaman 1 */
+                            }
+                        }
+
                         body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #000; background: #fff; font-size: 10pt; line-height: 1.3; }
 
-                        /* --- KOP SURAT BARU --- */
+                        /* --- KOP SURAT --- */
                         .kop { text-align: left; margin-bottom: 12px; }
                         .kop-wrapper { display: inline-block; border-bottom: 2px solid #000; padding-bottom: 5px; }
-                        .kop .kodim, .kop .koramil { font-weight: 900; font-size: 12pt; text-transform: uppercase; line-height: 1.2; letter-spacing: 0.5px; }
+                        .kop .kodim, .kop .koramil { font-weight: 900; font-size: 12pt; text-transform: uppercase; line-height: 1.2; letter-spacing: 0.5px; color: #000; }
                         .kop .koramil { margin-left: 25px; margin-top: 4px; }
 
                         /* --- JUDUL --- */
-                        .judul { text-align: center; font-weight: bold; font-size: 11pt; text-transform: uppercase; margin: 15px 0 8px; }
+                        .judul { text-align: center; font-weight: bold; font-size: 11pt; text-transform: uppercase; margin: 15px 0 8px; color: #000; }
 
-                        /* --- TABEL ASLI (TIDAK DIUBAH) --- */
+                        /* --- TABEL (HITAM PUTIH FORMAL) --- */
                         table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 9pt; border: 1px solid #000; table-layout: fixed; }
-                        th, td { border: 1px solid #000; padding: 3px 4px; text-align: left; vertical-align: top; word-break: normal; overflow-wrap: break-word; white-space: pre-line; }
-                        th { background: #000000; color: #ffffff; font-weight: 900; font-size: 9pt; text-align: center !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+                        th, td { border: 1px solid #000; padding: 4px 5px; text-align: left; vertical-align: top; word-break: normal; overflow-wrap: break-word; white-space: pre-line; color: #000; }
+                        
+                        /* Header Tabel Putih + Teks Hitam Tebal */
+                        th { background: #ffffff !important; color: #000000 !important; font-weight: bold; font-size: 9pt; text-align: center !important; }
                         
                         .no-col { width: 6%; text-align: center; }
                         .tgl-col { width: 17%; font-weight: 900; color: #000; }
                         .nama-col { width: 27%; }
                         .nama-col-kediaman { width: 25%; }
                         .nama-col-makodim { width: 25%; }
-                        
-                        .row-weekend td { background: #ffe6e6; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-                        .row-today td { background: #ffff99; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
                         
                         @media screen {
                             html { background: #e5e7eb; }
@@ -1512,18 +1530,13 @@
                     const parts = dateKey.split('-');
                     const d = new Date(parts[0], parts[1] - 1, parts[2]);
                     const dateStr = formatTanggalDuaBaris(d);
-                    const isToday = (dateKey === todayStr);
-                    const isWeekendDay = isWeekend(d);
-                    let rowClass = '';
-                    if (isToday) rowClass += ' row-today';
-                    if (isWeekendDay) rowClass += ' row-weekend';
 
                     const koramil  = formatNamaWithNumber(entry.koramil);
                     const kediaman = formatNamaWithNumber(entry.kediaman);
                     const makodim  = formatNamaWithNumber(entry.makodim);
 
                     printHtml += `
-                        <tr class="${rowClass}">
+                        <tr>
                             <td class="no-col">${index + 1}</td>
                             <td class="tgl-col">${dateStr}</td>
                             <td class="nama-col">${koramil}</td>
