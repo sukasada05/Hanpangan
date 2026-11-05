@@ -247,7 +247,7 @@
             color: #0066cc; font-size: 16px; margin-left: 10px;
         }
 
-        .menu-header-mobile, .menu-footer-mobile { display: none !important; }
+        .menu-header-mobile { display: none !important; }
         .options-list { display: block; }
 
         /* --- MOBILE FULL SCREEN MENU --- */
@@ -304,8 +304,6 @@
                 color: #0066cc; 
             }
 
-            .menu-footer-mobile { display: block !important; padding: 16px 20px; background: #ffffff; border-top: 2px solid #000; flex-shrink: 0; }
-            .btn-save-menu { width: 100%; padding: 15px; background: #000; color: #fff; font-size: 16px; font-weight: 700; border: none; border-radius: 0; cursor: pointer; letter-spacing: 1px; }
         }
 
         /* --- INDIKATOR SUPABASE --- */
@@ -770,7 +768,7 @@
                 // --- Header (Khusus Mobile) ---
                 const headerMobile = document.createElement('div');
                 headerMobile.className = 'menu-header-mobile';
-                headerMobile.innerHTML = `<h3>Pilih ${placeholderText}</h3> <button type="button" class="btn-close-menu"><i class="fas fa-times"></i></button>`;
+                headerMobile.innerHTML = `<h3>Pilih ${placeholderText}</h3> <button type="button" class="btn-close-menu" aria-label="Selesai" title="Selesai"><i class="fas fa-times" aria-hidden="true"></i></button>`;
                 menu.appendChild(headerMobile);
 
                 // --- List Opsi ---
@@ -799,15 +797,6 @@
                 });
                 menu.appendChild(optionsList);
 
-                // --- Footer (Khusus Mobile) ---
-                const footerMobile = document.createElement('div');
-                footerMobile.className = 'menu-footer-mobile';
-                const btnSave = document.createElement('button');
-                btnSave.className = 'btn-save-menu';
-                btnSave.textContent = 'SELESAI';
-                footerMobile.appendChild(btnSave);
-                menu.appendChild(footerMobile);
-
                 // --- Fungsi Tutup Menu ---
                 const closeMenu = () => {
                     menu.classList.remove('open');
@@ -819,11 +808,6 @@
                     e.stopPropagation();
                     closeMenu();
                 });
-                btnSave.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    closeMenu();
-                });
-
                 // --- Klik pada kotak display ---
                 display.addEventListener('click', (e) => {
                     e.stopPropagation();
