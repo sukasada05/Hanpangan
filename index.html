@@ -13,11 +13,11 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         :root { --sticky-top-height: 145px; }
         
-        /* Mengizinkan scroll horizontal di layar utama */
-        html, body { height: 100%; width: 100%; overflow-x: auto; overflow-y: auto; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f0f0; color: #000000; padding: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
+        /* Hilangkan overflow-x: hidden agar sticky bekerja sempurna */
+        html, body { height: auto; min-height: 100vh; width: 100%; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f0f0; color: #000000; padding: 0; display: flex; justify-content: center; align-items: flex-start; }
         
-        .container { max-width: 100%; width: 100%; min-height: 100vh; background: #ffffff; padding: 0 10px 16px; border: none; box-shadow: none; }
+        .container { max-width: 100%; width: 100%; min-height: 100vh; background: #ffffff; padding: 0 10px 16px; border: none; box-shadow: none; overflow: visible; }
         .sticky-top { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: #ffffff; padding: 12px 10px 1px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
         /* --- HEADER --- */
@@ -65,20 +65,18 @@
         .month-picker select option { background: #000000; color: #ffffff; }
         .month-picker .total-hari { display: none; }
 
-        /* --- TABEL (AUTO WIDTH TANPA WRAPPER OVERFLOW) --- */
+        /* --- TABEL (FIT TO SCREEN & STICKY FIX) --- */
         .preview-section { padding: calc(var(--sticky-top-height) + 2px) 0 0; background: transparent; margin-top: 0; position: relative; }
         .preview-section h3 { display: none; }
         
         .table-wrapper { 
             width: 100%; 
-            position: relative; 
-            /* overflow dihapus agar sticky bekerja sempurna */
+            position: static; /* Biarkan static agar sticky menempel ke layar */
         }
         
         .excel-table { 
-            width: max-content; /* Memaksa lebar tabel mengikuti isi */
-            min-width: 100%; 
-            table-layout: auto; /* Mengikuti lebar konten */
+            width: 100%; 
+            table-layout: fixed; 
             border-collapse: separate; 
             border-spacing: 0;
             font-size: clamp(13px, 1.1vw, 16px); 
@@ -94,9 +92,10 @@
             vertical-align: top;
             text-align: left;
             white-space: pre-line;
+            word-wrap: break-word;
         }
 
-        /* HEADER TABEL (FREEZE VERTIKAL) */
+        /* HEADER TABEL (FREEZE ATAS) */
         .excel-table thead th {
             background: #064e3b !important;
             color: #ffffff !important;
@@ -107,117 +106,105 @@
             border-top: 1px solid #064e3b !important;
             border-left: 1px solid #064e3b !important;
             padding: 10px 8px !important;
-            white-space: nowrap;
+            position: -webkit-sticky;
             position: sticky;
             top: var(--sticky-top-height);
-            z-index: 50; 
+            z-index: 50; /* Pastikan di atas baris data */
             text-align: center !important;
             vertical-align: middle !important;
             box-shadow: inset 0 -2px 0 #ffffff, 0 2px 4px rgba(0,0,0,0.3);
         }
 
-        /* --- FREEZE KOLOM KIRI (NO & TANGGAL) --- */
-        /* Kolom NO (Isi Tabel) */
-        .excel-table td:nth-child(1) {
-            width: 45px; min-width: 45px; max-width: 45px;
+        /* Distribusi Lebar Kolom (Total 100%) */
+        /* Kolom NO (Dilebarkan agar tidak turun) */
+        .excel-table th:nth-child(1), .excel-table td:nth-child(1) {
+            width: 8%; 
             text-align: center;
             font-weight: 700;
-            background-color: #f5f5f5;
-            position: sticky;
-            left: 0;
-            z-index: 40;
             vertical-align: middle;
+            white-space: nowrap;
         }
-        /* Kolom NO (Header) */
-        .excel-table th:nth-child(1) { 
-            width: 45px; min-width: 45px; max-width: 45px;
-            text-align: center;
-            font-weight: 900;
-            background-color: #064e3b !important;
-            color: #ffffff !important;
-            position: sticky;
-            left: 0;
-            z-index: 60; 
-            vertical-align: middle;
-        }
-
-        /* Kolom TANGGAL (Isi Tabel) */
-        .excel-table td:nth-child(2) { 
-            min-width: 130px; 
+        
+        /* Kolom TANGGAL */
+        .excel-table th:nth-child(2), .excel-table td:nth-child(2) { 
+            width: 23%;
             vertical-align: top; 
-            position: sticky; 
-            left: 45px; 
-            z-index: 30;
             color: #000000 !important; 
             font-weight: 900 !important;
-            font-size: clamp(15px, 1.3vw, 20px) !important;
+            font-size: clamp(14px, 1.3vw, 18px) !important;
             line-height: 1.2;
         }
-        /* Kolom TANGGAL (Header) */
-        .excel-table th:nth-child(2) { 
-            min-width: 130px; 
-            vertical-align: top; 
-            position: sticky; 
-            left: 45px; 
-            z-index: 60; 
-            background-color: #064e3b !important; 
-            color: #ffffff !important; 
-            text-align: center !important;
-        }
 
-        /* Kolom Lainnya (AUTO WIDTH) */
-        .excel-table th:nth-child(3), .excel-table td:nth-child(3) { min-width: 200px; vertical-align: top; }
-        .excel-table th:nth-child(4), .excel-table td:nth-child(4),
-        .excel-table th:nth-child(5), .excel-table td:nth-child(5) { min-width: 180px; vertical-align: top; }
+        /* Kolom Lainnya */
+        .excel-table th:nth-child(3), .excel-table td:nth-child(3) { width: 23%; vertical-align: top; }
+        .excel-table th:nth-child(4), .excel-table td:nth-child(4) { width: 23%; vertical-align: top; }
+        .excel-table th:nth-child(5), .excel-table td:nth-child(5) { width: 23%; vertical-align: top; }
 
         /* Warna Baris Spesial */
         .row-today td { background: #ffff99 !important; }
-        .row-today td:nth-child(2) { background-color: #ffff99 !important; color: #000000 !important; }
         .row-weekend td { background: #ffe6e6 !important; }
-        .row-weekend td:nth-child(2) { background-color: #ffe6e6 !important; color: #000000 !important; }
 
         .excel-table .no-data { color: #888; text-align: center; padding: 40px 0; font-weight: 600; font-size: clamp(14px, 1.2vw, 18px); }
 
-        /* --- DROPDOWN DALAM TABEL (MENGIKUTI LEBAR TEKS) --- */
+        /* --- DROPDOWN DALAM TABEL (AREA KLIK FULL) --- */
         .excel-table td[data-jenis] { 
             position: relative; 
             padding: 0 !important; 
             vertical-align: top; 
+            cursor: pointer; /* Kursor tangan di seluruh area sel */
         }
         
+        /* Efek hover di seluruh area sel */
+        .excel-table td[data-jenis]:hover {
+            background-color: #f0f7ff !important;
+        }
+
         .custom-dropdown-wrapper { 
             width: 100%; 
-            height: 100%;
-            cursor: pointer; 
+            height: 100%; 
+            min-height: 100%; 
             display: flex; 
             flex-direction: column;
         }
         
         .selected-names { 
             display: flex; 
-            flex-direction: column;
+            flex-direction: column; 
+            flex-grow: 1;
             width: 100%; 
             height: 100%; 
-            min-height: 33px; 
+            min-height: 100%;
             box-sizing: border-box; 
             padding: 6px 8px; 
-            background: transparent;
+            background: transparent !important; /* Biarkan warna dari td */
             color: #000; 
             font-weight: 700; 
             line-height: 1.4; 
             white-space: pre-line; 
-            cursor: pointer; 
-            transition: background 0.2s;
+            transition: background 0.2s; 
             word-wrap: break-word;
         }
         
-        .selected-names:hover { background: #f0f7ff; }
-        .selected-names:not(.has-value) { justify-content: center; align-items: center; text-align: center; }
-        .selected-names.has-value { justify-content: flex-start; align-items: flex-start; text-align: left; }
+        /* Jika kosong: Rata Tengah Vertikal & Horizontal (Center) */
+        .selected-names:not(.has-value) { 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+        }
+        
+        /* Jika ada nama terpilih: Rata Kiri Atas (Justify) */
+        .selected-names.has-value { 
+            justify-content: flex-start; 
+            align-items: flex-start; 
+            text-align: left; 
+        }
         
         .selected-names .placeholder {
-            color: #000000 !important; font-weight: 900 !important;
-            font-size: clamp(14px, 1.2vw, 18px) !important; letter-spacing: 0.5px;
+            color: #000000 !important; 
+            font-weight: 900 !important;
+            font-size: clamp(14px, 1.2vw, 18px) !important; 
+            letter-spacing: 0.5px;
+            pointer-events: none; /* Agar klik fokus ke container */
         }
 
         /* --- MENU DROPDOWN (DESKTOP: MELAYANG) --- */
@@ -253,9 +240,9 @@
             .month-picker { flex-direction: column; align-items: stretch; text-align: left; }
             .month-picker .total-hari { margin-left: 0; text-align: left; }
             .excel-table th, .excel-table td { padding: 4px 6px; font-size: 12px; text-align: left; vertical-align: top; }
-            .excel-table td:nth-child(2) { font-size: clamp(14px, 1.6vw, 18px) !important; }
-            .selected-names { font-size: 14px; line-height: 1.5; padding: 4px 6px; }
-            .selected-names .placeholder { font-size: clamp(12px, 1.5vw, 15px) !important; }
+            .excel-table td:nth-child(2) { font-size: clamp(13px, 1.5vw, 16px) !important; }
+            .selected-names { font-size: 13px; line-height: 1.4; padding: 4px 6px; }
+            .selected-names .placeholder { font-size: clamp(12px, 1.5vw, 14px) !important; }
             
             .header-actions { width: 100%; }
             .excel-table thead th { font-size: clamp(12px, 1.5vw, 15px) !important; padding: 8px 4px !important; text-align: center !important; }
@@ -302,18 +289,18 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         @media (max-width: 480px) {
-            .container { padding: 0 10px 8px; }
+            .container { padding: 0 5px 8px; }
             .sticky-top { padding: 8px 10px 1px; }
             .app-header h1 { font-size: 18px; text-align: left; }
             .running-text { font-size: 14px; animation-duration: 20px; text-align: left; }
             .month-picker select { padding: 6px 10px; font-size: 13px; min-width: 120px; text-align: left; }
-            .excel-table th, .excel-table td { padding: 3px 4px; font-size: 10px; text-align: left; vertical-align: top; }
-            .excel-table td:nth-child(2) { font-size: clamp(13px, 1.8vw, 16px) !important; line-height: 1.2; }
+            .excel-table th, .excel-table td { padding: 3px 2px; font-size: 9px; text-align: left; vertical-align: top; }
+            .excel-table td:nth-child(2) { font-size: clamp(11px, 1.5vw, 14px) !important; line-height: 1.2; }
             .preview-section h3 { font-size: 15px; text-align: left; }
-            .selected-names { font-size: 13px; line-height: 1.4; padding: 4px 5px; }
-            .selected-names .placeholder { font-size: clamp(11px, 1.5vw, 13px) !important; }
+            .selected-names { font-size: 10px; line-height: 1.3; padding: 3px 4px; }
+            .selected-names .placeholder { font-size: clamp(9px, 1.2vw, 12px) !important; }
             .supabase-indicator { width: 22px; height: 20px; top: 6px; right: 8px; }
-            .excel-table thead th { font-size: clamp(11px, 1.5vw, 13px) !important; padding: 6px 3px !important; text-align: center !important; }
+            .excel-table thead th { font-size: clamp(10px, 1.2vw, 12px) !important; padding: 6px 2px !important; text-align: center !important; }
         }
     </style>
 </head>
@@ -397,6 +384,7 @@
 
             updateStickyTopHeight();
             window.addEventListener('resize', updateStickyTopHeight);
+            window.addEventListener('load', updateStickyTopHeight);
             if ('ResizeObserver' in window) {
                 new ResizeObserver(updateStickyTopHeight).observe(stickyTop);
             }
@@ -933,11 +921,27 @@
                         const key = jenis.replace('_hari_ini', '');
                         const currentValue = (grouped[tanggal] && grouped[tanggal][key]) || '';
                         const dropdown = createCustomDropdown(tanggal, jenis, currentValue);
+                        
                         cell.innerHTML = '';
                         cell.style.background = 'transparent';
                         cell.style.textAlign = 'left';
                         cell.style.verticalAlign = 'top';
+                        cell.style.padding = '0'; // Pastikan padding 0 agar display full
                         cell.appendChild(dropdown);
+
+                        // Tambahkan event listener ke SELURUH area sel (td)
+                        cell.addEventListener('click', function(event) {
+                            // Abaikan jika yang diklik adalah menu dropdown
+                            if (event.target.closest('.custom-dropdown-menu')) return;
+
+                            const display = cell.querySelector('.selected-names');
+                            if (display) {
+                                // Cek jika klik bukan berasal dari display (misal klik di area kosong td)
+                                if (event.target !== display && !display.contains(event.target)) {
+                                    display.click();
+                                }
+                            }
+                        });
                     });
                 });
             }
@@ -1367,7 +1371,7 @@
 
                 // Global listener: klik di luar untuk menutup dropdown & auto-save
                 document.addEventListener('click', (e) => {
-                    if (!e.target.closest('.selected-names') && !e.target.closest('.custom-dropdown-menu')) {
+                    if (!e.target.closest('.selected-names') && !e.target.closest('.custom-dropdown-menu') && !e.target.closest('td[data-jenis]')) {
                         document.querySelectorAll('.custom-dropdown-menu.open').forEach(m => {
                             m.classList.remove('open');
                             document.body.style.overflow = '';
