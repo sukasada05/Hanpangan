@@ -1402,9 +1402,19 @@
             // ============================================================
             function cetakJadwal() {
                 const { bulan, tahun } = getBulanTahun();
-                const allDates = getDisplayDates(bulan, tahun);
+                const allDates = [];
+                const jumlahHari = new Date(tahun, bulan + 1, 0).getDate();
+
+                for (let hari = 1; hari <= jumlahHari; hari++) {
+                    allDates.push(
+                        `${tahun}-${String(bulan + 1).padStart(2, '0')}-${String(hari).padStart(2, '0')}`
+                    );
+                }
+
                 const displayDateKeys = new Set(allDates);
-                const filtered = allJadwal.filter(item => displayDateKeys.has(item.tanggal_jadwal));
+                const filtered = allJadwal.filter(item =>
+                    displayDateKeys.has(item.tanggal_jadwal)
+                );
 
                 const grouped = {};
                 filtered.forEach(item => {
