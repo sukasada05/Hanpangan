@@ -20,28 +20,29 @@
         .container { max-width: 100%; width: 100%; min-height: 100vh; background: #ffffff; padding: 0 10px 16px; border: none; box-shadow: none; overflow: visible; }
         
         /* Jarak header dirapatkan */
-        .sticky-top { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: #ffffff; padding: 8px 10px 1px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .sticky-top { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: #ffffff; padding: 4px 8px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
         /* --- HEADER --- */
-        .app-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 8px; flex-wrap: wrap; gap: 4px; }
+        .app-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 4px; flex-wrap: wrap; gap: 4px; }
         .app-header h1 { font-size: clamp(20px, 4vw, 32px); font-weight: 900; letter-spacing: 2px; text-align: left; }
         
         /* Jarak tombol dirapatkan */
-        .header-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 6px 8px; position: relative; top: 4px; width: 100%; }
+        .header-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 4px 6px; position: relative; top: 0; width: 100%; }
         .header-actions .month-picker { grid-column: 1; grid-row: 1; display: block; min-width: 0; }
         .header-actions .month-picker select { width: 100%; min-width: 0; }
         #btnCetak { grid-column: 2; grid-row: 1; width: 100%; justify-content: center; }
         #btnKirim { grid-column: 1 / -1; grid-row: 2; width: 100%; justify-content: center; }
         
-        .btn-cetak { background: #000000; color: #fff; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 6px; font-size: clamp(13px, 1vw, 16px); transition: 0.2s; }
-        .btn-cetak:hover { background: #000000; }
+        .btn-cetak { background: #475569; color: #fff; border: none; padding: 8px 16px; border-radius: 999px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 6px; font-size: clamp(13px, 1vw, 16px); transition: background 0.2s, transform 0.15s, box-shadow 0.2s; }
+        .btn-cetak:hover { background: #334155; }
+        .btn-cetak:active { background: #1e293b; transform: scale(0.97); box-shadow: inset 0 2px 5px rgba(0,0,0,0.25); text-shadow: 0 1px 3px rgba(255,255,255,0.55); }
 
         .btn-kirim {
-            background: #000000;
+            background: #16803c;
             color: #ffffff;
             border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
+            padding: 8px 16px;
+            border-radius: 999px;
             cursor: pointer;
             font-weight: 900;
             display: flex;
@@ -52,13 +53,14 @@
             letter-spacing: 0.5px;
             text-shadow: 0 0 4px rgba(255,255,255,0.3);
         }
-        .btn-kirim:hover { background: #000000; transform: scale(1.02); }
+        .btn-kirim:hover { background: #116b32; transform: scale(1.02); }
+        .btn-kirim:active { background: #0b4f24; transform: scale(0.98); box-shadow: inset 0 2px 5px rgba(0,0,0,0.25); text-shadow: 0 1px 3px rgba(255,255,255,0.6); }
         .btn-kirim:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .btn-kirim i { margin-right: 2px; color: #ffffff; }
 
         /* --- RUNNING TEXT --- */
         /* Margin bawah dirapatkan */
-        .running-container { background: #1b3b24; padding: 8px 12px; margin: 0 0 8px 0; overflow: hidden; white-space: nowrap; border-radius: 0; }
+        .running-container { background: #1b3b24; padding: 4px 8px; margin: 0 0 4px 0; overflow: hidden; white-space: nowrap; border-radius: 0; }
         .running-text { display: inline-block; white-space: nowrap; animation: marquee 30s linear infinite; color: #ffd700; font-weight: 700; font-size: clamp(16px, 2.2vw, 24px); padding-left: 100%; letter-spacing: 1px; text-align: left; }
         .running-container:hover .running-text { animation-play-state: paused; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-200%); } }
@@ -67,12 +69,14 @@
         .month-picker { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; padding: 4px 0; background: transparent; text-align: left; }
         .header-actions .month-picker { margin-bottom: 0; padding: 0; }
         .month-picker label { display: none; }
-        .month-picker select { padding: 6px 10px; border: 1px solid #000000; background: #000000; color: #fff; font-family: inherit; font-size: clamp(14px, 1.2vw, 17px); min-width: 150px; cursor: pointer; text-align: left; }
-        .month-picker select option { background: #000000; color: #ffffff; }
+        .month-picker select { padding: 6px 14px; border: 1px solid #2563eb; border-radius: 999px; background: #2563eb; color: #fff; font-family: inherit; font-size: clamp(14px, 1.2vw, 17px); min-width: 150px; cursor: pointer; text-align: left; transition: background 0.2s, box-shadow 0.2s; }
+        .month-picker select:hover { background: #1d4ed8; }
+        .month-picker select:focus { outline: none; background: #1e40af; box-shadow: 0 0 0 3px rgba(37,99,235,0.25); text-shadow: 0 1px 3px rgba(255,255,255,0.55); }
+        .month-picker select option { background: #2563eb; color: #ffffff; }
         .month-picker .total-hari { display: none; }
 
         /* --- TABEL (FIT TO SCREEN & STICKY FIX) --- */
-        .preview-section { padding: calc(var(--sticky-top-height) + 5px) 0 0; background: transparent; margin-top: 0; position: relative; }
+        .preview-section { padding: var(--sticky-top-height) 0 0; background: transparent; margin-top: 0; position: relative; }
         .preview-section h3 { display: none; }
         
         .table-wrapper { 
@@ -103,20 +107,20 @@
 
         /* HEADER TABEL (WARNA HIJAU TUA ARMY & GARIS PUTIH) */
         .excel-table thead th {
-            background-color: #1b3b24 !important; 
+            background: #1b3b24 !important;
             color: #ffffff !important; 
             font-weight: 900 !important;
             font-size: clamp(14px, 1.2vw, 18px) !important;
             text-shadow: 0 0 8px rgba(255,255,255,0.15);
             letter-spacing: 1px;
             
-            /* GARIS HEADER DIBUAT PUTIH */
-            border-top: 1px solid #1b3b24 !important;
+            /* Garis hitam menempel langsung pada bidang hijau */
+            border-top: 1px solid #000000 !important;
             border-left: 1px solid #1b3b24 !important;
             border-right: 1px solid #ffffff !important; /* Kanan Putih */
-            border-bottom: 1px solid #ffffff !important; /* Bawah Putih */
+            border-bottom: 1px solid #000000 !important; /* Bawah hitam */
             
-            padding: 10px 8px !important;
+            padding: 19px 8px !important;
             position: -webkit-sticky;
             position: sticky;
             top: var(--sticky-top-height);
@@ -249,7 +253,7 @@
         /* --- MOBILE FULL SCREEN MENU --- */
         @media (max-width: 768px) {
             .container { padding: 0 14px 12px; }
-            .sticky-top { padding: 8px 12px 1px; }
+            .sticky-top { padding: 4px 8px 0; }
             .month-picker { flex-direction: column; align-items: stretch; text-align: left; }
             .month-picker .total-hari { margin-left: 0; text-align: left; }
             .excel-table th, .excel-table td { padding: 4px 6px; font-size: 12px; text-align: left; vertical-align: top; }
@@ -257,7 +261,7 @@
             .selected-names { font-size: 13px; line-height: 1.4; padding: 4px 6px; }
             .selected-names .placeholder { font-size: clamp(12px, 1.5vw, 14px) !important; }
             
-            .header-actions { width: 100%; gap: 6px; }
+            .header-actions { width: 100%; gap: 4px 6px; }
             .excel-table thead th { font-size: clamp(12px, 1.5vw, 15px) !important; padding: 8px 4px !important; text-align: center !important; }
 
             /* Full Screen Menu */
@@ -332,7 +336,7 @@
 
         @media (max-width: 480px) {
             .container { padding: 0 5px 8px; }
-            .sticky-top { padding: 6px 8px 1px; }
+            .sticky-top { padding: 4px 8px 0; }
             .app-header h1 { font-size: 18px; text-align: left; }
             .running-text { font-size: 14px; animation-duration: 20px; text-align: left; }
             .month-picker select { padding: 6px 8px; font-size: 13px; min-width: 120px; text-align: left; }
