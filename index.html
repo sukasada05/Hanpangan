@@ -1402,27 +1402,24 @@
             // ============================================================
             function cetakJadwal() {
                 const { bulan, tahun } = getBulanTahun();
+
+                // 1) Selalu generate SEMUA tanggal 1 s/d akhir bulan terpilih
                 const allDates = [];
                 const jumlahHari = new Date(tahun, bulan + 1, 0).getDate();
-
                 for (let hari = 1; hari <= jumlahHari; hari++) {
                     allDates.push(
                         `${tahun}-${String(bulan + 1).padStart(2, '0')}-${String(hari).padStart(2, '0')}`
                     );
                 }
 
-                const displayDateKeys = new Set(allDates);
-                const filtered = allJadwal.filter(item =>
-                    displayDateKeys.has(item.tanggal_jadwal)
-                );
-
+                // 2) Map data tersimpan per tanggal (hanya yang punya data)
                 const grouped = {};
-                filtered.forEach(item => {
+                allJadwal.forEach(item => {
                     const key = item.tanggal_jadwal;
                     if (!grouped[key]) grouped[key] = { koramil: '', kediaman: '', makodim: '' };
-                    if (item.jenis === 'koramil_hari_ini') grouped[key].koramil = item.nama1 || '';
+                    if (item.jenis === 'koramil_hari_ini')       grouped[key].koramil  = item.nama1 || '';
                     else if (item.jenis === 'kediaman_hari_ini') grouped[key].kediaman = item.nama1 || '';
-                    else if (item.jenis === 'makodim_hari_ini') grouped[key].makodim = item.nama1 || '';
+                    else if (item.jenis === 'makodim_hari_ini')  grouped[key].makodim  = item.nama1 || '';
                 });
 
                 function formatNamaWithNumber(namaStr) {
@@ -1433,8 +1430,9 @@
                 }
 
                 const today = new Date();
-                const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(
-                    today.getDate()).padStart(2, '0');
+                const todayStr = today.getFullYear() + '-' +
+                    String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(today.getDate()).padStart(2, '0');
 
                 let printHtml = `
                 <!DOCTYPE html>
@@ -1443,73 +1441,15 @@
                     <meta charset="UTF-8">
                     <title>Jadwal Piket Koramil</title>
                     <style>
-                        @page {
-                            size: A4;
-                            margin: 1.5cm;
-                        }
-                        body {
-                            font-family: Arial, sans-serif;
-                            margin: 0;
-                            padding: 0;
-                            color: #000;
-                            background: #fff;
-                            font-size: 9pt;
-                            line-height: 1.25;
-                        }
-                        .kop {
-                            text-align: left;
-                            margin-bottom: 8px;
-                            font-size: 10pt;
-                            font-weight: bold;
-                        }
-                        .kop .kodim {
-                            font-weight: bold;
-                            font-size: 10pt;
-                            text-transform: uppercase;
-                        }
-                        .kop .koramil {
-                            font-weight: bold;
-                            font-size: 10pt;
-                            text-transform: uppercase;
-                        }
-                        .kop hr {
-                            width: 220px;
-                            margin: 3px 0;
-                            border: 1px solid #000;
-                        }
-                        .judul {
-                            text-align: center;
-                            font-weight: bold;
-                            font-size: 11pt;
-                            text-transform: uppercase;
-                            margin: 10px 0 8px;
-                        }
-                        table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            font-family: Arial, sans-serif;
-                            font-size: 9pt;
-                            border: 1px solid #000;
-                            table-layout: fixed;
-                        }
-                        th, td {
-                            border: 1px solid #000;
-                            padding: 3px 4px;
-                            text-align: left;
-                            vertical-align: top;
-                            word-break: normal;
-                            overflow-wrap: break-word;
-                            white-space: pre-line;
-                        }
-                        th {
-                            background: #000000;
-                            color: #ffffff;
-                            font-weight: 900;
-                            font-size: 9pt;
-                            text-align: center !important;
-                            print-color-adjust: exact;
-                            -webkit-print-color-adjust: exact;
-                        }
+                        @page { size: A4; margin: 1.5cm; }
+                        body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #000; background: #fff; font-size: 9pt; line-height: 1.25; }
+                        .kop { text-align: left; margin-bottom: 8px; font-size: 10pt; font-weight: bold; }
+                        .kop .kodim, .kop .koramil { font-weight: bold; font-size: 10pt; text-transform: uppercase; }
+                        .kop hr { width: 220px; margin: 3px 0; border: 1px solid #000; }
+                        .judul { text-align: center; font-weight: bold; font-size: 11pt; text-transform: uppercase; margin: 10px 0 8px; }
+                        table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 9pt; border: 1px solid #000; table-layout: fixed; }
+                        th, td { border: 1px solid #000; padding: 3px 4px; text-align: left; vertical-align: top; word-break: normal; overflow-wrap: break-word; white-space: pre-line; }
+                        th { background: #000000; color: #ffffff; font-weight: 900; font-size: 9pt; text-align: center !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
                         .no-col { width: 6%; text-align: center; }
                         .tgl-col { width: 17%; font-weight: 900; color: #000; }
                         .nama-col { width: 27%; }
@@ -1519,31 +1459,13 @@
                         .row-today td { background: #ffff99; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
                         @media screen {
                             html { background: #e5e7eb; }
-                            body {
-                                width: 210mm;
-                                max-width: calc(100vw - 32px);
-                                min-height: 297mm;
-                                margin: 16px auto;
-                                padding: 15mm;
-                                box-sizing: border-box;
-                                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-                            }
+                            body { width: 210mm; max-width: calc(100vw - 32px); min-height: 297mm; margin: 16px auto; padding: 15mm; box-sizing: border-box; box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
                         }
                         @media print {
-                            body {
-                                width: auto;
-                                max-width: none;
-                                min-height: 0;
-                                margin: 0;
-                                padding: 0;
-                                box-shadow: none;
-                            }
+                            body { width: auto; max-width: none; min-height: 0; margin: 0; padding: 0; box-shadow: none; }
                             thead { display: table-header-group; }
                             tr { break-inside: avoid; page-break-inside: avoid; }
-                            .no-col {
-                                text-align: center;
-                                vertical-align: middle;
-                            }
+                            .no-col { text-align: center; vertical-align: middle; }
                             .tgl-col { text-align: center; }
                         }
                     </style>
@@ -1568,6 +1490,7 @@
                         <tbody>
                 `;
 
+                // 3) Cetak SEMUA tanggal, isi kosong bila tidak ada data
                 allDates.forEach((dateKey, index) => {
                     const entry = grouped[dateKey] || { koramil: '', kediaman: '', makodim: '' };
                     const parts = dateKey.split('-');
@@ -1579,13 +1502,13 @@
                     if (isToday) rowClass += ' row-today';
                     if (isWeekendDay) rowClass += ' row-weekend';
 
-                    const koramil = formatNamaWithNumber(entry.koramil);
+                    const koramil  = formatNamaWithNumber(entry.koramil);
                     const kediaman = formatNamaWithNumber(entry.kediaman);
-                    const makodim = formatNamaWithNumber(entry.makodim);
+                    const makodim  = formatNamaWithNumber(entry.makodim);
 
                     printHtml += `
                         <tr class="${rowClass}">
-                            <td class="no-col">${index+1}</td>
+                            <td class="no-col">${index + 1}</td>
                             <td class="tgl-col">${dateStr}</td>
                             <td class="nama-col">${koramil}</td>
                             <td class="nama-col-kediaman">${kediaman}</td>
