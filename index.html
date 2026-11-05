@@ -52,7 +52,7 @@
         .btn-kirim i { margin-right: 2px; color: #ffffff; }
 
         /* --- RUNNING TEXT --- */
-        .running-container { background: #064e3b; padding: 10px 16px; margin: 0 0 16px 0; overflow: hidden; white-space: nowrap; border-radius: 0; }
+        .running-container { background: #1b3b24; padding: 10px 16px; margin: 0 0 16px 0; overflow: hidden; white-space: nowrap; border-radius: 0; }
         .running-text { display: inline-block; white-space: nowrap; animation: marquee 30s linear infinite; color: #ffd700; font-weight: 700; font-size: clamp(16px, 2.2vw, 24px); padding-left: 100%; letter-spacing: 1px; text-align: left; }
         .running-container:hover .running-text { animation-play-state: paused; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-200%); } }
@@ -95,16 +95,16 @@
             word-wrap: break-word;
         }
 
-        /* HEADER TABEL (FREEZE ATAS) */
+        /* HEADER TABEL (WARNA HIJAU TUA ARMY & TEKS PUTIH) */
         .excel-table thead th {
-            background: #064e3b !important;
-            color: #ffffff !important;
+            background-color: #1b3b24 !important; /* Hijau Tua Army */
+            color: #ffffff !important; /* Teks Putih untuk semua header */
             font-weight: 900 !important;
             font-size: clamp(14px, 1.2vw, 18px) !important;
             text-shadow: 0 0 8px rgba(255,255,255,0.15);
             letter-spacing: 1px;
-            border-top: 1px solid #064e3b !important;
-            border-left: 1px solid #064e3b !important;
+            border-top: 1px solid #1b3b24 !important;
+            border-left: 1px solid #1b3b24 !important;
             padding: 10px 8px !important;
             position: -webkit-sticky;
             position: sticky;
@@ -113,6 +113,7 @@
             text-align: center !important;
             vertical-align: middle !important;
             box-shadow: inset 0 -2px 0 #ffffff, 0 2px 4px rgba(0,0,0,0.3);
+            white-space: nowrap; /* Mencegah teks turun baris */
         }
 
         /* Distribusi Lebar Kolom (Total 100%) */
@@ -121,16 +122,23 @@
             text-align: center;
             font-weight: 700;
             vertical-align: middle;
-            white-space: nowrap;
         }
         
-        .excel-table th:nth-child(2), .excel-table td:nth-child(2) { 
+        /* Khusus Isi Tabel Tanggal (td) */
+        .excel-table td:nth-child(2) { 
             width: 23%;
             vertical-align: top; 
-            color: #000000 !important; 
+            color: #000000 !important; /* Warna teks hitam untuk isi tanggal */
             font-weight: 900 !important;
             font-size: clamp(14px, 1.3vw, 18px) !important;
             line-height: 1.2;
+        }
+
+        /* Khusus Header Tabel Tanggal (th) */
+        .excel-table th:nth-child(2) {
+            width: 23%;
+            vertical-align: top;
+            color: #ffffff !important; /* Paksa putih untuk header */
         }
 
         .excel-table th:nth-child(3), .excel-table td:nth-child(3) { width: 23%; vertical-align: top; }
@@ -260,7 +268,7 @@
             }
             .custom-dropdown-menu.open { display: flex !important; }
             
-            .menu-header-mobile { display: flex !important; justify-content: space-between; align-items: center; padding: 16px 20px; background: #064e3b; color: #fff; border-bottom: 2px solid #000; flex-shrink: 0; }
+            .menu-header-mobile { display: flex !important; justify-content: space-between; align-items: center; padding: 16px 20px; background: #1b3b24; color: #fff; border-bottom: 2px solid #000; flex-shrink: 0; }
             .menu-header-mobile h3 { font-size: 18px; font-weight: 700; }
             .btn-close-menu { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
 
@@ -1417,3 +1425,4 @@
 
 </body>
 </html>
+```
