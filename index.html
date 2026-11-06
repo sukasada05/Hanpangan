@@ -131,12 +131,15 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.3);
             white-space: nowrap; 
         }
+        .excel-table thead th[data-tts] { cursor: pointer; }
+        .excel-table thead th[data-tts]:hover { background: #285a37 !important; }
+        .excel-table thead th[data-tts]:focus-visible { outline: 2px solid #facc15; outline-offset: -3px; }
 
         /* Distribusi Lebar Kolom (Total 100%) */
         .excel-table th:nth-child(1), .excel-table td:nth-child(1) {
             width: 8%; 
             text-align: center;
-            font-weight: 700;
+            font-weight: 900;
             vertical-align: middle;
         }
         
@@ -162,8 +165,23 @@
         .excel-table th:nth-child(5), .excel-table td:nth-child(5) { width: 23%; vertical-align: top; }
 
         /* Warna Baris Spesial */
+        .row-weekend td { background: #ffffff !important; }
         .row-today td { background: #ffff99 !important; }
-        .row-weekend td { background: #ffe6e6 !important; }
+        .row-sunday td { color: #ff0000 !important; }
+        .row-sunday td * { color: #ff0000 !important; }
+        .row-sunday td:nth-child(2) { color: #ff0000 !important; }
+        .row-sunday td:first-child .row-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.7em;
+            height: 1.7em;
+            border: 3px solid #ff0000;
+            border-radius: 50%;
+            color: #ff0000 !important;
+            line-height: 1;
+        }
+        .row-sunday td .selected-names .placeholder { color: #ff0000 !important; }
 
         .excel-table .no-data { color: #888; text-align: center; padding: 40px 0; font-weight: 600; font-size: clamp(14px, 1.2vw, 18px); }
 
@@ -264,6 +282,8 @@
             
             .header-actions { width: 100%; gap: 4px 6px; }
             .excel-table thead th { font-size: clamp(12px, 1.5vw, 15px) !important; padding: 8px 4px !important; text-align: center !important; }
+            .excel-table thead th[data-tts] { cursor: pointer; }
+            .excel-table thead th[data-tts]:active { background: #285a37 !important; }
 
             /* Full Screen Menu */
             .custom-dropdown-menu { 
@@ -286,7 +306,8 @@
             
             .menu-header-mobile { display: flex !important; justify-content: space-between; align-items: center; padding: 16px 20px; background: #1b3b24; color: #fff; border-bottom: 2px solid #000; flex-shrink: 0; }
             .menu-header-mobile h3 { font-size: 18px; font-weight: 700; }
-            .btn-close-menu { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
+            .btn-close-menu { background: #16803c; border: 1px solid rgba(255,255,255,0.75); border-radius: 8px; color: #fff; font-size: 16px; font-weight: 800; padding: 8px 14px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+            .btn-close-menu:active { background: #116b32; }
 
             .options-list { flex: 1; overflow-y: auto; padding: 0; background: #ffffff; }
             
@@ -297,8 +318,9 @@
                 border-radius: 0; 
                 border: none; 
                 border-bottom: 1px solid #ddd; 
-                font-size: 16px; 
-                padding: 12px 20px; 
+                font-size: 15px; 
+                line-height: 1.2;
+                padding: 5px 18px; 
             }
             .custom-dropdown-menu .option-item.selected { 
                 background: #e6f7ff; 
@@ -371,7 +393,7 @@
                 </div>
                 <button id="btnKirim" class="btn-kirim">
                     <i class="fab fa-whatsapp"></i>
-                    Kirim KE WHATSAPP
+                    Kirim ke WhatsApp
                 </button>
                 <button id="btnCetak" class="btn-cetak">
                     <i class="fas fa-print"></i> Cetak
@@ -769,7 +791,8 @@
                 // --- Header (Khusus Mobile) ---
                 const headerMobile = document.createElement('div');
                 headerMobile.className = 'menu-header-mobile';
-                headerMobile.innerHTML = `<h3>Pilih ${placeholderText}</h3> <button type="button" class="btn-close-menu" aria-label="Selesai" title="Selesai"><i class="fas fa-times" aria-hidden="true"></i></button>`;
+                const closeButtonLabel = 'OK <i class="fas fa-play" aria-hidden="true"></i>';
+                headerMobile.innerHTML = `<h3>Pilih ${placeholderText}</h3> <button type="button" class="btn-close-menu" aria-label="OK dan putar audio" title="OK dan putar audio">${closeButtonLabel}</button>`;
                 menu.appendChild(headerMobile);
 
                 // --- List Opsi ---
@@ -793,6 +816,7 @@
                             opt.classList.add('selected');
                         }
                         updateDisplay();
+                        dengarkanNama(nama);
                     });
                     optionsList.appendChild(opt);
                 });
@@ -807,11 +831,31 @@
 
                 headerMobile.querySelector('.btn-close-menu').addEventListener('click', (e) => {
                     e.stopPropagation();
+                    dengarkanNama('OK');
                     closeMenu();
                 });
+                // Ketuk biasa membuka pilihan; tekan-tahan pada kolom Koramil memutar TTS.
+                let pressTimer = null;
+                let suppressNextClick = false;
+                if (jenis === 'koramil_hari_ini') {
+                    display.addEventListener('pointerdown', () => {
+                        pressTimer = setTimeout(() => {
+                            suppressNextClick = true;
+                            dengarkanHanpangan();
+                        }, 600);
+                    });
+                    ['pointerup', 'pointerleave', 'pointercancel'].forEach(eventName => {
+                        display.addEventListener(eventName, () => clearTimeout(pressTimer));
+                    });
+                }
+
                 // --- Klik pada kotak display ---
                 display.addEventListener('click', (e) => {
                     e.stopPropagation();
+                    if (suppressNextClick) {
+                        suppressNextClick = false;
+                        return;
+                    }
                     
                     document.querySelectorAll('.custom-dropdown-menu.open').forEach(m => {
                         m.classList.remove('open');
@@ -875,6 +919,20 @@
 
                 const today = new Date();
                 const sortedDates = getDisplayDates(bulan, tahun);
+                const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(today.getDate()).padStart(2, '0');
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const tomorrowStr = tomorrow.getFullYear() + '-' + String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(tomorrow.getDate()).padStart(2, '0');
+                const isCurrentMonth = bulan === today.getMonth() && tahun === today.getFullYear();
+                if (isCurrentMonth && !sortedDates.includes(tomorrowStr)) sortedDates.push(tomorrowStr);
+                const todayIndex = sortedDates.indexOf(todayStr);
+                if (todayIndex >= 0) {
+                    const datesFromToday = sortedDates.slice(todayIndex);
+                    const datesBeforeToday = sortedDates.slice(0, todayIndex);
+                    sortedDates.splice(0, sortedDates.length, ...datesFromToday, ...datesBeforeToday);
+                }
                 const displayDateKeys = new Set(sortedDates);
                 const filtered = data.filter(item => displayDateKeys.has(item.tanggal_jadwal));
 
@@ -893,9 +951,6 @@
                     }
                 });
 
-                const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(
-                    today.getDate()).padStart(2, '0');
-
                 let html = `
                     <div class="table-wrapper">
                         <table class="excel-table">
@@ -903,7 +958,7 @@
                                 <tr>
                                     <th style="text-align:center !important;">NO</th>
                                     <th style="text-align:center !important;">TANGGAL</th>
-                                    <th style="text-align:center !important;">KORAMIL</th>
+                                    <th data-tts role="button" tabindex="0" aria-label="Dengarkan jadwal hanpangan hari ini" title="Ketuk untuk mendengarkan jadwal hanpangan" style="text-align:center !important;">KORAMIL</th>
                                     <th style="text-align:center !important;">KEDIAMAN</th>
                                     <th style="text-align:center !important;">MAKODIM</th>
                                 </tr>
@@ -918,12 +973,14 @@
                     const dateStr = formatTanggalDuaBaris(d);
                     const isToday = (dateKey === todayStr);
                     const isWeekendDay = isWeekend(d);
+                    const isSunday = d.getDay() === 0;
                     let rowClass = '';
                     if (isToday) rowClass += ' row-today';
                     if (isWeekendDay) rowClass += ' row-weekend';
+                    if (isSunday) rowClass += ' row-sunday';
                     html += `
                         <tr class="${rowClass}" data-tanggal="${dateKey}">
-                            <td style="font-weight:700;text-align:center;vertical-align:middle;">${index+1}</td>
+                            <td style="font-weight:900;text-align:center;vertical-align:middle;"><span class="row-number">${index+1}</span></td>
                             <td style="text-align:left;vertical-align:top;font-weight:900;color:#000000;">${dateStr}</td>
                             <td data-jenis="koramil_hari_ini" style="text-align:left;vertical-align:top;"></td>
                             <td data-jenis="kediaman_hari_ini" style="text-align:left;vertical-align:top;"></td>
@@ -938,6 +995,8 @@
                     </div>
                 `;
                 previewContainer.innerHTML = html;
+
+                setupHanpanganTTS();
 
                 const rows = previewContainer.querySelectorAll('tr[data-tanggal]');
                 rows.forEach(row => {
@@ -1028,28 +1087,12 @@
             }
 
             function getDisplayDates(bulan, tahun) {
-                const today = new Date();
-                const isCurrentMonth = tahun === today.getFullYear() && bulan === today.getMonth();
                 const allDates = [];
-                const monthsToShow = isCurrentMonth ? 2 : 1;
+                const daysInMonth = new Date(tahun, bulan + 1, 0).getDate();
 
-                for (let monthOffset = 0; monthOffset < monthsToShow; monthOffset++) {
-                    const date = new Date(tahun, bulan + monthOffset, 1);
-                    const year = date.getFullYear();
-                    const month = date.getMonth();
-                    const firstDay = monthOffset === 0 && isCurrentMonth ? today.getDate() : 1;
-                    const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-                    for (let day = firstDay; day <= daysInMonth; day++) {
-                        allDates.push(year + '-' + String(month + 1).padStart(2, '0') + '-' +
-                            String(day).padStart(2, '0'));
-                    }
-                }
-
-                if (!isCurrentMonth) {
-                    const nextMonthFirstDate = new Date(tahun, bulan + 1, 1);
-                    allDates.push(nextMonthFirstDate.getFullYear() + '-' +
-                        String(nextMonthFirstDate.getMonth() + 1).padStart(2, '0') + '-01');
+                for (let day = 1; day <= daysInMonth; day++) {
+                    allDates.push(tahun + '-' + String(bulan + 1).padStart(2, '0') + '-' +
+                        String(day).padStart(2, '0'));
                 }
 
                 return allDates;
@@ -1170,8 +1213,116 @@
                     console.error('Gagal mengirim pesan:', e);
                 } finally {
                     btnKirim.disabled = false;
-                    btnKirim.innerHTML = '<i class="fab fa-whatsapp"></i> Kirim KE WHATSAPP';
+                    btnKirim.innerHTML = '<i class="fab fa-whatsapp"></i> Kirim ke WhatsApp';
                 }
+            }
+
+            // ============================================================
+            //  TEXT TO SPEECH
+            // ============================================================
+            function speakWithMinuteVoice(text) {
+                if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
+
+                const isEvenMinute = new Date().getMinutes() % 2 === 0;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'id-ID';
+                utterance.rate = 0.95;
+                // Browser TTS tidak menyediakan info gender; pitch memberi fallback jika voice gender tidak terdeteksi.
+                utterance.pitch = isEvenMinute ? 0.75 : 1.25;
+
+                const voices = window.speechSynthesis.getVoices();
+                const indonesianVoices = voices.filter(voice => voice.lang.toLowerCase().startsWith('id'));
+                const genderPattern = isEvenMinute
+                    ? /male|man|andika|dimas|arif/i
+                    : /female|woman|damayanti|gadis/i;
+                const matchingVoice = indonesianVoices.find(voice => genderPattern.test(voice.name));
+                if (matchingVoice) utterance.voice = matchingVoice;
+                else if (indonesianVoices.length) utterance.voice = indonesianVoices[0];
+
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(utterance);
+            }
+
+            function dengarkanNama(nama) {
+                if (!nama) return;
+                speakWithMinuteVoice(nama);
+            }
+
+            function dengarkanHanpangan() {
+                if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+                    console.error('TTS tidak didukung oleh browser ini.');
+                    return;
+                }
+
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                    return;
+                }
+
+                const nama = currentHanpangan?.nama || 'Belum tersedia';
+                speakWithMinuteVoice('Jadwal hanpangan hari ini: ' + nama);
+            }
+
+            function dengarkanJadwal() {
+                if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+                    console.error('TTS tidak didukung oleh browser ini.');
+                    return;
+                }
+
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                    return;
+                }
+
+                const today = new Date();
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const toDateKey = date => date.getFullYear() + '-' +
+                    String(date.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(date.getDate()).padStart(2, '0');
+                const dates = [today, tomorrow];
+                const keys = dates.map(toDateKey);
+                const grouped = {};
+                allJadwal.forEach(item => {
+                    if (!keys.includes(item.tanggal_jadwal)) return;
+                    if (!grouped[item.tanggal_jadwal]) {
+                        grouped[item.tanggal_jadwal] = { koramil: '', kediaman: '', makodim: '' };
+                    }
+                    if (item.jenis === 'koramil_hari_ini') grouped[item.tanggal_jadwal].koramil = item.nama1 || '';
+                    else if (item.jenis === 'kediaman_hari_ini') grouped[item.tanggal_jadwal].kediaman = item.nama1 || '';
+                    else if (item.jenis === 'makodim_hari_ini') grouped[item.tanggal_jadwal].makodim = item.nama1 || '';
+                });
+
+                const jenisJadwal = [
+                    ['koramil', 'Koramil'],
+                    ['kediaman', 'Kediaman'],
+                    ['makodim', 'Makodim']
+                ];
+                const bagian = [];
+                dates.forEach((date, index) => {
+                    const entry = grouped[keys[index]] || {};
+                    jenisJadwal.forEach(([key, label]) => {
+                        if (entry[key]) {
+                            bagian.push(`${label}, ${formatTanggalWA(date)}: ${entry[key].split(',').join(', ')}.`);
+                        }
+                    });
+                });
+                bagian.push(`Jadwal hanpangan hari ini: ${currentHanpangan?.nama || 'belum tersedia'}.`);
+
+                speakWithMinuteVoice(bagian.join(' '));
+            }
+
+            function setupHanpanganTTS() {
+                const koramilHeader = document.querySelector('.excel-table thead th[data-tts]');
+                if (!koramilHeader) return;
+
+                koramilHeader.addEventListener('click', dengarkanHanpangan);
+                koramilHeader.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        dengarkanHanpangan();
+                    }
+                });
             }
 
             // ============================================================
@@ -1236,7 +1387,7 @@
                         table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 9pt; border: 1px solid #000; table-layout: fixed; }
                         th, td { border: 1px solid #000; padding: 4px 5px; text-align: left; vertical-align: top; word-break: normal; overflow-wrap: break-word; white-space: pre-line; color: #000; }
                         th { background: #ffffff !important; color: #000000 !important; font-weight: bold; font-size: 9pt; text-align: center !important; }
-                        .no-col { width: 6%; text-align: center; }
+                        .no-col { width: 6%; text-align: center; font-weight: 900; }
                         .tgl-col { width: 17%; font-weight: 900; color: #000; }
                         .nama-col { width: 27%; }
                         .nama-col-kediaman { width: 25%; }
@@ -1358,8 +1509,18 @@
 
             function startAutoRefresh() {
                 if (refreshInterval) clearInterval(refreshInterval);
+                let lastObservedDate = new Date().toDateString();
                 refreshInterval = setInterval(() => {
-                    if (isSupabaseConnected && !isSaving && !isReloading) {
+                    const now = new Date();
+                    if (now.toDateString() !== lastObservedDate) {
+                        lastObservedDate = now.toDateString();
+                        const currentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+                        if ([...bulanSelect.options].some(option => option.value === currentMonth)) {
+                            bulanSelect.value = currentMonth;
+                        }
+                        updateHanpanganDisplay();
+                        if (isSupabaseConnected) loadAllJadwal();
+                    } else if (isSupabaseConnected && !isSaving && !isReloading) {
                         loadAllJadwal();
                     }
                 }, 30000);
@@ -1388,7 +1549,10 @@
 
                 bulanSelect.addEventListener('change', loadAllJadwal);
                 document.getElementById('btnCetak').addEventListener('click', cetakJadwal);
-                document.getElementById('btnKirim').addEventListener('click', kirimKeWhatsApp);
+                document.getElementById('btnKirim').addEventListener('click', () => {
+                    dengarkanNama('Kirim ke WhatsApp');
+                    kirimKeWhatsApp();
+                });
 
                 setupHanpanganScheduler();
                 startAutoRefresh();
