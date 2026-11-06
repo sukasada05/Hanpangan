@@ -60,10 +60,11 @@
 
         /* --- RUNNING TEXT --- */
         /* Margin bawah dirapatkan */
-        .running-container { background: #1b3b24; padding: 4px 8px; margin: 0 0 4px 0; overflow: hidden; white-space: nowrap; border-radius: 0; }
-        .running-text { display: inline-block; white-space: nowrap; animation: marquee 30s linear infinite; color: #ffd700; font-weight: 700; font-size: clamp(16px, 2.2vw, 24px); padding-left: 100%; letter-spacing: 1px; text-align: left; }
+        .running-container { background: #16803c; padding: 4px 8px; margin: 0 0 4px 0; overflow: hidden; white-space: nowrap; border-radius: 999px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.14), 0 1px 3px rgba(0,0,0,0.12); position: relative; }
+        .running-container::after { content: none; }
+        .running-text { display: inline-block; white-space: nowrap; animation: marquee 15s linear infinite; color: #c99700; -webkit-text-fill-color: #c99700; text-shadow: 1px 1px 2px #000, 0 0 5px rgba(0,0,0,0.9); font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-weight: 700; font-size: clamp(20px, 3vw, 30px); line-height: 1.2; padding-left: 100%; letter-spacing: 1px; text-align: left; }
         .running-container:hover .running-text { animation-play-state: paused; }
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-200%); } }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
         /* --- MONTH PICKER --- */
         .month-picker { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; padding: 4px 0; background: transparent; text-align: left; }
@@ -336,7 +337,7 @@
             .container { padding: 0 5px 8px; }
             .sticky-top { padding: 4px 8px 0; }
             .app-header h1 { font-size: 18px; text-align: left; }
-            .running-text { font-size: 14px; animation-duration: 20px; text-align: left; }
+            .running-text { font-size: clamp(18px, 5vw, 24px); line-height: 1.2; animation-duration: 10s; text-align: left; }
             .month-picker select { padding: 6px 8px; font-size: 13px; min-width: 120px; text-align: left; }
             .excel-table th, .excel-table td { padding: 3px 2px; font-size: 9px; text-align: left; vertical-align: top; }
             .excel-table td:nth-child(2) { font-size: clamp(11px, 1.5vw, 14px) !important; line-height: 1.2; }
@@ -509,7 +510,7 @@
                 currentHanpangan = getHanpanganToday(hanpanganData, today);
                 const runningText = document.getElementById('runningTextJadwal');
                 if (currentHanpangan) {
-                    runningText.textContent = '🌾 JADWAL HANPANGAN HARI INI: ' +
+                    runningText.textContent = '🌾 Jadwal hanpangan hari ini: ' +
                         (currentHanpangan.nama || 'Tidak ada') + ' 🌾';
                 } else {
                     runningText.textContent = '🌾 Memuat jadwal hanpangan... 🌾';
