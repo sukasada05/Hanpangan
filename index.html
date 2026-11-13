@@ -13,20 +13,16 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         :root { --sticky-top-height: 145px; }
         
-        /* Hilangkan overflow-x: hidden agar sticky bekerja sempurna */
         html, body { height: auto; min-height: 100vh; width: 100%; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f0f0; color: #000000; padding: 0; display: flex; justify-content: center; align-items: flex-start; }
         
         .container { max-width: 100%; width: 100%; min-height: 100vh; background: #ffffff; padding: 0 10px 16px; border: none; box-shadow: none; overflow: visible; }
         
-        /* Jarak header dirapatkan */
         .sticky-top { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: #ffffff; padding: 4px 8px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-        /* --- HEADER --- */
         .app-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 4px; flex-wrap: wrap; gap: 4px; }
         .app-header h1 { font-size: clamp(20px, 4vw, 32px); font-weight: 900; letter-spacing: 2px; text-align: left; }
         
-        /* Jarak tombol dirapatkan */
         .header-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 4px 6px; position: relative; top: 0; width: 100%; }
         .header-actions .month-picker { grid-column: 1; grid-row: 1; display: block; min-width: 0; }
         .header-actions .month-picker select { width: 100%; min-width: 0; }
@@ -58,42 +54,27 @@
         .btn-kirim:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .btn-kirim i { margin-right: 2px; color: #ffffff; }
 
-        /* --- RUNNING TEXT --- */
-        /* Margin bawah dirapatkan */
         .running-container { background: #16803c; padding: 4px 8px; margin: 0 0 4px 0; overflow: hidden; white-space: nowrap; border-radius: 999px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.14), 0 1px 3px rgba(0,0,0,0.12); position: relative; }
-        .running-container::after { content: none; }
         .running-text { display: inline-block; white-space: nowrap; animation: marquee 15s linear infinite; color: #c99700; -webkit-text-fill-color: #c99700; text-shadow: 1px 1px 2px #000, 0 0 5px rgba(0,0,0,0.9); font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-weight: 700; font-size: clamp(20px, 3vw, 30px); line-height: 1.2; padding-left: 100%; letter-spacing: 1px; text-align: left; }
         .running-container:hover .running-text { animation-play-state: paused; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        /* --- MONTH PICKER --- */
         .month-picker { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; padding: 4px 0; background: transparent; text-align: left; }
         .header-actions .month-picker { margin-bottom: 0; padding: 0; }
         .month-picker label { display: none; }
         .month-picker select { padding: 6px 14px; border: 1px solid #2563eb; border-radius: 999px; background: #2563eb; color: #fff; font-family: inherit; font-size: clamp(14px, 1.2vw, 17px); min-width: 150px; cursor: pointer; text-align: left; transition: background 0.2s, box-shadow 0.2s; }
         .month-picker select:hover { background: #1d4ed8; }
-        .month-picker select:focus { outline: none; background: #1e40af; box-shadow: 0 0 0 3px rgba(37,99,235,0.25); text-shadow: 0 1px 3px rgba(255,255,255,0.55); }
+        .month-picker select:focus { outline: none; background: #1e40af; box-shadow: 0 0 0 3px rgba(37,99,235,0.25); }
         .month-picker select option { background: #2563eb; color: #ffffff; }
         .month-picker .total-hari { display: none; }
 
-        /* --- TABEL (FIT TO SCREEN & STICKY FIX) --- */
         .preview-section { padding: var(--sticky-top-height) 0 0; background: transparent; margin-top: 0; position: relative; }
         .preview-section h3 { display: none; }
         
-        .table-wrapper { 
-            width: 100%; 
-            position: static; 
-        }
+        .table-wrapper { width: 100%; position: static; }
         
-        .excel-table { 
-            width: 100%; 
-            table-layout: fixed; 
-            border-collapse: separate; 
-            border-spacing: 0;
-            font-size: clamp(13px, 1.1vw, 16px); 
-        }
+        .excel-table { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 0; font-size: clamp(13px, 1.1vw, 16px); }
         
-        /* Garis Tabel Umum (Hitam) */
         .excel-table th, .excel-table td { 
             border-right: 1px solid #000000 !important; 
             border-bottom: 1px solid #000000 !important; 
@@ -106,7 +87,6 @@
             word-wrap: break-word;
         }
 
-        /* HEADER TABEL (WARNA HIJAU TUA ARMY & GARIS PUTIH) */
         .excel-table thead th {
             background: #1b3b24 !important;
             color: #ffffff !important; 
@@ -114,13 +94,10 @@
             font-size: clamp(14px, 1.2vw, 18px) !important;
             text-shadow: 0 0 8px rgba(255,255,255,0.15);
             letter-spacing: 1px;
-            
-            /* Garis hitam menempel langsung pada bidang hijau */
             border-top: 1px solid #000000 !important;
             border-left: 1px solid #1b3b24 !important;
-            border-right: 1px solid #ffffff !important; /* Kanan Putih */
-            border-bottom: 1px solid #000000 !important; /* Bawah hitam */
-            
+            border-right: 1px solid #ffffff !important;
+            border-bottom: 1px solid #000000 !important;
             padding: 19px 8px !important;
             position: -webkit-sticky;
             position: sticky;
@@ -135,115 +112,39 @@
         .excel-table thead th[data-tts]:hover { background: #285a37 !important; }
         .excel-table thead th[data-tts]:focus-visible { outline: 2px solid #facc15; outline-offset: -3px; }
 
-        /* Distribusi Lebar Kolom (Total 100%) */
-        .excel-table th:nth-child(1), .excel-table td:nth-child(1) {
-            width: 8%; 
-            text-align: center;
-            font-weight: 900;
-            vertical-align: middle;
-        }
-        
-        /* Khusus Isi Tabel Tanggal (td) */
-        .excel-table td:nth-child(2) { 
-            width: 23%;
-            vertical-align: top; 
-            color: #000000 !important; 
-            font-weight: 900 !important;
-            font-size: clamp(14px, 1.3vw, 18px) !important;
-            line-height: 1.2;
-        }
-
-        /* Khusus Header Tabel Tanggal (th) */
-        .excel-table th:nth-child(2) {
-            width: 23%;
-            vertical-align: top;
-            color: #ffffff !important; 
-        }
-
+        .excel-table th:nth-child(1), .excel-table td:nth-child(1) { width: 8%; text-align: center; font-weight: 900; vertical-align: middle; }
+        .excel-table td:nth-child(2) { width: 23%; vertical-align: top; color: #000000 !important; font-weight: 900 !important; font-size: clamp(14px, 1.3vw, 18px) !important; line-height: 1.2; }
+        .excel-table th:nth-child(2) { width: 23%; vertical-align: top; color: #ffffff !important; }
         .excel-table th:nth-child(3), .excel-table td:nth-child(3) { width: 23%; vertical-align: top; }
         .excel-table th:nth-child(4), .excel-table td:nth-child(4) { width: 23%; vertical-align: top; }
         .excel-table th:nth-child(5), .excel-table td:nth-child(5) { width: 23%; vertical-align: top; }
 
-        /* Warna Baris Spesial */
         .row-weekend td { background: #ffffff !important; }
         .row-today td { background: #ffff99 !important; }
         .row-sunday td { color: #ff0000 !important; }
         .row-sunday td * { color: #ff0000 !important; }
         .row-sunday td:nth-child(2) { color: #ff0000 !important; }
-        .row-sunday td:first-child .row-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 1.7em;
-            height: 1.7em;
-            border: 3px solid #ff0000;
-            border-radius: 50%;
-            color: #ff0000 !important;
-            line-height: 1;
-        }
+        .row-sunday td:first-child .row-number { display: inline-flex; align-items: center; justify-content: center; width: 1.7em; height: 1.7em; border: 3px solid #ff0000; border-radius: 50%; color: #ff0000 !important; line-height: 1; }
         .row-sunday td .selected-names .placeholder { color: #ff0000 !important; }
 
         .excel-table .no-data { color: #888; text-align: center; padding: 40px 0; font-weight: 600; font-size: clamp(14px, 1.2vw, 18px); }
 
-        /* --- DROPDOWN DALAM TABEL (AREA KLIK FULL) --- */
-        .excel-table td[data-jenis] { 
-            position: relative; 
-            padding: 0 !important; 
-            vertical-align: top; 
-            cursor: pointer; 
-        }
-        
-        .excel-table td[data-jenis]:hover {
-            background-color: #f0f7ff !important;
-        }
+        .excel-table td[data-jenis] { position: relative; padding: 0 !important; vertical-align: top; cursor: pointer; }
+        .excel-table td[data-jenis]:hover { background-color: #f0f7ff !important; }
 
-        .custom-dropdown-wrapper { 
-            width: 100%; 
-            height: 100%; 
-            min-height: 100%; 
-            display: flex; 
-            flex-direction: column;
-        }
+        .custom-dropdown-wrapper { width: 100%; height: 100%; min-height: 100%; display: flex; flex-direction: column; }
         
         .selected-names { 
-            display: flex; 
-            flex-direction: column; 
-            flex-grow: 1;
-            width: 100%; 
-            height: 100%; 
-            min-height: 100%;
-            box-sizing: border-box; 
-            padding: 6px 8px; 
-            background: transparent !important;
-            color: #000; 
-            font-weight: 700; 
-            line-height: 1.4; 
-            white-space: pre-line; 
-            transition: background 0.2s; 
-            word-wrap: break-word;
+            display: flex; flex-direction: column; flex-grow: 1;
+            width: 100%; height: 100%; min-height: 100%;
+            box-sizing: border-box; padding: 6px 8px; 
+            background: transparent !important; color: #000; font-weight: 700; line-height: 1.4; 
+            white-space: pre-line; transition: background 0.2s; word-wrap: break-word;
         }
-        
-        .selected-names:not(.has-value) { 
-            justify-content: center; 
-            align-items: center; 
-            text-align: center; 
-        }
-        
-        .selected-names.has-value { 
-            justify-content: flex-start; 
-            align-items: flex-start; 
-            text-align: left; 
-        }
-        
-        .selected-names .placeholder {
-            color: #000000 !important; 
-            font-weight: 900 !important;
-            font-size: clamp(14px, 1.2vw, 18px) !important; 
-            letter-spacing: 0.5px;
-            pointer-events: none; 
-        }
+        .selected-names:not(.has-value) { justify-content: center; align-items: center; text-align: center; }
+        .selected-names.has-value { justify-content: flex-start; align-items: flex-start; text-align: left; }
+        .selected-names .placeholder { color: #000000 !important; font-weight: 900 !important; font-size: clamp(14px, 1.2vw, 18px) !important; letter-spacing: 0.5px; pointer-events: none; }
 
-        /* --- MENU DROPDOWN (DESKTOP: MELAYANG) --- */
         .custom-dropdown-menu {
             display: none; position: fixed; background: #ffffff; border: 2px solid #000;
             z-index: 999999; max-height: 250px; overflow-y: auto;
@@ -251,7 +152,6 @@
             min-width: 220px; max-width: 90vw;
         }
         .custom-dropdown-menu.open { display: block; }
-        
         .custom-dropdown-menu .option-item {
             padding: 12px 16px; cursor: pointer; font-family: 'Segoe UI', Arial, sans-serif;
             font-size: 15px; font-weight: 700; border-bottom: 1px solid #eee;
@@ -261,75 +161,38 @@
         .custom-dropdown-menu .option-item:last-child { border-bottom: none; }
         .custom-dropdown-menu .option-item:hover { background: #f0f7ff; }
         .custom-dropdown-menu .option-item.selected { background: #e6f7ff; color: #0066cc; }
-        .custom-dropdown-menu .option-item.selected::after {
-            content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
-            color: #0066cc; font-size: 16px; margin-left: 10px;
-        }
+        .custom-dropdown-menu .option-item.selected::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: #0066cc; font-size: 16px; margin-left: 10px; }
 
         .menu-header-mobile { display: none !important; }
         .options-list { display: block; }
 
-        /* --- MOBILE FULL SCREEN MENU --- */
         @media (max-width: 768px) {
             .container { padding: 0 14px 12px; }
             .sticky-top { padding: 4px 8px 0; }
             .month-picker { flex-direction: column; align-items: stretch; text-align: left; }
-            .month-picker .total-hari { margin-left: 0; text-align: left; }
             .excel-table th, .excel-table td { padding: 4px 6px; font-size: 12px; text-align: left; vertical-align: top; }
             .excel-table td:nth-child(2) { font-size: clamp(13px, 1.5vw, 16px) !important; }
             .selected-names { font-size: 13px; line-height: 1.4; padding: 4px 6px; }
             .selected-names .placeholder { font-size: clamp(12px, 1.5vw, 14px) !important; }
-            
             .header-actions { width: 100%; gap: 4px 6px; }
             .excel-table thead th { font-size: clamp(12px, 1.5vw, 15px) !important; padding: 8px 4px !important; text-align: center !important; }
-            .excel-table thead th[data-tts] { cursor: pointer; }
-            .excel-table thead th[data-tts]:active { background: #285a37 !important; }
 
-            /* Full Screen Menu */
             .custom-dropdown-menu { 
-                top: 0 !important; 
-                left: 0 !important; 
-                right: 0 !important; 
-                bottom: 0 !important; 
-                width: 100% !important; 
-                height: 100% !important; 
-                max-height: 100vh !important; 
-                border: none; 
-                border-radius: 0; 
-                padding: 0; 
-                background: #ffffff; 
-                display: none; 
-                flex-direction: column; 
-                z-index: 9999999;
+                top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; 
+                width: 100% !important; height: 100% !important; max-height: 100vh !important; 
+                border: none; border-radius: 0; padding: 0; background: #ffffff; 
+                display: none; flex-direction: column; z-index: 9999999;
             }
             .custom-dropdown-menu.open { display: flex !important; }
-            
             .menu-header-mobile { display: flex !important; justify-content: space-between; align-items: center; padding: 16px 20px; background: #1b3b24; color: #fff; border-bottom: 2px solid #000; flex-shrink: 0; }
             .menu-header-mobile h3 { font-size: 18px; font-weight: 700; }
             .btn-close-menu { background: #16803c; border: 1px solid rgba(255,255,255,0.75); border-radius: 8px; color: #fff; font-size: 16px; font-weight: 800; padding: 8px 14px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
             .btn-close-menu:active { background: #116b32; }
-
             .options-list { flex: 1; overflow-y: auto; padding: 0; background: #ffffff; }
-            
-            /* Menghilangkan kotak & merapatkan baris */
-            .custom-dropdown-menu .option-item { 
-                background: #ffffff; 
-                margin-bottom: 0; 
-                border-radius: 0; 
-                border: none; 
-                border-bottom: 1px solid #ddd; 
-                font-size: 15px; 
-                line-height: 1.2;
-                padding: 5px 18px; 
-            }
-            .custom-dropdown-menu .option-item.selected { 
-                background: #e6f7ff; 
-                color: #0066cc; 
-            }
-
+            .custom-dropdown-menu .option-item { background: #ffffff; margin-bottom: 0; border-radius: 0; border: none; border-bottom: 1px solid #ddd; font-size: 15px; line-height: 1.2; padding: 5px 18px; }
+            .custom-dropdown-menu .option-item.selected { background: #e6f7ff; color: #0066cc; }
         }
 
-        /* --- INDIKATOR SUPABASE --- */
         .supabase-indicator { position: fixed; top: 12px; right: 14px; width: 25px; height: 22px; z-index: 99999; display: flex; align-items: flex-end; justify-content: space-between; gap: 2px; padding: 2px; }
         .supabase-indicator span { display: block; flex: 1; height: var(--bar-height); border-radius: 0; background: #ffffff; }
         .supabase-indicator.online span { background: #ffffff; }
@@ -363,7 +226,6 @@
             .month-picker select { padding: 6px 8px; font-size: 13px; min-width: 120px; text-align: left; }
             .excel-table th, .excel-table td { padding: 3px 2px; font-size: 9px; text-align: left; vertical-align: top; }
             .excel-table td:nth-child(2) { font-size: clamp(11px, 1.5vw, 14px) !important; line-height: 1.2; }
-            .preview-section h3 { font-size: 15px; text-align: left; }
             .selected-names { font-size: 10px; line-height: 1.3; padding: 3px 4px; }
             .selected-names .placeholder { font-size: clamp(9px, 1.2vw, 12px) !important; }
             .supabase-indicator { width: 22px; height: 20px; top: 6px; right: 8px; }
@@ -435,7 +297,6 @@
             let isSaving = false;
             let isReloading = false;
             let lastReloadTime = 0;
-            let isInitialLoad = true;
 
             const bulanSelect = document.getElementById('bulanSelect');
             const bulanTahunTitle = document.getElementById('bulanTahunTitle');
@@ -448,97 +309,53 @@
             function updateStickyTopHeight() {
                 document.documentElement.style.setProperty('--sticky-top-height', stickyTop.offsetHeight + 'px');
             }
-
             updateStickyTopHeight();
             window.addEventListener('resize', updateStickyTopHeight);
             window.addEventListener('load', updateStickyTopHeight);
-            if ('ResizeObserver' in window) {
-                new ResizeObserver(updateStickyTopHeight).observe(stickyTop);
-            }
+            if ('ResizeObserver' in window) new ResizeObserver(updateStickyTopHeight).observe(stickyTop);
 
             const NAMA_HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-            const NAMA_BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September",
-                "Oktober", "November", "Desember"
-            ];
+            const NAMA_BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
             // ============================================================
-            //  UTILITY FUNCTIONS
+            //  UTILITY
             // ============================================================
             function getEpochDay(date) {
-                const ref = new Date(2024, 0, 1);
-                ref.setHours(0, 0, 0, 0);
-                const d = new Date(date);
-                d.setHours(0, 0, 0, 0);
-                const diffTime = d.getTime() - ref.getTime();
-                return Math.floor(diffTime / (24 * 60 * 60 * 1000));
+                const ref = new Date(2024, 0, 1); ref.setHours(0,0,0,0);
+                const d = new Date(date); d.setHours(0,0,0,0);
+                return Math.floor((d.getTime() - ref.getTime()) / 86400000);
             }
-
             function getHanpanganToday(data, date) {
                 if (!data || data.length === 0) return null;
-                const startEpoch = getEpochDay(START_DATE);
-                const todayEpoch = getEpochDay(date);
-                const dayDiff = todayEpoch - startEpoch;
+                const dayDiff = getEpochDay(date) - getEpochDay(START_DATE);
                 const idx = ((START_INDEX + dayDiff) % data.length + data.length) % data.length;
                 return data[idx];
             }
-
             function formatTanggalDuaBaris(date) {
-                return NAMA_HARI[date.getDay()] + ',\n' +
-                    date.getDate() + ' ' +
-                    NAMA_BULAN[date.getMonth()] + ' ' +
-                    date.getFullYear();
+                return NAMA_HARI[date.getDay()] + ',\n' + date.getDate() + ' ' + NAMA_BULAN[date.getMonth()] + ' ' + date.getFullYear();
             }
-
             function formatTanggalWA(date) {
-                return NAMA_HARI[date.getDay()] + ', ' +
-                    date.getDate() + ' ' +
-                    NAMA_BULAN[date.getMonth()] + ' ' +
-                    date.getFullYear();
+                return NAMA_HARI[date.getDay()] + ', ' + date.getDate() + ' ' + NAMA_BULAN[date.getMonth()] + ' ' + date.getFullYear();
             }
-
-            function isWeekend(date) {
-                const day = date.getDay();
-                return day === 0 || day === 6;
-            }
-
+            function isWeekend(date) { const d = date.getDay(); return d === 0 || d === 6; }
             function updateIndicator(status) {
                 indicator.className = 'supabase-indicator';
-                if (status === 'online') {
-                    indicator.classList.add('online');
-                    indicator.setAttribute('aria-label', 'Supabase terhubung');
-                } else if (status === 'offline') {
-                    indicator.classList.add('offline');
-                    indicator.setAttribute('aria-label', 'Supabase tidak terhubung');
-                } else {
-                    indicator.classList.add('checking');
-                    indicator.setAttribute('aria-label', 'Memeriksa koneksi Supabase');
-                }
+                if (status === 'online') { indicator.classList.add('online'); indicator.setAttribute('aria-label', 'Supabase terhubung'); }
+                else if (status === 'offline') { indicator.classList.add('offline'); indicator.setAttribute('aria-label', 'Supabase tidak terhubung'); }
+                else { indicator.classList.add('checking'); indicator.setAttribute('aria-label', 'Memeriksa koneksi Supabase'); }
             }
-
             function fetchText(url) {
                 return fetch(url + '?t=' + Date.now())
-                    .then(r => {
-                        if (!r.ok) throw new Error('HTTP ' + r.status);
-                        return r.text();
-                    })
+                    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
                     .catch(() => null);
             }
-
-            // ============================================================
-            //  UPDATE HANPANGAN
-            // ============================================================
             function updateHanpanganDisplay() {
                 const today = new Date();
                 currentHanpangan = getHanpanganToday(hanpanganData, today);
                 const runningText = document.getElementById('runningTextJadwal');
-                if (currentHanpangan) {
-                    runningText.textContent = '🌾 Jadwal hanpangan hari ini: ' +
-                        (currentHanpangan.nama || 'Tidak ada') + ' 🌾';
-                } else {
-                    runningText.textContent = '🌾 Memuat jadwal hanpangan... 🌾';
-                }
+                if (currentHanpangan) runningText.textContent = '🌾 Jadwal hanpangan hari ini: ' + (currentHanpangan.nama || 'Tidak ada') + ' 🌾';
+                else runningText.textContent = '🌾 Memuat jadwal hanpangan... 🌾';
             }
-
             function parseCSV(csvText) {
                 const lines = csvText.trim().split('\n');
                 if (lines.length < 2) return [];
@@ -549,16 +366,9 @@
                 else if (headerLine.includes(';')) delimiter = ';';
                 const data = [];
                 for (let i = 1; i < lines.length; i++) {
-                    const line = lines[i].trim();
-                    if (!line) continue;
+                    const line = lines[i].trim(); if (!line) continue;
                     const cols = line.split(delimiter);
-                    if (cols.length >= 3) {
-                        data.push({
-                            nama: cols[0].trim(),
-                            desa: cols[1].trim(),
-                            status: cols[2].trim()
-                        });
-                    }
+                    if (cols.length >= 3) data.push({ nama: cols[0].trim(), desa: cols[1].trim(), status: cols[2].trim() });
                 }
                 return data;
             }
@@ -569,16 +379,10 @@
             async function loadPiket() {
                 try {
                     const data = await fetchText(PIKET_URL);
-                    if (data) {
-                        daftarNama = data.trim().split('\n').filter(l => l.trim()).map(n => n.trim());
-                        return true;
-                    }
+                    if (data) { daftarNama = data.trim().split('\n').filter(l => l.trim()).map(n => n.trim()); return true; }
                     return false;
-                } catch (e) {
-                    return false;
-                }
+                } catch (e) { return false; }
             }
-
             async function loadHanpangan() {
                 try {
                     const data = await fetchText(HANPANGAN_URL);
@@ -586,9 +390,7 @@
                     hanpanganData = parseCSV(data);
                     updateHanpanganDisplay();
                     return true;
-                } catch (e) {
-                    return false;
-                }
+                } catch (e) { return false; }
             }
 
             // ============================================================
@@ -597,26 +399,15 @@
             async function initSupabase() {
                 updateIndicator('checking');
                 try {
-                    if (typeof supabase === 'undefined') {
-                        updateIndicator('offline');
-                        return false;
-                    }
+                    if (typeof supabase === 'undefined') { updateIndicator('offline'); return false; }
                     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                     const { error } = await supabaseClient.from('jadwal_piket').select('id').limit(1);
-                    if (error) {
-                        updateIndicator('offline');
-                        isSupabaseConnected = false;
-                        return false;
-                    }
+                    if (error) { updateIndicator('offline'); isSupabaseConnected = false; return false; }
                     isSupabaseConnected = true;
                     updateIndicator('online');
                     await loadAllJadwal();
                     return true;
-                } catch (e) {
-                    updateIndicator('offline');
-                    isSupabaseConnected = false;
-                    return false;
-                }
+                } catch (e) { updateIndicator('offline'); isSupabaseConnected = false; return false; }
             }
 
             async function loadAllJadwal() {
@@ -624,25 +415,17 @@
                 if (now - lastReloadTime < 1000) return;
                 lastReloadTime = now;
                 if (isReloading) return;
-
                 if (!supabaseClient || !isSupabaseConnected) {
                     previewContainer.innerHTML = '<div class="no-data">⚠️ Supabase tidak terhubung</div>';
                     return;
                 }
-
                 isReloading = true;
                 try {
-                    const { data, error } = await supabaseClient
-                        .from('jadwal_piket')
-                        .select('*')
-                        .order('tanggal_jadwal', { ascending: true });
+                    const { data, error } = await supabaseClient.from('jadwal_piket').select('*').order('tanggal_jadwal', { ascending: true });
                     if (error) throw error;
                     allJadwal = data || [];
                     populateBulan();
                     renderPreview(allJadwal);
-                    if (isInitialLoad) {
-                        isInitialLoad = false;
-                    }
                 } catch (e) {
                     previewContainer.innerHTML = '<div class="no-data">❌ Gagal memuat data</div>';
                 } finally {
@@ -652,29 +435,17 @@
 
             function showSaveIndicator(element, status) {
                 if (!element) return;
-                let indicator = element.querySelector('.save-indicator');
-                if (!indicator) {
-                    indicator = document.createElement('span');
-                    indicator.className = 'save-indicator';
-                    element.appendChild(indicator);
-                }
-                indicator.className = 'save-indicator ' + status;
-                if (status === 'saved' || status === 'error') {
-                    setTimeout(() => {
-                        indicator.className = 'save-indicator';
-                    }, 2000);
-                }
+                let ind = element.querySelector('.save-indicator');
+                if (!ind) { ind = document.createElement('span'); ind.className = 'save-indicator'; element.appendChild(ind); }
+                ind.className = 'save-indicator ' + status;
+                if (status === 'saved' || status === 'error') setTimeout(() => { ind.className = 'save-indicator'; }, 2000);
             }
 
             // ============================================================
             //  SAVE JADWAL
             // ============================================================
             async function saveJadwal(tanggal, jenis, nama) {
-                if (!supabaseClient || !isSupabaseConnected) {
-                    console.error('Gagal simpan: Supabase tidak terhubung.');
-                    return false;
-                }
-
+                if (!supabaseClient || !isSupabaseConnected) { console.error('Supabase tidak terhubung.'); return false; }
                 if (isSaving) return false;
                 isSaving = true;
 
@@ -682,98 +453,49 @@
                 let targetCell = null;
                 for (let cell of cells) {
                     const row = cell.closest('tr');
-                    if (row && row.dataset.tanggal === tanggal) {
-                        targetCell = cell;
-                        break;
-                    }
+                    if (row && row.dataset.tanggal === tanggal) { targetCell = cell; break; }
                 }
-
-                if (targetCell) {
-                    showSaveIndicator(targetCell, 'saving');
-                }
+                if (targetCell) showSaveIndicator(targetCell, 'saving');
 
                 try {
                     const { data: existing, error: findErr } = await supabaseClient
-                        .from('jadwal_piket')
-                        .select('id, nama1, nama2')
-                        .eq('tanggal_jadwal', tanggal)
-                        .eq('jenis', jenis)
-                        .maybeSingle();
+                        .from('jadwal_piket').select('id, nama1, nama2')
+                        .eq('tanggal_jadwal', tanggal).eq('jenis', jenis).maybeSingle();
                     if (findErr) throw findErr;
-
                     const oldValue = existing ? (existing.nama1 || '') : '';
                     const newValue = nama || '';
-
                     if (oldValue === newValue) {
-                        if (targetCell) {
-                            showSaveIndicator(targetCell, 'saved');
-                            setTimeout(() => showSaveIndicator(targetCell, ''), 1000);
-                        }
-                        isSaving = false;
-                        return true;
+                        if (targetCell) { showSaveIndicator(targetCell, 'saved'); setTimeout(() => showSaveIndicator(targetCell, ''), 1000); }
+                        isSaving = false; return true;
                     }
-
                     let result;
                     if (existing) {
-                        result = await supabaseClient
-                            .from('jadwal_piket')
-                            .update({
-                                nama1: nama || null,
-                                nama2: null,
-                                tanggal_input: new Date().toISOString()
-                            })
-                            .eq('id', existing.id);
+                        result = await supabaseClient.from('jadwal_piket').update({ nama1: nama || null, nama2: null, tanggal_input: new Date().toISOString() }).eq('id', existing.id);
                     } else {
-                        result = await supabaseClient
-                            .from('jadwal_piket')
-                            .insert([{
-                                tanggal_jadwal: tanggal,
-                                jenis: jenis,
-                                nama1: nama || null,
-                                nama2: null,
-                                tanggal_input: new Date().toISOString()
-                            }]);
+                        result = await supabaseClient.from('jadwal_piket').insert([{ tanggal_jadwal: tanggal, jenis: jenis, nama1: nama || null, nama2: null, tanggal_input: new Date().toISOString() }]);
                     }
                     if (result.error) throw result.error;
-
-                    console.log('✅ Save success:', tanggal, jenis, nama);
-
-                    if (targetCell) {
-                        showSaveIndicator(targetCell, 'saved');
-                    }
-
+                    if (targetCell) showSaveIndicator(targetCell, 'saved');
                     return true;
                 } catch (e) {
-                    console.error('❌ Gagal simpan:', e);
-                    if (targetCell) {
-                        showSaveIndicator(targetCell, 'error');
-                    }
+                    console.error('Gagal simpan:', e);
+                    if (targetCell) showSaveIndicator(targetCell, 'error');
                     return false;
-                } finally {
-                    isSaving = false;
-                }
+                } finally { isSaving = false; }
             }
 
             // ============================================================
-            //  DROPDOWN CUSTOM
+            //  DROPDOWN
             // ============================================================
             function createCustomDropdown(tanggal, jenis, currentValue) {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'custom-dropdown-wrapper';
-
                 const display = document.createElement('div');
                 display.className = 'selected-names';
-                
-                const columnNames = {
-                    koramil_hari_ini: 'KORAMIL',
-                    kediaman_hari_ini: 'KEDIAMAN',
-                    makodim_hari_ini: 'MAKODIM'
-                };
+                const columnNames = { koramil_hari_ini: 'KORAMIL', kediaman_hari_ini: 'KEDIAMAN', makodim_hari_ini: 'MAKODIM' };
                 const placeholderText = `${(columnNames[jenis] || 'NAMA')}`;
-
-                const savedNames = currentValue ? currentValue.split(',').map(nama => nama.trim()).filter(Boolean) : [];
+                const savedNames = currentValue ? currentValue.split(',').map(n => n.trim()).filter(Boolean) : [];
                 let selectedNames = [...savedNames];
-
                 const updateDisplay = () => {
                     if (selectedNames.length > 0) {
                         display.innerHTML = selectedNames.map((nama, i) => `${i + 1}. ${nama}`).join('<br>');
@@ -788,24 +510,19 @@
                 const menu = document.createElement('div');
                 menu.className = 'custom-dropdown-menu';
 
-                // --- Header (Khusus Mobile) ---
                 const headerMobile = document.createElement('div');
                 headerMobile.className = 'menu-header-mobile';
-                const closeButtonLabel = 'OK <i class="fas fa-play" aria-hidden="true"></i>';
-                headerMobile.innerHTML = `<h3>Pilih ${placeholderText}</h3> <button type="button" class="btn-close-menu" aria-label="OK dan putar audio" title="OK dan putar audio">${closeButtonLabel}</button>`;
+                headerMobile.innerHTML = `<h3>Pilih ${placeholderText}</h3> <button type="button" class="btn-close-menu" aria-label="OK">OK <i class="fas fa-play" aria-hidden="true"></i></button>`;
                 menu.appendChild(headerMobile);
 
-                // --- List Opsi ---
                 const optionsList = document.createElement('div');
                 optionsList.className = 'options-list';
-                
                 const allNames = [...new Set([...savedNames, ...daftarNama])];
                 allNames.forEach(nama => {
                     const opt = document.createElement('div');
                     opt.className = 'option-item';
                     opt.textContent = nama;
                     if (selectedNames.includes(nama)) opt.classList.add('selected');
-
                     opt.addEventListener('click', (e) => {
                         e.stopPropagation();
                         if (selectedNames.includes(nama)) {
@@ -822,10 +539,9 @@
                 });
                 menu.appendChild(optionsList);
 
-                // --- Fungsi Tutup Menu ---
                 const closeMenu = () => {
                     menu.classList.remove('open');
-                    document.body.style.overflow = ''; 
+                    document.body.style.overflow = '';
                     if (menu._onClose) menu._onClose();
                 };
 
@@ -834,76 +550,44 @@
                     dengarkanNama('OK');
                     closeMenu();
                 });
-                // Ketuk biasa membuka pilihan; tekan-tahan pada kolom Koramil memutar TTS.
+
                 let pressTimer = null;
                 let suppressNextClick = false;
                 if (jenis === 'koramil_hari_ini') {
                     display.addEventListener('pointerdown', () => {
-                        pressTimer = setTimeout(() => {
-                            suppressNextClick = true;
-                            dengarkanHanpangan();
-                        }, 600);
+                        pressTimer = setTimeout(() => { suppressNextClick = true; dengarkanHanpangan(); }, 600);
                     });
-                    ['pointerup', 'pointerleave', 'pointercancel'].forEach(eventName => {
-                        display.addEventListener(eventName, () => clearTimeout(pressTimer));
-                    });
+                    ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => display.addEventListener(ev, () => clearTimeout(pressTimer)));
                 }
 
-                // --- Klik pada kotak display ---
                 display.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    if (suppressNextClick) {
-                        suppressNextClick = false;
-                        return;
-                    }
-                    
-                    document.querySelectorAll('.custom-dropdown-menu.open').forEach(m => {
-                        m.classList.remove('open');
-                        if (m._onClose) m._onClose();
-                    });
-
+                    if (suppressNextClick) { suppressNextClick = false; return; }
+                    document.querySelectorAll('.custom-dropdown-menu.open').forEach(m => { m.classList.remove('open'); if (m._onClose) m._onClose(); });
                     if (window.innerWidth <= 768) {
                         menu.classList.add('open');
-                        document.body.style.overflow = 'hidden'; 
+                        document.body.style.overflow = 'hidden';
                     } else {
                         const rect = display.getBoundingClientRect();
                         menu.style.top = (rect.bottom + 2) + 'px';
-                        
                         let leftPos = rect.left;
-                        if (leftPos + 220 > window.innerWidth) {
-                            leftPos = window.innerWidth - 230;
-                        }
+                        if (leftPos + 220 > window.innerWidth) leftPos = window.innerWidth - 230;
                         menu.style.left = Math.max(10, leftPos) + 'px';
-                        
                         menu.classList.add('open');
-
                         setTimeout(() => {
-                            const menuRect = menu.getBoundingClientRect();
-                            if (menuRect.bottom > window.innerHeight) {
-                                menu.style.top = (rect.top - menuRect.height - 2) + 'px';
-                            }
+                            const mr = menu.getBoundingClientRect();
+                            if (mr.bottom > window.innerHeight) menu.style.top = (rect.top - mr.height - 2) + 'px';
                         }, 0);
                     }
                 });
 
                 menu._onClose = () => {
                     const namesStr = selectedNames.join(', ');
-                    const oldStr = savedNames.join(', ');
-                    if (namesStr !== oldStr) {
-                        saveJadwal(tanggal, jenis, namesStr);
-                    }
+                    if (namesStr !== savedNames.join(', ')) saveJadwal(tanggal, jenis, namesStr);
                 };
 
                 wrapper.appendChild(display);
                 document.body.appendChild(menu);
-
-                wrapper._resetDropdown = () => {
-                    selectedNames = [];
-                    updateDisplay();
-                    optionsList.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
-                    if (menu.parentNode) menu.parentNode.removeChild(menu);
-                };
-
                 return wrapper;
             }
 
@@ -912,19 +596,15 @@
             // ============================================================
             function renderPreview(data) {
                 document.querySelectorAll('.custom-dropdown-menu').forEach(el => el.remove());
-
                 const { bulan, tahun } = getBulanTahun();
                 updateTitle();
                 updateTotalHari();
 
                 const today = new Date();
                 const sortedDates = getDisplayDates(bulan, tahun);
-                const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' +
-                    String(today.getDate()).padStart(2, '0');
-                const tomorrow = new Date(today);
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                const tomorrowStr = tomorrow.getFullYear() + '-' + String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' +
-                    String(tomorrow.getDate()).padStart(2, '0');
+                const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+                const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+                const tomorrowStr = tomorrow.getFullYear() + '-' + String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' + String(tomorrow.getDate()).padStart(2, '0');
                 const isCurrentMonth = bulan === today.getMonth() && tahun === today.getFullYear();
                 if (isCurrentMonth && !sortedDates.includes(tomorrowStr)) sortedDates.push(tomorrowStr);
                 const todayIndex = sortedDates.indexOf(todayStr);
@@ -935,20 +615,13 @@
                 }
                 const displayDateKeys = new Set(sortedDates);
                 const filtered = data.filter(item => displayDateKeys.has(item.tanggal_jadwal));
-
                 const grouped = {};
                 filtered.forEach(item => {
                     const key = item.tanggal_jadwal;
-                    if (!grouped[key]) {
-                        grouped[key] = { koramil: '', kediaman: '', makodim: '' };
-                    }
-                    if (item.jenis === 'koramil_hari_ini') {
-                        grouped[key].koramil = item.nama1 || '';
-                    } else if (item.jenis === 'kediaman_hari_ini') {
-                        grouped[key].kediaman = item.nama1 || '';
-                    } else if (item.jenis === 'makodim_hari_ini') {
-                        grouped[key].makodim = item.nama1 || '';
-                    }
+                    if (!grouped[key]) grouped[key] = { koramil: '', kediaman: '', makodim: '' };
+                    if (item.jenis === 'koramil_hari_ini') grouped[key].koramil = item.nama1 || '';
+                    else if (item.jenis === 'kediaman_hari_ini') grouped[key].kediaman = item.nama1 || '';
+                    else if (item.jenis === 'makodim_hari_ini') grouped[key].makodim = item.nama1 || '';
                 });
 
                 let html = `
@@ -967,7 +640,6 @@
                 `;
 
                 sortedDates.forEach((dateKey, index) => {
-                    const entry = grouped[dateKey] || { koramil: '', kediaman: '', makodim: '' };
                     const parts = dateKey.split('-');
                     const d = new Date(parts[0], parts[1] - 1, parts[2]);
                     const dateStr = formatTanggalDuaBaris(d);
@@ -989,13 +661,8 @@
                     `;
                 });
 
-                html += `
-                            </tbody>
-                        </table>
-                    </div>
-                `;
+                html += `</tbody></table></div>`;
                 previewContainer.innerHTML = html;
-
                 setupHanpanganTTS();
 
                 const rows = previewContainer.querySelectorAll('tr[data-tanggal]');
@@ -1007,23 +674,16 @@
                         const key = jenis.replace('_hari_ini', '');
                         const currentValue = (grouped[tanggal] && grouped[tanggal][key]) || '';
                         const dropdown = createCustomDropdown(tanggal, jenis, currentValue);
-                        
                         cell.innerHTML = '';
                         cell.style.background = 'transparent';
                         cell.style.textAlign = 'left';
                         cell.style.verticalAlign = 'top';
-                        cell.style.padding = '0'; 
+                        cell.style.padding = '0';
                         cell.appendChild(dropdown);
-
                         cell.addEventListener('click', function(event) {
                             if (event.target.closest('.custom-dropdown-menu')) return;
-
                             const display = cell.querySelector('.selected-names');
-                            if (display) {
-                                if (event.target !== display && !display.contains(event.target)) {
-                                    display.click();
-                                }
-                            }
+                            if (display && event.target !== display && !display.contains(event.target)) display.click();
                         });
                     });
                 });
@@ -1037,72 +697,44 @@
                 const currentMonth = now.getMonth();
                 const currentYear = now.getFullYear();
                 const selectedMonth = bulanSelect.value;
-
                 const allMonths = [];
-                const firstScheduleDate = allJadwal.reduce((earliest, item) => {
-                    return !earliest || item.tanggal_jadwal < earliest
-                        ? item.tanggal_jadwal
-                        : earliest;
-                }, '');
-                const earliestScheduleYear = firstScheduleDate
-                    ? parseInt(firstScheduleDate.split('-')[0], 10)
-                    : currentYear - 2;
+                const firstScheduleDate = allJadwal.reduce((e, item) => (!e || item.tanggal_jadwal < e ? item.tanggal_jadwal : e), '');
+                const earliestScheduleYear = firstScheduleDate ? parseInt(firstScheduleDate.split('-')[0], 10) : currentYear - 2;
                 const firstYear = Math.min(currentYear - 2, earliestScheduleYear);
-
                 for (let year = firstYear; year <= currentYear + 2; year++) {
                     for (let m = 0; m < 12; m++) {
-                        allMonths.push({
-                            value: year + '-' + String(m + 1).padStart(2, '0'),
-                            label: NAMA_BULAN[m] + ' ' + year,
-                            year: year,
-                            month: m
-                        });
+                        allMonths.push({ value: year + '-' + String(m + 1).padStart(2, '0'), label: NAMA_BULAN[m] + ' ' + year });
                     }
                 }
-
                 bulanSelect.innerHTML = '';
                 allMonths.forEach(m => {
                     const opt = document.createElement('option');
-                    opt.value = m.value;
-                    opt.textContent = m.label;
+                    opt.value = m.value; opt.textContent = m.label;
                     bulanSelect.appendChild(opt);
                 });
-
                 const currentKey = currentYear + '-' + String(currentMonth + 1).padStart(2, '0');
-                if (allMonths.some(m => m.value === selectedMonth)) {
-                    bulanSelect.value = selectedMonth;
-                } else if (allMonths.some(m => m.value === currentKey)) {
-                    bulanSelect.value = currentKey;
-                } else {
-                    bulanSelect.value = allMonths[0].value;
-                }
-
+                if (allMonths.some(m => m.value === selectedMonth)) bulanSelect.value = selectedMonth;
+                else if (allMonths.some(m => m.value === currentKey)) bulanSelect.value = currentKey;
+                else bulanSelect.value = allMonths[0].value;
                 updateTotalHari();
             }
-
             function getBulanTahun() {
                 const val = bulanSelect.value;
                 const parts = val.split('-');
                 return { bulan: parseInt(parts[1]) - 1, tahun: parseInt(parts[0]) };
             }
-
             function getDisplayDates(bulan, tahun) {
                 const allDates = [];
                 const daysInMonth = new Date(tahun, bulan + 1, 0).getDate();
-
                 for (let day = 1; day <= daysInMonth; day++) {
-                    allDates.push(tahun + '-' + String(bulan + 1).padStart(2, '0') + '-' +
-                        String(day).padStart(2, '0'));
+                    allDates.push(tahun + '-' + String(bulan + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0'));
                 }
-
                 return allDates;
             }
-
             function updateTitle() {
                 const { bulan, tahun } = getBulanTahun();
                 bulanTahunTitle.textContent = NAMA_BULAN[bulan] + ' ' + tahun;
             }
-
             function updateTotalHari() {
                 const { bulan, tahun } = getBulanTahun();
                 const daysInMonth = new Date(tahun, bulan + 1, 0).getDate();
@@ -1113,33 +745,16 @@
             //  KIRIM WA
             // ============================================================
             async function kirimKeWhatsApp() {
-                if (!supabaseClient || !isSupabaseConnected) {
-                    console.error('Gagal mengirim: Supabase tidak terhubung.');
-                    return;
-                }
-
+                if (!supabaseClient || !isSupabaseConnected) { console.error('Supabase tidak terhubung.'); return; }
                 btnKirim.disabled = true;
                 btnKirim.innerHTML = '<span class="spinner"></span> Mengirim...';
-
                 try {
                     const today = new Date();
-                    const tomorrow = new Date(today);
-                    tomorrow.setDate(tomorrow.getDate() + 1);
-
-                    const todayStr = today.getFullYear() + '-' +
-                        String(today.getMonth() + 1).padStart(2, '0') + '-' +
-                        String(today.getDate()).padStart(2, '0');
-                    const tomorrowStr = tomorrow.getFullYear() + '-' +
-                        String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' +
-                        String(tomorrow.getDate()).padStart(2, '0');
-
-                    const { data, error } = await supabaseClient
-                        .from('jadwal_piket')
-                        .select('*')
-                        .in('tanggal_jadwal', [todayStr, tomorrowStr]);
-
+                    const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+                    const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+                    const tomorrowStr = tomorrow.getFullYear() + '-' + String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' + String(tomorrow.getDate()).padStart(2, '0');
+                    const { data, error } = await supabaseClient.from('jadwal_piket').select('*').in('tanggal_jadwal', [todayStr, tomorrowStr]);
                     if (error) throw error;
-
                     const grouped = {};
                     data.forEach(item => {
                         const key = item.tanggal_jadwal;
@@ -1148,376 +763,136 @@
                         else if (item.jenis === 'kediaman_hari_ini') grouped[key].kediaman = item.nama1 || '';
                         else if (item.jenis === 'makodim_hari_ini') grouped[key].makodim = item.nama1 || '';
                     });
-
                     const tglHariIni = formatTanggalWA(today);
                     const tglBesok = formatTanggalWA(tomorrow);
-
-                    let pesan = '';
-                    pesan += '_____________________________\n';
-                    pesan += '*KORAMIL 1609-05/SUKASADA*\n';
-                    pesan += '    *JADWAL DINAS DALAM*\n';
-                    pesan += '_____________________________\n\n';
-
+                    let pesan = '_____________________________\n*KORAMIL 1609-05/SUKASADA*\n    *JADWAL DINAS DALAM*\n_____________________________\n\n';
                     function formatNamaWA(namaStr) {
                         if (!namaStr) return '';
                         const names = namaStr.split(',').map(s => s.trim()).filter(s => s);
                         if (names.length === 0) return '';
                         return names.map((n, i) => '   ' + (i + 1) + '. ' + n).join('\n');
                     }
-
-                    let sections = [];
-                    let letter = 'A';
-
+                    let sections = []; let letter = 'A';
                     function addSection(date, names, type) {
                         if (names && names.trim() !== '') {
                             let label = letter + '.';
-                            let title = date;
-                            if (type) title += ' (' + type + ')';
+                            let title = date + (type ? ' (' + type + ')' : '');
                             sections.push({ label, title, names });
                             letter = String.fromCharCode(letter.charCodeAt(0) + 1);
                         }
                     }
-
                     addSection(tglHariIni, grouped[todayStr]?.koramil || '', '');
                     addSection(tglBesok, grouped[tomorrowStr]?.koramil || '', '');
                     addSection(tglHariIni, grouped[todayStr]?.kediaman || '', 'Kediaman');
                     addSection(tglBesok, grouped[tomorrowStr]?.kediaman || '', 'Kediaman');
                     addSection(tglHariIni, grouped[todayStr]?.makodim || '', 'Makodim');
                     addSection(tglBesok, grouped[tomorrowStr]?.makodim || '', 'Makodim');
-
-                    if (sections.length === 0) {
-                        pesan += 'Belum ada data jadwal untuk hari ini dan besok.\n\n';
-                    } else {
+                    if (sections.length === 0) pesan += 'Belum ada data jadwal untuk hari ini dan besok.\n\n';
+                    else {
                         sections.forEach((sec, idx) => {
-                            pesan += sec.label + ' ' + sec.title + '\n';
-                            pesan += formatNamaWA(sec.names) + '\n';
+                            pesan += sec.label + ' ' + sec.title + '\n' + formatNamaWA(sec.names) + '\n';
                             if (idx < sections.length - 1) pesan += '\n';
                         });
                         pesan += '\n';
                     }
-
-                    if (currentHanpangan) {
-                        pesan += '🌾 *JADWAL HANPANGAN HARI INI:* ' + currentHanpangan.nama + ' 🌾\n';
-                    } else {
-                        pesan += '🌾 *JADWAL HANPANGAN HARI INI:* Belum tersedia 🌾\n';
-                    }
+                    if (currentHanpangan) pesan += '🌾 *JADWAL HANPANGAN HARI INI:* ' + currentHanpangan.nama + ' 🌾\n';
+                    else pesan += '🌾 *JADWAL HANPANGAN HARI INI:* Belum tersedia 🌾\n';
                     pesan += '\n*Demikian MMP.*';
-
-                    const encoded = encodeURIComponent(pesan);
-                    const waUrl = 'https://api.whatsapp.com/send?text=' + encoded;
-                    window.open(waUrl, '_blank');
-
-                    console.log('Pesan berhasil dikirim ke WhatsApp.');
-
-                } catch (e) {
-                    console.error('Gagal mengirim pesan:', e);
-                } finally {
+                    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(pesan), '_blank');
+                } catch (e) { console.error(e); }
+                finally {
                     btnKirim.disabled = false;
                     btnKirim.innerHTML = '<i class="fab fa-whatsapp"></i> Kirim ke WhatsApp';
                 }
             }
 
             // ============================================================
-            //  TEXT TO SPEECH
-            // ============================================================
-            function speakWithMinuteVoice(text) {
-                if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
-
-                const isEvenMinute = new Date().getMinutes() % 2 === 0;
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'id-ID';
-                utterance.rate = 0.95;
-                // Browser TTS tidak menyediakan info gender; pitch memberi fallback jika voice gender tidak terdeteksi.
-                utterance.pitch = isEvenMinute ? 0.75 : 1.25;
-
-                const voices = window.speechSynthesis.getVoices();
-                const indonesianVoices = voices.filter(voice => voice.lang.toLowerCase().startsWith('id'));
-                const genderPattern = isEvenMinute
-                    ? /male|man|andika|dimas|arif/i
-                    : /female|woman|damayanti|gadis/i;
-                const matchingVoice = indonesianVoices.find(voice => genderPattern.test(voice.name));
-                if (matchingVoice) utterance.voice = matchingVoice;
-                else if (indonesianVoices.length) utterance.voice = indonesianVoices[0];
-
-                window.speechSynthesis.cancel();
-                window.speechSynthesis.speak(utterance);
-            }
-
-            function dengarkanNama(nama) {
-                if (!nama) return;
-                speakWithMinuteVoice(nama);
-            }
-
-            function dengarkanHanpangan() {
-                if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
-                    console.error('TTS tidak didukung oleh browser ini.');
-                    return;
-                }
-
-                if (window.speechSynthesis.speaking) {
-                    window.speechSynthesis.cancel();
-                    return;
-                }
-
-                const nama = currentHanpangan?.nama || 'Belum tersedia';
-                speakWithMinuteVoice('Jadwal hanpangan hari ini: ' + nama);
-            }
-
-            function dengarkanJadwal() {
-                if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
-                    console.error('TTS tidak didukung oleh browser ini.');
-                    return;
-                }
-
-                if (window.speechSynthesis.speaking) {
-                    window.speechSynthesis.cancel();
-                    return;
-                }
-
-                const today = new Date();
-                const tomorrow = new Date(today);
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                const toDateKey = date => date.getFullYear() + '-' +
-                    String(date.getMonth() + 1).padStart(2, '0') + '-' +
-                    String(date.getDate()).padStart(2, '0');
-                const dates = [today, tomorrow];
-                const keys = dates.map(toDateKey);
-                const grouped = {};
-                allJadwal.forEach(item => {
-                    if (!keys.includes(item.tanggal_jadwal)) return;
-                    if (!grouped[item.tanggal_jadwal]) {
-                        grouped[item.tanggal_jadwal] = { koramil: '', kediaman: '', makodim: '' };
-                    }
-                    if (item.jenis === 'koramil_hari_ini') grouped[item.tanggal_jadwal].koramil = item.nama1 || '';
-                    else if (item.jenis === 'kediaman_hari_ini') grouped[item.tanggal_jadwal].kediaman = item.nama1 || '';
-                    else if (item.jenis === 'makodim_hari_ini') grouped[item.tanggal_jadwal].makodim = item.nama1 || '';
-                });
-
-                const jenisJadwal = [
-                    ['koramil', 'Koramil'],
-                    ['kediaman', 'Kediaman'],
-                    ['makodim', 'Makodim']
-                ];
-                const bagian = [];
-                dates.forEach((date, index) => {
-                    const entry = grouped[keys[index]] || {};
-                    jenisJadwal.forEach(([key, label]) => {
-                        if (entry[key]) {
-                            bagian.push(`${label}, ${formatTanggalWA(date)}: ${entry[key].split(',').join(', ')}.`);
-                        }
-                    });
-                });
-                bagian.push(`Jadwal hanpangan hari ini: ${currentHanpangan?.nama || 'belum tersedia'}.`);
-
-                speakWithMinuteVoice(bagian.join(' '));
-            }
-
-            function setupHanpanganTTS() {
-                const koramilHeader = document.querySelector('.excel-table thead th[data-tts]');
-                if (!koramilHeader) return;
-
-                koramilHeader.addEventListener('click', dengarkanHanpangan);
-                koramilHeader.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        dengarkanHanpangan();
-                    }
-                });
-            }
-
-            // ============================================================
-            //  CETAK
+            //  CETAK → BUKA print.html (TERINTEGRASI)
             // ============================================================
             function cetakJadwal() {
                 const { bulan, tahun } = getBulanTahun();
+                const key = tahun + '-' + String(bulan + 1).padStart(2, '0');
 
-                const allDates = [];
-                const jumlahHari = new Date(tahun, bulan + 1, 0).getDate();
-                for (let hari = 1; hari <= jumlahHari; hari++) {
-                    allDates.push(
-                        `${tahun}-${String(bulan + 1).padStart(2, '0')}-${String(hari).padStart(2, '0')}`
-                    );
+                // Simpan snapshot data ke localStorage (agar print.html bisa akses tanpa fetch ulang)
+                try {
+                    localStorage.setItem('print_snapshot', JSON.stringify({
+                        bulanKey: key,
+                        allJadwal: allJadwal,
+                        timestamp: Date.now()
+                    }));
+                } catch (e) {
+                    console.warn('Gagal simpan snapshot:', e);
                 }
 
-                const grouped = {};
-                allJadwal.forEach(item => {
-                    const key = item.tanggal_jadwal;
-                    if (!grouped[key]) grouped[key] = { koramil: '', kediaman: '', makodim: '' };
-                    if (item.jenis === 'koramil_hari_ini')       grouped[key].koramil  = item.nama1 || '';
-                    else if (item.jenis === 'kediaman_hari_ini') grouped[key].kediaman = item.nama1 || '';
-                    else if (item.jenis === 'makodim_hari_ini')  grouped[key].makodim  = item.nama1 || '';
-                });
-
-                function formatNamaWithNumber(namaStr) {
-                    if (!namaStr) return '';
-                    const names = namaStr.split(',').map(s => s.trim()).filter(s => s);
-                    if (names.length === 0) return '';
-                    return names.map((n, i) => (i + 1) + '. ' + n).join('\n');
+                // Buka print.html di tab baru dengan parameter bulan
+                const url = 'print.html?bulan=' + encodeURIComponent(key) + '&auto=1';
+                const w = window.open(url, '_blank');
+                if (!w) {
+                    alert('Popup diblokir. Izinkan popup untuk mencetak.');
                 }
-
-                let printHtml = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Jadwal Piket Koramil</title>
-                    <style>
-                        @page {
-                            size: A4;
-                            margin: 2cm 1.5cm 1.5cm 1.5cm;
-                            @top-center {
-                                content: "-" counter(page) "-";
-                                font-family: Arial, sans-serif;
-                                font-size: 10pt;
-                                font-weight: bold;
-                                color: #000;
-                                vertical-align: bottom;
-                                padding-bottom: 10px;
-                            }
-                        }
-                        @page :first {
-                            @top-center { content: none; }
-                        }
-                        body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #000; background: #fff; font-size: 10pt; line-height: 1.3; }
-                        .kop { text-align: left; margin-bottom: 12px; }
-                        .kop-wrapper { display: inline-block; border-bottom: 2px solid #000; padding-bottom: 5px; }
-                        .kop .kodim, .kop .koramil { font-weight: 900; font-size: 12pt; text-transform: uppercase; line-height: 1.2; letter-spacing: 0.5px; color: #000; }
-                        .kop .koramil { margin-left: 25px; margin-top: 4px; }
-                        .judul { text-align: center; font-weight: bold; font-size: 11pt; text-transform: uppercase; margin: 15px 0 8px; color: #000; }
-                        table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 9pt; border: 1px solid #000; table-layout: fixed; }
-                        th, td { border: 1px solid #000; padding: 4px 5px; text-align: left; vertical-align: top; word-break: normal; overflow-wrap: break-word; white-space: pre-line; color: #000; }
-                        th { background: #ffffff !important; color: #000000 !important; font-weight: bold; font-size: 9pt; text-align: center !important; }
-                        .no-col { width: 6%; text-align: center; font-weight: 900; }
-                        .tgl-col { width: 17%; font-weight: 900; color: #000; }
-                        .nama-col { width: 27%; }
-                        .nama-col-kediaman { width: 25%; }
-                        .nama-col-makodim { width: 25%; }
-                        @media screen {
-                            html { background: #e5e7eb; }
-                            body { width: 210mm; max-width: calc(100vw - 32px); min-height: 297mm; margin: 16px auto; padding: 15mm; box-sizing: border-box; box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
-                        }
-                        @media print {
-                            body { width: auto; max-width: none; min-height: 0; margin: 0; padding: 0; box-shadow: none; }
-                            thead { display: table-header-group; }
-                            tr { break-inside: avoid; page-break-inside: avoid; }
-                            .no-col { text-align: center; vertical-align: middle; }
-                            .tgl-col { text-align: center; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="kop">
-                        <div class="kop-wrapper">
-                            <div class="kodim">KOMANDO DISTRIK MILITER 1609/BULELENG</div>
-                            <div class="koramil">KOMANDO RAYON MILITER 1609-05</div>
-                        </div>
-                    </div>
-
-                    <div class="judul">DAFTAR JADWAL PIKET KORAMIL 1609-05/SUKASADA<br>${NAMA_BULAN[bulan].toUpperCase()} ${tahun}</div>
-
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="no-col" style="text-align:center !important;">NO</th>
-                                <th class="tgl-col" style="text-align:center !important;">TANGGAL</th>
-                                <th class="nama-col" style="text-align:center !important;">KORAMIL</th>
-                                <th class="nama-col-kediaman" style="text-align:center !important;">KEDIAMAN</th>
-                                <th class="nama-col-makodim" style="text-align:center !important;">MAKODIM</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-
-                allDates.forEach((dateKey, index) => {
-                    const entry = grouped[dateKey] || { koramil: '', kediaman: '', makodim: '' };
-                    const parts = dateKey.split('-');
-                    const d = new Date(parts[0], parts[1] - 1, parts[2]);
-                    const dateStr = formatTanggalDuaBaris(d);
-
-                    const koramil  = formatNamaWithNumber(entry.koramil);
-                    const kediaman = formatNamaWithNumber(entry.kediaman);
-                    const makodim  = formatNamaWithNumber(entry.makodim);
-
-                    printHtml += `
-                        <tr>
-                            <td class="no-col">${index + 1}</td>
-                            <td class="tgl-col">${dateStr}</td>
-                            <td class="nama-col">${koramil}</td>
-                            <td class="nama-col-kediaman">${kediaman}</td>
-                            <td class="nama-col-makodim">${makodim}</td>
-                        </tr>
-                    `;
-                });
-
-                printHtml += `
-                        </tbody>
-                    </table>
-                </body>
-                </html>
-                `;
-
-                const printWindow = window.open('', '_blank', 'width=800,height=600');
-                if (!printWindow) {
-                    console.error('Jendela cetak tidak dapat dibuka. Periksa pengaturan popup browser.');
-                    return;
-                }
-                printWindow.document.write(printHtml);
-                printWindow.document.close();
-                printWindow.focus();
-                printWindow.print();
             }
 
             // ============================================================
-            //  SCHEDULER HANPANGAN
+            //  TTS
+            // ============================================================
+            function speakWithMinuteVoice(text) {
+                if (!('speechSynthesis' in window)) return;
+                const isEvenMinute = new Date().getMinutes() % 2 === 0;
+                const u = new SpeechSynthesisUtterance(text);
+                u.lang = 'id-ID'; u.rate = 0.95; u.pitch = isEvenMinute ? 0.75 : 1.25;
+                const voices = window.speechSynthesis.getVoices();
+                const idVoices = voices.filter(v => v.lang.toLowerCase().startsWith('id'));
+                const pattern = isEvenMinute ? /male|man|andika|dimas|arif/i : /female|woman|damayanti|gadis/i;
+                const match = idVoices.find(v => pattern.test(v.name));
+                if (match) u.voice = match; else if (idVoices.length) u.voice = idVoices[0];
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(u);
+            }
+            function dengarkanNama(nama) { if (nama) speakWithMinuteVoice(nama); }
+            function dengarkanHanpangan() {
+                if (!('speechSynthesis' in window)) return;
+                if (window.speechSynthesis.speaking) { window.speechSynthesis.cancel(); return; }
+                speakWithMinuteVoice('Jadwal hanpangan hari ini: ' + (currentHanpangan?.nama || 'Belum tersedia'));
+            }
+            function setupHanpanganTTS() {
+                const h = document.querySelector('.excel-table thead th[data-tts]');
+                if (!h) return;
+                h.addEventListener('click', dengarkanHanpangan);
+                h.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dengarkanHanpangan(); } });
+            }
+
+            // ============================================================
+            //  SCHEDULER & INIT
             // ============================================================
             function setupHanpanganScheduler() {
-                function checkAndUpdateHanpangan() {
-                    const now = new Date();
-                    const hours = now.getHours();
-                    const minutes = now.getMinutes();
-                    const seconds = now.getSeconds();
-
-                    if (hours === 0 && minutes === 2 && seconds <= 30) {
-                        if (!window._hanpanganUpdatedToday) {
-                            window._hanpanganUpdatedToday = true;
-                            const today = new Date();
-                            const newHanpangan = getHanpanganToday(hanpanganData, today);
-                            if (newHanpangan && JSON.stringify(newHanpangan) !== JSON.stringify(currentHanpangan)) {
-                                currentHanpangan = newHanpangan;
-                                updateHanpanganDisplay();
-                            }
-                            setTimeout(() => {
-                                window._hanpanganUpdatedToday = false;
-                            }, 60000);
+                function check() {
+                    const n = new Date();
+                    if (n.getHours() === 0 && n.getMinutes() === 2 && n.getSeconds() <= 30) {
+                        if (!window._hpUpdated) {
+                            window._hpUpdated = true;
+                            currentHanpangan = getHanpanganToday(hanpanganData, new Date());
+                            updateHanpanganDisplay();
+                            setTimeout(() => { window._hpUpdated = false; }, 60000);
                         }
-                    } else if (hours === 0 && minutes === 3 && seconds === 0) {
-                        window._hanpanganUpdatedToday = false;
+                    } else if (n.getHours() === 0 && n.getMinutes() === 3 && n.getSeconds() === 0) {
+                        window._hpUpdated = false;
                     }
                 }
-                setInterval(checkAndUpdateHanpangan, 5000);
+                setInterval(check, 5000);
             }
-
             function registerServiceWorker() {
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('sw.js')
-                        .then(() => console.log('✅ SW registered'))
-                        .catch(() => console.log('ℹ️ SW not registered'));
-                }
+                if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').then(() => console.log('✅ SW registered')).catch(() => console.log('ℹ️ SW not registered'));
             }
-
             let refreshInterval = null;
-
             function startAutoRefresh() {
                 if (refreshInterval) clearInterval(refreshInterval);
-                let lastObservedDate = new Date().toDateString();
+                let last = new Date().toDateString();
                 refreshInterval = setInterval(() => {
-                    const now = new Date();
-                    if (now.toDateString() !== lastObservedDate) {
-                        lastObservedDate = now.toDateString();
-                        const currentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
-                        if ([...bulanSelect.options].some(option => option.value === currentMonth)) {
-                            bulanSelect.value = currentMonth;
-                        }
+                    const n = new Date();
+                    if (n.toDateString() !== last) {
+                        last = n.toDateString();
+                        const cm = n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0');
+                        if ([...bulanSelect.options].some(o => o.value === cm)) bulanSelect.value = cm;
                         updateHanpanganDisplay();
                         if (isSupabaseConnected) loadAllJadwal();
                     } else if (isSupabaseConnected && !isSaving && !isReloading) {
@@ -1526,64 +901,26 @@
                 }, 30000);
             }
 
-            // ============================================================
-            //  INIT
-            // ============================================================
             async function init() {
                 registerServiceWorker();
-
-                const [piketLoaded, hanpanganLoaded] = await Promise.all([
-                    loadPiket(),
-                    loadHanpangan()
-                ]);
-
-                if (!piketLoaded) {
-                    console.error('Gagal memuat daftar nama.');
-                }
-                if (!hanpanganLoaded) {
-                    console.error('Gagal memuat data hanpangan.');
-                }
-
+                await Promise.all([loadPiket(), loadHanpangan()]);
                 populateBulan();
                 await initSupabase();
-
                 bulanSelect.addEventListener('change', loadAllJadwal);
                 document.getElementById('btnCetak').addEventListener('click', cetakJadwal);
-                document.getElementById('btnKirim').addEventListener('click', () => {
-                    dengarkanNama('Kirim ke WhatsApp');
-                    kirimKeWhatsApp();
-                });
-
+                document.getElementById('btnKirim').addEventListener('click', () => { dengarkanNama('Kirim ke WhatsApp'); kirimKeWhatsApp(); });
                 setupHanpanganScheduler();
                 startAutoRefresh();
-
-                // Global listener: klik di luar untuk menutup dropdown & auto-save
                 document.addEventListener('click', (e) => {
                     if (!e.target.closest('.selected-names') && !e.target.closest('.custom-dropdown-menu') && !e.target.closest('td[data-jenis]')) {
                         document.querySelectorAll('.custom-dropdown-menu.open').forEach(m => {
-                            m.classList.remove('open');
-                            document.body.style.overflow = '';
+                            m.classList.remove('open'); document.body.style.overflow = '';
                             if (m._onClose) m._onClose();
                         });
                     }
                 });
             }
-
             document.addEventListener('DOMContentLoaded', init);
-
-            window.__app = {
-                loadAllJadwal,
-                saveJadwal,
-                daftarNama,
-                allJadwal,
-                hanpanganData,
-                currentHanpangan,
-                isSupabaseConnected,
-                reload: loadAllJadwal,
-                cetak: cetakJadwal,
-                kirimKeWhatsApp
-            };
-
         })();
     </script>
 

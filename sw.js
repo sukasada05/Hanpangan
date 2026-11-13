@@ -3,7 +3,7 @@
 //  KORAMIL 1609-05/SUKASADA
 // ============================================================
 
-const CACHE_NAME = 'hanpangan-v4';
+const CACHE_NAME = 'hanpangan-v6';   // ← dari v5 ke v6
 const urlsToCache = [
   './',
   './index.html',
@@ -57,15 +57,8 @@ self.addEventListener('activate', function(event) {
 //  FETCH - Cache First Strategy
 // ============================================================
 self.addEventListener('fetch', function(event) {
-  // Skip cross-origin requests
-  if (!event.request.url.startsWith(self.location.origin)) {
-    return;
-  }
-
-  // Skip non-GET requests
-  if (event.request.method !== 'GET') {
-    return;
-  }
+  if (!event.request.url.startsWith(self.location.origin)) return;
+  if (event.request.method !== 'GET') return;
 
   event.respondWith(
     caches.match(event.request)

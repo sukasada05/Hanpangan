@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cetak Jadwal Piket</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* ============================================================
+           LAYOUT CETAK — 1 BULAN = 1 HALAMAN A4
+           ============================================================ */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: #000;
+            background: #e5e7eb;
+        }
+
+        body {
+            width: 210mm;
+            max-width: calc(100vw - 32px);
+            min-height: 297mm;
+            margin: 16px auto;
+            padding: 10mm;
+            box-sizing: border-box;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+            background: #fff;
+            font-size: 8pt;
+            line-height: 1.15;
+        }
+
+        /* ====== KOP SURAT ====== */
+        .kop {
+            text-align: left;
+            margin-bottom: 18px; /* ⬅️ DITAMBAH: Jarak dari Kop ke Judul */
+        }
+        .kop-wrapper {
+            display: inline-block;
+            border-bottom: 2px solid #000;
+            padding-bottom: 3px;
+        }
+        .kop .kodim, .kop .koramil {
+            font-weight: 900;
+            font-size: 9pt; /* Sedikit disesuaikan agar proporsional */
+            text-transform: uppercase;
+            line-height: 1.1;
+            letter-spacing: 0.2px;
+            color: #000;
+        }
+        .kop .koramil {
+            margin-left: 0;
+            text-indent: 22px;
+            margin-top: 1px;
+        }
+
+        /* ====== JUDUL ====== */
+        .judul {
+            text-align: center;
+            font-weight: bold;
+            font-size: 9pt;
+            text-transform: uppercase;
+            margin: 0 0 12px 0; /* ⬅️ DITAMBAH: Jarak dari Judul ke Tabel */
+            color: #000;
+            line-height: 1.3;
+        }
+
+        /* ====== TABEL ====== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            font-size: 7pt;
+            border: 1px solid #000;
+            table-layout: fixed;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 1px 2.5px;
+            text-align: left;
+            vertical-align: top;
+            word-break: normal;
+            overflow-wrap: break-word;
+            white-space: pre-line;
+            color: #000;
+            line-height: 1.05;
+        }
+        
+        /* HEADER TABEL */
+        th {
+            background: #fff !important;
+            color: #000 !important;
+            font-weight: 900;
+            font-size: 7.5pt;
+            text-align: center !important;
+            vertical-align: middle !important;
+            padding: 6px 2.5px !important;
+            letter-spacing: 0.3px;
+        }
+
+        /* Lebar Kolom */
+        .no-col { width: 6%; text-align: center; font-weight: 900; }
+        .tgl-col { width: 19%; font-weight: 900; color: #000; }
+        .nama-col { width: 25%; }
+        .nama-col-kediaman { width: 25%; }
+        .nama-col-makodim { width: 25%; }
+
+        /* ====== BLOK TANDA TANGAN ====== */
+        .signature-block {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            margin-top: 14px;
+            color: #000;
+            font-family: Arial, sans-serif;
+            font-size: 7.5pt;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+        .signature-block .catatan {
+            font-weight: bold;
+            font-style: italic;
+            max-width: 55%;
+        }
+        .signature-block .ttd {
+            min-width: 200px;
+            text-align: center;
+        }
+        .signature-block .ttd .heading {
+            font-weight: bold;
+            letter-spacing: 0.4px;
+        }
+        .signature-block .ttd .jabatan {
+            font-weight: bold;
+            margin-top: 1px;
+        }
+        .signature-block .ttd .space {
+            height: 45px;
+        }
+        .signature-block .ttd .line {
+            width: 175px;
+            margin: 0 auto;
+            border-top: 1px solid #000;
+        }
+
+        /* ====== LOADING / ERROR ====== */
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.95);
+            z-index: 9999;
+            font-family: Arial, sans-serif;
+            font-size: 14pt;
+            color: #333;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .loading-overlay.hidden { display: none; }
+        .spinner {
+            width: 32px; height: 32px;
+            border: 4px solid #ddd;
+            border-top: 4px solid #1b3b24;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .toolbar {
+            position: fixed;
+            top: 8px;
+            right: 8px;
+            z-index: 9998;
+            display: flex;
+            gap: 6px;
+        }
+        .toolbar button {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 999px;
+            background: #1b3b24;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+        .toolbar button:hover { background: #285a37; }
+
+        /* ============================================================
+           ATURAN CETAK
+           ============================================================ */
+        @page {
+            size: A4;
+            margin: 1cm 1cm 0.8cm 1cm;
+        }
+        @page :first { @top-center { content: none; } }
+
+        @media print {
+            html, body {
+                background: #fff !important;
+                width: auto;
+                max-width: none;
+                min-height: 0;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+            }
+            thead { display: table-header-group; }
+            tr {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            .toolbar { display: none !important; }
+            .no-col { text-align: center; vertical-align: middle; }
+            .tgl-col { text-align: center; }
+            .signature-block { break-inside: avoid; page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toolbar (hanya tampil di layar, tidak di cetak) -->
+    <div class="toolbar">
+        <button onclick="window.print()">🖨️ Cetak / PDF</button>
+        <button onclick="window.close()">✕ Tutup</button>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <div>Menyiapkan halaman cetak...</div>
+    </div>
+
+    <!-- Konten cetak -->
+    <div id="printContent" style="display:none;">
+        
+        <!-- KOP SURAT -->
+        <div class="kop">
+            <div class="kop-wrapper">
+                <div class="kodim">KOMANDO DISTRIK MILITER 1609/BULELENG</div>
+                <div class="koramil">KOMANDO RAYON MILITER 1609-05</div>
+            </div>
+        </div>
+
+        <!-- JUDUL -->
+        <div class="judul" id="judul">DAFTAR JADWAL PIKET KORAMIL 1609-05/SUKASADA<br>...</div>
+
+        <!-- TABEL -->
+        <table>
+            <thead>
+                <tr>
+                    <th class="no-col">NO</th>
+                    <th class="tgl-col">TANGGAL</th>
+                    <th class="nama-col">KORAMIL</th>
+                    <th class="nama-col-kediaman">KEDIAMAN</th>
+                    <th class="nama-col-makodim">MAKODIM</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyPrint">
+                <!-- diisi JS -->
+            </tbody>
+        </table>
+
+        <!-- TANDA TANGAN -->
+        <div class="signature-block">
+            <div class="catatan">Catatan : Jadwal Ini sewaktu waktu bisa berubah</div>
+            <div class="ttd">
+                <div class="heading">Mengetahui</div>
+                <div class="jabatan">Bati Tuud Ramil 1609-05/Sukasada</div>
+                <div class="space"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ============================================================
+            //  KONFIGURASI
+            // ============================================================
+            const SUPABASE_URL = 'https://wausfsflcehizpuqdwbg.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhdXNmc2ZsY2VoaXpwdXFkd2JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxMTA3ODQsImV4cCI6MjA5ODY4Njc4NH0.2zF7iogzuTwWoQc451-uKxQdNN1C-qkB0O9Jvz1ZoI0';
+
+            const NAMA_HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const NAMA_BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+            // ============================================================
+            //  PARSE PARAMETER URL
+            // ============================================================
+            const params = new URLSearchParams(window.location.search);
+            const bulanKey = params.get('bulan') || '';           // format: YYYY-MM
+            const autoPrint = params.get('auto') === '1';
+
+            function formatTanggalDuaBaris(date) {
+                return NAMA_HARI[date.getDay()] + ',\n' + date.getDate() + ' ' + NAMA_BULAN[date.getMonth()] + ' ' + date.getFullYear();
+            }
+            function formatNamaWithNumber(namaStr) {
+                if (!namaStr) return '';
+                const names = namaStr.split(',').map(s => s.trim()).filter(s => s);
+                if (names.length === 0) return '';
+                return names.map((n, i) => (i + 1) + '. ' + n).join('\n');
+            }
+
+            // ============================================================
+            //  AMBIL DATA
+            // ============================================================
+            async function ambilData() {
+                // Prioritas 1: dari snapshot localStorage (dikirim index.html)
+                try {
+                    const raw = localStorage.getItem('print_snapshot');
+                    if (raw) {
+                        const snap = JSON.parse(raw);
+                        if (snap && snap.bulanKey === bulanKey && Array.isArray(snap.allJadwal)) {
+                            console.log('📦 Pakai snapshot localStorage');
+                            return snap.allJadwal;
+                        }
+                    }
+                } catch (e) { console.warn('Snapshot gagal dibaca:', e); }
+
+                // Prioritas 2: fetch dari Supabase
+                console.log('🌐 Fetch dari Supabase');
+                const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                const { data, error } = await client.from('jadwal_piket').select('*').order('tanggal_jadwal', { ascending: true });
+                if (error) throw error;
+                return data || [];
+            }
+
+            // ============================================================
+            //  RENDER TABEL
+            // ============================================================
+            function renderTabel(allJadwal) {
+                if (!bulanKey) {
+                    throw new Error('Parameter ?bulan=YYYY-MM tidak ada di URL.');
+                }
+                const parts = bulanKey.split('-');
+                const tahun = parseInt(parts[0], 10);
+                const bulan = parseInt(parts[1], 10) - 1;
+
+                // Judul
+                document.getElementById('judul').innerHTML =
+                    'DAFTAR JADWAL PIKET KORAMIL 1609-05/SUKASADA<br>' +
+                    NAMA_BULAN[bulan].toUpperCase() + ' ' + tahun;
+
+                // Group by tanggal
+                const grouped = {};
+                allJadwal.forEach(item => {
+                    const key = item.tanggal_jadwal;
+                    if (!grouped[key]) grouped[key] = { koramil: '', kediaman: '', makodim: '' };
+                    if (item.jenis === 'koramil_hari_ini') grouped[key].koramil = item.nama1 || '';
+                    else if (item.jenis === 'kediaman_hari_ini') grouped[key].kediaman = item.nama1 || '';
+                    else if (item.jenis === 'makodim_hari_ini') grouped[key].makodim = item.nama1 || '';
+                });
+
+                // Bangun tanggal 1..akhir bulan
+                const allDates = [];
+                const daysInMonth = new Date(tahun, bulan + 1, 0).getDate();
+                for (let d = 1; d <= daysInMonth; d++) {
+                    allDates.push(tahun + '-' + String(bulan + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0'));
+                }
+
+                // Render baris
+                const tbody = document.getElementById('tbodyPrint');
+                let html = '';
+                allDates.forEach((dateKey, index) => {
+                    const entry = grouped[dateKey] || { koramil: '', kediaman: '', makodim: '' };
+                    const p = dateKey.split('-');
+                    const d = new Date(p[0], p[1] - 1, p[2]);
+                    const dateStr = formatTanggalDuaBaris(d);
+                    
+                    html += `
+                        <tr>
+                            <td class="no-col">${index + 1}</td>
+                            <td class="tgl-col">${dateStr}</td>
+                            <td class="nama-col">${formatNamaWithNumber(entry.koramil)}</td>
+                            <td class="nama-col-kediaman">${formatNamaWithNumber(entry.kediaman)}</td>
+                            <td class="nama-col-makodim">${formatNamaWithNumber(entry.makodim)}</td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+            }
+
+            // ============================================================
+            //  INIT
+            // ============================================================
+            async function init() {
+                try {
+                    const allJadwal = await ambilData();
+                    renderTabel(allJadwal);
+                    document.getElementById('loadingOverlay').classList.add('hidden');
+                    document.getElementById('printContent').style.display = 'block';
+
+                    // Auto print setelah render (jika ?auto=1)
+                    if (autoPrint) {
+                        setTimeout(() => {
+                            window.print();
+                        }, 600);
+                    }
+                } catch (e) {
+                    console.error('❌ Gagal render:', e);
+                    document.getElementById('loadingOverlay').innerHTML =
+                        '<div style="color:#c00;font-weight:bold;text-align:center;padding:20px;">' +
+                        '❌ Gagal memuat data<br><small style="font-weight:normal;font-size:10pt;color:#666;">' +
+                        (e.message || 'Terjadi kesalahan') + '</small></div>';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', init);
+        })();
+    </script>
+
+</body>
+</html>
